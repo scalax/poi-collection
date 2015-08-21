@@ -1,7 +1,8 @@
-package org.xarcher.poic
+package org.xarcher.cpoi
 
-import org.apache.poi.ss.usermodel.{RichTextString, Cell}
+import org.apache.poi.ss.usermodel.{Workbook, RichTextString, Cell}
 import scala.language.implicitConversions
+import scala.language.existentials
 import java.util.Date
 
 abstract class CCellData[T](val data: T)
@@ -54,11 +55,55 @@ trait CCellAbs {
     case _ => None
   }
 
+  lazy val cellStyle = poiCell.map(_.getCellStyle)
+  lazy val rowIndex = poiCell.map(_.getRowIndex)
+  lazy val columnIndex = poiCell.map(_.getColumnIndex)
+
+  //use default convert to get the cell value
   def tryValue[T](implicit defaultCellConvert: DefaultCellConvert[T]) = defaultCellConvert.convert(this)
+  //use custom convert to get the cell value
   def tryCustomValue[T](implicit customCellConvert: CustomCellConvert[T]) = customCellConvert.convert(this)
+  //use all convert to get the cell value
   def tryAllValue[T](implicit allCellConvert: AbsCellConvert[T]) = allCellConvert.convert(this)
 
 }
 
 class CCell(override val poiCell: Option[Cell]) extends CCellAbs {
+}
+
+case class CWorkbook(sheets: Set[CSheet])
+case class CSheet(name: String, rows: Set[CRow])
+case class CRow(index: Int, cells: Set[_ <: CCellAbs])
+
+object CPoi {
+
+  def load(workbook: Workbook) = {
+
+    val sheets = for {
+      i <- (0 until workbook.getNumberOfSheets).toSet[Int]
+      sheet = workbook.getSheetAt(i) if (sheet != null)
+    } yield {
+
+        val rows = for {
+          k <- (0 to sheet.getLastRowNum).toSet[Int]
+          row = sheet.getRow(k) if (row != null)
+        } yield {
+
+          val cells = for {
+            j <- (0 until row.getLastCellNum).toSet[Int]
+            cell = row.getCell(j) if (cell != null)
+          } yield {
+            new CCell(Option(cell))
+          }
+          CRow(k, cells)
+
+        }
+        CSheet(sheet.getSheetName, rows)
+
+    }
+
+    CWorkbook(sheets)
+
+  }
+
 }

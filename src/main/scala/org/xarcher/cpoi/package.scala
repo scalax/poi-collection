@@ -6,7 +6,7 @@ import org.joda.time.DateTime
 /**
  * Created by djx314 on 15-8-22.
  */
-package object poic {
+package object cpoi {
 
   import scala.util.control.Exception._
 
