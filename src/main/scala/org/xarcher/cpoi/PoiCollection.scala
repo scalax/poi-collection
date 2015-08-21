@@ -73,7 +73,7 @@ class CCell(override val poiCell: Option[Cell]) extends CCellAbs {
 
 case class CWorkbook(sheets: Set[CSheet])
 case class CSheet(name: String, rows: Set[CRow])
-case class CRow(index: Int, cells: Set[_ <: CCellAbs])
+case class CRow(index: Int, cells: Set[CCellAbs])
 
 object CPoi {
 
@@ -93,7 +93,7 @@ object CPoi {
             j <- (0 until row.getLastCellNum).toSet[Int]
             cell = row.getCell(j) if (cell != null)
           } yield {
-            new CCell(Option(cell))
+            new CCell(Option(cell)): CCellAbs
           }
           CRow(k, cells)
 
