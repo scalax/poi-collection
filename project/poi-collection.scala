@@ -27,7 +27,7 @@ object `poi-collection` extends Build {
       "org.apache.poi" % "poi-ooxml-schemas" % "3.12" exclude("stax", "stax-api"),
       "joda-time" % "joda-time" % "2.8.2",
       "org.joda" % "joda-convert" % "1.7"
-  )
+    )
   )
 
 }
