@@ -1,6 +1,6 @@
 package org.xarcher.cpoi
 
-import org.apache.poi.ss.usermodel.{Workbook, RichTextString, Cell}
+import org.apache.poi.ss.usermodel.{CellStyle, Workbook, RichTextString, Cell}
 import scala.language.implicitConversions
 import scala.language.existentials
 import java.util.Date
@@ -55,20 +55,27 @@ trait CCellAbs {
     case _ => None
   }
 
-  lazy val cellStyle = poiCell.map(_.getCellStyle)
-  lazy val rowIndex = poiCell.map(_.getRowIndex)
-  lazy val columnIndex = poiCell.map(_.getColumnIndex)
+  lazy val cellStyle: Option[CellStyle] = poiCell.map(_.getCellStyle)
+  lazy val rowIndex: Option[Int] = poiCell.map(_.getRowIndex)
+  lazy val columnIndex: Option[Int] = poiCell.map(_.getColumnIndex)
 
   //use default convert to get the cell value
-  def tryValue[T](implicit defaultCellConvert: DefaultCellConvert[T]) = defaultCellConvert.convert(this)
+  def tryValue[T](implicit defaultCellConvert: DefaultCellConvert[T]): Option[T] = defaultCellConvert.convert(this)
   //use custom convert to get the cell value
-  def tryCustomValue[T](implicit customCellConvert: CustomCellConvert[T]) = customCellConvert.convert(this)
+  def tryCustomValue[T](implicit customCellConvert: CustomCellConvert[T]): Option[T] = customCellConvert.convert(this)
   //use all convert to get the cell value
-  def tryAllValue[T](implicit allCellConvert: AbsCellConvert[T]) = allCellConvert.convert(this)
+  def tryAllValue[T](implicit allCellConvert: AbsCellConvert[T]): Option[T] = allCellConvert.convert(this)
 
 }
 
 class CCell(override val poiCell: Option[Cell]) extends CCellAbs {
+}
+
+object CCell {
+
+  def apply(poiCell: Option[Cell]): CCellAbs = new CCell(poiCell)
+  def apply(poiCell: Cell): CCellAbs = new CCell(Option(poiCell))
+
 }
 
 case class CWorkbook(sheets: Set[CSheet])
@@ -93,7 +100,7 @@ object CPoi {
             j <- (0 until row.getLastCellNum).toSet[Int]
             cell = row.getCell(j) if (cell != null)
           } yield {
-            new CCell(Option(cell)): CCellAbs
+            CCell(cell)
           }
           CRow(k, cells)
 
