@@ -11,12 +11,18 @@ package object cpoi {
   import scala.util.control.Exception._
 
   implicit object poiCollectionStringDefaultConvert extends DefaultCellConvert[String] {
-    override val convert: CCellAbs => Option[String] = cell => cell.stringValue
+    override val convert: CCellAbs => Option[String] = cell => {
+      cell.stringValue
+        .fold(cell.numericValue.map(_.toString))(Option(_))
+        .fold(cell.dateValue.map(_.toString))(Option(_))
+        .fold(cell.booleanValue.map(_.toString))(Option(_))
+        .fold(cell.richTextStringValue.map(_.toString))(Option(_))
+    }
   }
 
   implicit object poiCollectionDoubleDefaultConvert extends DefaultCellConvert[Double] {
     override val convert: CCellAbs => Option[Double] = cell => {
-      cell.numericValue.fold(cell.stringValue.flatMap(s => allCatch.opt(s.toDouble)))(Option(_))
+      cell.numericValue.fold(cell.stringValue.flatMap(s => allCatch.opt(s.toDouble)))(s => Option(s.toDouble))
     }
   }
 
@@ -52,7 +58,7 @@ package object cpoi {
 
   implicit object poiCollectionBigDecimalDefaultConvert extends DefaultCellConvert[BigDecimal] {
     override val convert: CCellAbs => Option[BigDecimal] = cell => {
-      cell.numericValue.flatMap(s => allCatch.opt(BigDecimal(s))).fold(cell.stringValue.flatMap(s => allCatch.opt(BigDecimal(s))))(Option(_))
+      cell.numericValue.fold(cell.stringValue.flatMap(s => allCatch.opt(BigDecimal(s))))(Option(_))
     }
   }
 

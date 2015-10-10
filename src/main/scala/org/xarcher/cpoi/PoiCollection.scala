@@ -7,7 +7,7 @@ import java.util.Date
 
 abstract class CCellData[T](val data: T)
 case class CFormulaData(override val data: String) extends CCellData(data)
-case class CNumericData(override val data: Double) extends CCellData(data)
+case class CNumericData(override val data: BigDecimal) extends CCellData(data)
 case class CDateData(override val data: Date) extends CCellData(data)
 case class CRichTextStringData(override val data: Date) extends CCellData(data)
 case class CStringData(override val data: String) extends CCellData(data)
@@ -29,21 +29,21 @@ trait CCellAbs {
 
   import scala.util.control.Exception._
 
-  lazy val cellType: Option[Int] = allCatch.opt(poiCell.map(_.getCellType)).flatMap(t => t)
+  lazy val cellType: Option[Int] = allCatch.opt(poiCell.map(_.getCellType)).flatten
 
-  lazy val formulaValue: Option[String] = allCatch.opt(poiCell.map(_.getCellFormula)).flatMap(t => t)
+  lazy val formulaValue: Option[String] = allCatch.opt(poiCell.map(_.getCellFormula)).flatten
 
-  lazy val numericValue: Option[Double] = allCatch.opt(poiCell.map(_.getNumericCellValue)).flatMap(t => t)
+  lazy val numericValue: Option[BigDecimal] = allCatch.opt(poiCell.map(s => BigDecimal(s.getNumericCellValue))).flatten
 
-  lazy val dateValue: Option[Date] = allCatch.opt(poiCell.map(_.getDateCellValue)).flatMap(t => t)
+  lazy val dateValue: Option[Date] = allCatch.opt(poiCell.map(_.getDateCellValue)).flatten
 
-  lazy val richTextStringValue: Option[RichTextString] = allCatch.opt(poiCell.map(_.getRichStringCellValue)).flatMap(t => t)
+  lazy val richTextStringValue: Option[RichTextString] = allCatch.opt(poiCell.map(_.getRichStringCellValue)).flatten
 
-  lazy val stringValue: Option[String] = allCatch.opt(poiCell.map(_.getStringCellValue)).flatMap(t => t)
+  lazy val stringValue: Option[String] = allCatch.opt(poiCell.map(_.getStringCellValue)).flatten
 
-  lazy val booleanValue: Option[Boolean] = allCatch.opt(poiCell.map(_.getBooleanCellValue)).flatMap(t => t)
+  lazy val booleanValue: Option[Boolean] = allCatch.opt(poiCell.map(_.getBooleanCellValue)).flatten
 
-  lazy val errorValue: Option[Byte] = allCatch.opt(poiCell.map(_.getErrorCellValue)).flatMap(t => t)
+  lazy val errorValue: Option[Byte] = allCatch.opt(poiCell.map(_.getErrorCellValue)).flatten
 
   lazy val actualValue: Option[CCellData[_]] = cellType.flatMap {
     case Cell.CELL_TYPE_FORMULA => formulaValue.map(CFormulaData(_))
@@ -79,7 +79,7 @@ object CCell {
 }
 
 case class CWorkbook(sheets: Set[CSheet])
-case class CSheet(name: String, rows: Set[CRow])
+case class CSheet(index: Int, name: String, rows: Set[CRow])
 case class CRow(index: Int, cells: Set[CCellAbs])
 
 object CPoi {
@@ -105,7 +105,7 @@ object CPoi {
           CRow(k, cells)
 
         }
-        CSheet(sheet.getSheetName, rows)
+        CSheet(i, sheet.getSheetName, rows)
 
     }
 
