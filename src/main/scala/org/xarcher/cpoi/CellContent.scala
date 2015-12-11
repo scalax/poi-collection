@@ -31,13 +31,13 @@ trait CellContent {
   lazy val rowIndex: Option[Int] = poiCell.map(_.getRowIndex)
   lazy val columnIndex: Option[Int] = poiCell.map(_.getColumnIndex)
 
-  def genData[T : WriteableCellOperation : ReadableCellOperation]: CellData[T] = {
-    val value = implicitly[ReadableCellOperation[T]].get(poiCell)
+  def genData[T : WriteableCellOperationAbs : ReadableCellOperationAbs]: CellData[T] = {
+    val value = implicitly[ReadableCellOperationAbs[T]].get(poiCell)
     CellData(value)
   }
 
-  def tryValue[T : ReadableCellOperation]: Option[T] = {
-    implicitly[ReadableCellOperation[T]].get(poiCell)
+  def tryValue[T : ReadableCellOperationAbs]: Option[T] = {
+    implicitly[ReadableCellOperationAbs[T]].get(poiCell)
   }
 
 }

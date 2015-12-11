@@ -5,8 +5,6 @@ import java.util.{Calendar, Date}
 import org.apache.poi.ss.usermodel.{Cell, CellStyle}
 import org.joda.time.DateTime
 
-import scala.reflect.runtime.universe._
-
 /**
  * Created by djx314 on 15-8-22.
  */
@@ -25,11 +23,7 @@ trait PoiOperations {
 
   import scala.util.control.Exception._
 
-  //private val textFormatIndex: Short = 0x31
-
   implicit def poiCollectionStringDefaultConvert = new CellContentOperation[String] {
-
-    override def typeName = typeOf[String].toString
 
     override def contentGet(cell: CellContent): Option[String] = {
       cell.stringValue
@@ -63,8 +57,6 @@ trait PoiOperations {
 
   implicit def poiCollectionDoubleDefaultConvert = new CellContentOperation[Double] {
 
-    override def typeName = typeOf[Double].toString
-
     override def contentGet(cell: CellContent): Option[Double] = {
       cell.numericValue.fold(cell.stringValue.flatMap(s => allCatch.opt(s.toDouble)))(s => Option(s.toDouble))
     }
@@ -75,8 +67,6 @@ trait PoiOperations {
 
   implicit def poiCollectionBooleanDefaultConvert = new CellContentOperation[Boolean] {
 
-    override def typeName = typeOf[Boolean].toString
-
     override def contentGet(cell: CellContent): Option[Boolean] = {
       cell.booleanValue.fold(cell.stringValue.flatMap(s => allCatch.opt(s.toBoolean)))(Option(_))
     }
@@ -86,8 +76,6 @@ trait PoiOperations {
   }
 
   implicit def poiCollectionIntDefaultConvert = new CellContentOperation[Int] {
-
-    override def typeName = typeOf[Int].toString
 
     override def contentGet(cell: CellContent): Option[Int] = {
       cell.numericValue.flatMap(s => allCatch.opt(s.toInt)).fold(cell.stringValue.flatMap(s => {
@@ -101,8 +89,6 @@ trait PoiOperations {
 
   implicit def poiCollectionLongDefaultConvert = new CellContentOperation[Long] {
 
-    override def typeName = typeOf[Long].toString
-
     override def contentGet(cell: CellContent): Option[Long] = {
       cell.numericValue.flatMap(s => allCatch.opt(s.toLong)).fold(cell.stringValue.flatMap(s => allCatch.opt(s.toLong)))(Option(_))
     }
@@ -112,8 +98,6 @@ trait PoiOperations {
   }
 
   implicit def poiCollectionShortDefaultConvert = new CellContentOperation[Short] {
-
-    override def typeName = typeOf[Short].toString
 
     override def contentGet(cell: CellContent): Option[Short] = {
       cell.numericValue.flatMap(s => allCatch.opt(s.toShort)).fold(cell.stringValue.flatMap(s => allCatch.opt(s.toShort)))(Option(_))
@@ -125,8 +109,6 @@ trait PoiOperations {
 
   implicit def poiCollectionBigIntDefaultConvert = new CellContentOperation[BigInt] {
 
-    override def typeName = typeOf[BigInt].toString
-
     override def contentGet(cell: CellContent): Option[BigInt] = {
       cell.numericValue.flatMap(s => allCatch.opt(BigInt(s.toLong))).fold(cell.stringValue.flatMap(s => allCatch.opt(BigInt(s))))(Option(_))
     }
@@ -136,8 +118,6 @@ trait PoiOperations {
   }
 
   def bigDecimalOperation: Option[Int] => CellContentOperation[BigDecimal] = scale => new CellContentOperation[BigDecimal] {
-
-    override def typeName = typeOf[BigDecimal].toString
 
     override def contentGet(cell: CellContent): Option[BigDecimal] = {
       val dataOpt = cell.numericValue.fold(cell.stringValue.flatMap(s => allCatch.opt(BigDecimal(s))))(Option(_))
@@ -157,8 +137,6 @@ trait PoiOperations {
 
   implicit def poiCollectionDateDefaultConvert = new CellContentOperation[Date] {
 
-    override def typeName = typeOf[Date].toString
-
     override def contentGet(cell: CellContent): Option[Date] = {
       cell.dateValue
     }
@@ -168,8 +146,6 @@ trait PoiOperations {
   }
 
   implicit def poiCollectionSqlDateDefaultConvert = new CellContentOperation[java.sql.Date] {
-
-    override def typeName = typeOf[java.sql.Date].toString
 
     override def contentGet(cell: CellContent): Option[java.sql.Date] = {
       cell.dateValue.map(s => new java.sql.Date(s.getTime))
@@ -181,8 +157,6 @@ trait PoiOperations {
 
   implicit def poiCollectionSqlTimeDefaultConvert = new CellContentOperation[java.sql.Time] {
 
-    override def typeName = typeOf[java.sql.Time].toString
-
     override def contentGet(cell: CellContent): Option[java.sql.Time] = {
       cell.dateValue.map(s => new java.sql.Time(s.getTime))
     }
@@ -192,8 +166,6 @@ trait PoiOperations {
   }
 
   implicit def poiCollectionSqlTimestampDefaultConvert = new CellContentOperation[java.sql.Timestamp] {
-
-    override def typeName = typeOf[java.sql.Timestamp].toString
 
     override def contentGet(cell: CellContent): Option[java.sql.Timestamp] = {
       cell.dateValue.map(s => new java.sql.Timestamp(s.getTime))
@@ -205,8 +177,6 @@ trait PoiOperations {
 
   implicit def poiCollectionDateTimeDefaultConvert = new CellContentOperation[DateTime] {
 
-    override def typeName = typeOf[DateTime].toString
-
     override def contentGet(cell: CellContent): Option[DateTime] = {
       cell.dateValue.map(s => new DateTime(s.getTime))
     }
@@ -216,8 +186,6 @@ trait PoiOperations {
   }
 
   implicit def poiCollectionCalendarDefaultConvert = new CellContentOperation[Calendar] {
-
-    override def typeName = typeOf[Calendar].toString
 
     override def contentGet(cell: CellContent): Option[Calendar] = {
       cell.dateValue.map(s => {

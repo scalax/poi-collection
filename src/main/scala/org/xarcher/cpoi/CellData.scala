@@ -6,17 +6,18 @@ import org.apache.poi.ss.usermodel.{Cell, CellStyle, RichTextString, Workbook}
 
 import scala.language.existentials
 import scala.language.implicitConversions
+import scala.reflect.runtime.universe._
 import scala.util.control.Exception._
 
-case class CellData[T : WriteableCellOperation](val data: Option[T]) {
+case class CellData[T : WriteableCellOperationAbs](val data: Option[T]) {
 
   val styleTrans: List[StyleTransform] = Nil
 
   type DataType = T
 
-  private val operation = implicitly[WriteableCellOperation[T]]
+  protected val operation = implicitly[WriteableCellOperationAbs[T]]
 
-  def typeName = operation.typeName
+  def typeTag = operation.typeTag
 
   def setValue(cell: Cell, style: Option[CellStyle] = None): Boolean = {
     operation.set(data, Option(cell), style)
@@ -57,7 +58,7 @@ case class CellData[T : WriteableCellOperation](val data: Option[T]) {
 
 object CellData {
 
-  def gen[T](data: T)(implicit operation: WriteableCellOperation[T]) = {
+  def gen[T](data: T)(implicit operation: WriteableCellOperationAbs[T]) = {
     CellData(Option(data))
   }
 
