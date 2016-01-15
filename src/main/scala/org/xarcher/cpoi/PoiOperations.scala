@@ -5,6 +5,8 @@ import java.util.{Calendar, Date}
 import org.apache.poi.ss.usermodel.{Cell, CellStyle}
 import org.joda.time.DateTime
 
+import scala.reflect.runtime.universe._
+
 /**
  * Created by djx314 on 15-8-22.
  */
@@ -22,6 +24,16 @@ trait PoiOperations {
   }
 
   import scala.util.control.Exception._
+
+  implicit def optionCellOperationToNoneOptionCellOpreation[T : WriteableCellOperationAbs](implicit weakTypeTag: WeakTypeTag[Option[T]]): WriteableCellOperationAbs[Option[T]] = {
+    new WriteableCellOperationAbs[Option[T]] {
+      override type DataType = Option[T]
+      override val typeTag = weakTypeTag
+      override def set(value: Option[DataType], cell: Option[Cell], style: Option[CellStyle] = None): Boolean = {
+        implicitly[WriteableCellOperationAbs[T]].set(value.flatten, cell, style)
+      }
+    }
+  }
 
   implicit def poiCollectionStringDefaultConvert = new CellContentOperation[String] {
 
