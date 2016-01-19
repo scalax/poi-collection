@@ -46,9 +46,10 @@ trait PoiOperations {
     }
 
     override def notNullSet(value: String, cell: Cell): Unit = {
-      throw new Exception("此方法不应该被使用")
+      //throw new Exception("此方法不应该被使用")
+      cell.setCellValue(value)
     }
-    override def set(value: Option[String], cell: Option[Cell], style: Option[CellStyle] = None): Boolean = {
+    /*override def set(value: Option[String], cell: Option[Cell], style: Option[CellStyle] = None): Boolean = {
       allCatch.opt {
         for {
           value1 <- value
@@ -63,7 +64,7 @@ trait PoiOperations {
           true
         }
       }.flatten.getOrElse(false)
-    }
+    }*/
 
   }
 
