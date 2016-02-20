@@ -191,7 +191,10 @@ trait PoiOperations {
   implicit def poiCollectionDateTimeDefaultConvert = new CellContentOperation[DateTime] {
 
     override def contentGet(cell: CellContent): Option[DateTime] = {
-      cell.dateValue.map(s => new DateTime(s.getTime))
+      cell.dateValue.flatMap { s =>
+        Option(s).map { t => new DateTime(t.getTime) }
+
+      }
     }
     override def notNullSet(value: DateTime, cell: Cell): Unit = {
       cell.setCellValue(value.toDate)
