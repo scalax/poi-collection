@@ -23,6 +23,31 @@ trait PoiOperations {
 
   }
 
+  implicit class CellDataOptExtensionMethon(cellDataOpt: Option[CellData[_]]) {
+
+    def openAlways: CellData[_] = {
+      cellDataOpt match {
+        case Some(s) => s
+        case None => CellData[Unit](None)(new WriteableCellOperationAbs[Unit] {
+          override def set(value: Option[Unit], cell: Option[Cell], style: Option[CellStyle] = None): Boolean = {
+            for {
+              autualCell <- cell
+              autualStyle <- style
+            } yield {
+              autualCell.setCellStyle(autualStyle)
+            }
+            true
+          }
+          override val typeTag = {
+            throw new Exception("Empty CellData can't get typeTag")
+            ???
+          }
+        })
+      }
+    }
+
+  }
+
   import scala.util.control.Exception._
 
   implicit def optionCellOperationToNoneOptionCellOpreation[T : WriteableCellOperationAbs](implicit weakTypeTag: WeakTypeTag[Option[T]]): WriteableCellOperationAbs[Option[T]] = {
