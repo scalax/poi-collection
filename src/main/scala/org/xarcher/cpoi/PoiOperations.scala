@@ -35,14 +35,17 @@ trait PoiOperations {
     }
   }
 
-  implicit def poiCollectionStringDefaultConvert = new CellContentOperation[String] {
+  implicit def poiCollectionStringDefaultConvert: CellContentOperation[String] = new CellContentOperation[String] {
 
     override def contentGet(cell: CellContent): Option[String] = {
-      cell.stringValue
-      .fold(cell.numericValue.map(_.toString))(Option(_))
-      .fold(cell.dateValue.map(_.toString))(Option(_))
-      .fold(cell.booleanValue.map(_.toString))(Option(_))
-      .fold(cell.richTextStringValue.map(_.toString))(Option(_))
+      if (cell.isDefined)
+        cell.stringValue
+        .fold(cell.numericValue.map(_.toString))(Option(_))
+        .fold(cell.dateValue.map(_.toString))(Option(_))
+        .fold(cell.booleanValue.map(_.toString))(Option(_))
+        .fold(cell.richTextStringValue.map(_.toString))(Option(_))
+      else
+        None
     }
 
     override def notNullSet(value: String, cell: Cell): Unit = {
@@ -68,62 +71,80 @@ trait PoiOperations {
 
   }
 
-  implicit def poiCollectionDoubleDefaultConvert = new CellContentOperation[Double] {
+  implicit def poiCollectionDoubleDefaultConvert: CellContentOperation[Double] = new CellContentOperation[Double] {
 
     override def contentGet(cell: CellContent): Option[Double] = {
-      cell.numericValue.fold(cell.stringValue.flatMap(s => allCatch.opt(s.toDouble)))(s => Option(s.toDouble))
+      if (cell.isDefined) {
+        cell.numericValue.fold(cell.stringValue.flatMap(s => allCatch.opt(s.toDouble)))(s => Option(s.toDouble))
+      } else
+        None
     }
     override def notNullSet(value: Double, cell: Cell): Unit = {
       cell.setCellValue(value)
     }
   }
 
-  implicit def poiCollectionBooleanDefaultConvert = new CellContentOperation[Boolean] {
+  implicit def poiCollectionBooleanDefaultConvert: CellContentOperation[Boolean] = new CellContentOperation[Boolean] {
 
     override def contentGet(cell: CellContent): Option[Boolean] = {
-      cell.booleanValue.fold(cell.stringValue.flatMap(s => allCatch.opt(s.toBoolean)))(Option(_))
+      if (cell.isDefined) {
+        cell.booleanValue.fold(cell.stringValue.flatMap(s => allCatch.opt(s.toBoolean)))(Option(_))
+      } else
+        None
     }
     override def notNullSet(value: Boolean, cell: Cell): Unit = {
       cell.setCellValue(value)
     }
   }
 
-  implicit def poiCollectionIntDefaultConvert = new CellContentOperation[Int] {
+  implicit def poiCollectionIntDefaultConvert: CellContentOperation[Int] = new CellContentOperation[Int] {
 
     override def contentGet(cell: CellContent): Option[Int] = {
-      cell.numericValue.flatMap(s => allCatch.opt(s.toInt)).fold(cell.stringValue.flatMap(s => {
-        allCatch.opt(s.toInt)
-      }))(Option(_))
+      if (cell.isDefined) {
+        cell.numericValue.flatMap(s => allCatch.opt(s.toInt)).fold(cell.stringValue.flatMap(s => {
+          allCatch.opt(s.toInt)
+        }))(Option(_))
+      } else
+        None
     }
     override def notNullSet(value: Int, cell: Cell): Unit = {
       cell.setCellValue(value)
     }
   }
 
-  implicit def poiCollectionLongDefaultConvert = new CellContentOperation[Long] {
+  implicit def poiCollectionLongDefaultConvert: CellContentOperation[Long] = new CellContentOperation[Long] {
 
     override def contentGet(cell: CellContent): Option[Long] = {
-      cell.numericValue.flatMap(s => allCatch.opt(s.toLong)).fold(cell.stringValue.flatMap(s => allCatch.opt(s.toLong)))(Option(_))
+      if (cell.isDefined) {
+        cell.numericValue.flatMap(s => allCatch.opt(s.toLong)).fold(cell.stringValue.flatMap(s => allCatch.opt(s.toLong)))(Option(_))
+      } else
+        None
     }
     override def notNullSet(value: Long, cell: Cell): Unit = {
       cell.setCellValue(value)
     }
   }
 
-  implicit def poiCollectionShortDefaultConvert = new CellContentOperation[Short] {
+  implicit def poiCollectionShortDefaultConvert: CellContentOperation[Short] = new CellContentOperation[Short] {
 
     override def contentGet(cell: CellContent): Option[Short] = {
-      cell.numericValue.flatMap(s => allCatch.opt(s.toShort)).fold(cell.stringValue.flatMap(s => allCatch.opt(s.toShort)))(Option(_))
-    }
+      if (cell.isDefined) {
+        cell.numericValue.flatMap(s => allCatch.opt(s.toShort)).fold(cell.stringValue.flatMap(s => allCatch.opt(s.toShort)))(Option(_))
+      } else
+        None
+  }
     override def notNullSet(value: Short, cell: Cell): Unit = {
       cell.setCellValue(value)
     }
   }
 
-  implicit def poiCollectionBigIntDefaultConvert = new CellContentOperation[BigInt] {
+  implicit def poiCollectionBigIntDefaultConvert: CellContentOperation[BigInt] = new CellContentOperation[BigInt] {
 
     override def contentGet(cell: CellContent): Option[BigInt] = {
-      cell.numericValue.flatMap(s => allCatch.opt(BigInt(s.toLong))).fold(cell.stringValue.flatMap(s => allCatch.opt(BigInt(s))))(Option(_))
+      if (cell.isDefined) {
+        cell.numericValue.flatMap(s => allCatch.opt(BigInt(s.toLong))).fold(cell.stringValue.flatMap(s => allCatch.opt(BigInt(s))))(Option(_))
+      } else
+        None
     }
     override def notNullSet(value: BigInt, cell: Cell): Unit = {
       cell.setCellValue(value.toLong)
@@ -133,12 +154,15 @@ trait PoiOperations {
   def bigDecimalOperation: Option[Int] => CellContentOperation[BigDecimal] = scale => new CellContentOperation[BigDecimal] {
 
     override def contentGet(cell: CellContent): Option[BigDecimal] = {
-      val dataOpt = cell.numericValue.fold(cell.stringValue.flatMap(s => allCatch.opt(BigDecimal(s))))(Option(_))
-      dataOpt.map(s => {
-        scale
-          .map(t => s.setScale(t, BigDecimal.RoundingMode.HALF_UP))
-          .getOrElse(s)
-      })
+      if (cell.isDefined) {
+        val dataOpt = cell.numericValue.fold(cell.stringValue.flatMap(s => allCatch.opt(BigDecimal(s))))(Option(_))
+        dataOpt.map(s => {
+          scale
+            .map(t => s.setScale(t, BigDecimal.RoundingMode.HALF_UP))
+            .getOrElse(s)
+        })
+      } else
+        None
     }
     override def notNullSet(value: BigDecimal, cell: Cell): Unit = {
       val valueToInsert = scale
@@ -148,7 +172,7 @@ trait PoiOperations {
     }
   }
 
-  implicit def poiCollectionDateDefaultConvert = new CellContentOperation[Date] {
+  implicit def poiCollectionDateDefaultConvert: CellContentOperation[Date] = new CellContentOperation[Date] {
 
     override def contentGet(cell: CellContent): Option[Date] = {
       cell.dateValue
@@ -158,7 +182,7 @@ trait PoiOperations {
     }
   }
 
-  implicit def poiCollectionSqlDateDefaultConvert = new CellContentOperation[java.sql.Date] {
+  implicit def poiCollectionSqlDateDefaultConvert: CellContentOperation[java.sql.Date] = new CellContentOperation[java.sql.Date] {
 
     override def contentGet(cell: CellContent): Option[java.sql.Date] = {
       cell.dateValue.map(s => new java.sql.Date(s.getTime))
@@ -168,7 +192,7 @@ trait PoiOperations {
     }
   }
 
-  implicit def poiCollectionSqlTimeDefaultConvert = new CellContentOperation[java.sql.Time] {
+  implicit def poiCollectionSqlTimeDefaultConvert: CellContentOperation[java.sql.Time] = new CellContentOperation[java.sql.Time] {
 
     override def contentGet(cell: CellContent): Option[java.sql.Time] = {
       cell.dateValue.map(s => new java.sql.Time(s.getTime))
@@ -178,7 +202,7 @@ trait PoiOperations {
     }
   }
 
-  implicit def poiCollectionSqlTimestampDefaultConvert = new CellContentOperation[java.sql.Timestamp] {
+  implicit def poiCollectionSqlTimestampDefaultConvert: CellContentOperation[java.sql.Timestamp] = new CellContentOperation[java.sql.Timestamp] {
 
     override def contentGet(cell: CellContent): Option[java.sql.Timestamp] = {
       cell.dateValue.map(s => new java.sql.Timestamp(s.getTime))
@@ -188,7 +212,7 @@ trait PoiOperations {
     }
   }
 
-  implicit def poiCollectionDateTimeDefaultConvert = new CellContentOperation[DateTime] {
+  implicit def poiCollectionDateTimeDefaultConvert: CellContentOperation[DateTime] = new CellContentOperation[DateTime] {
 
     override def contentGet(cell: CellContent): Option[DateTime] = {
       cell.dateValue.flatMap { s =>
@@ -201,7 +225,7 @@ trait PoiOperations {
     }
   }
 
-  implicit def poiCollectionCalendarDefaultConvert = new CellContentOperation[Calendar] {
+  implicit def poiCollectionCalendarDefaultConvert: CellContentOperation[Calendar] = new CellContentOperation[Calendar] {
 
     override def contentGet(cell: CellContent): Option[Calendar] = {
       cell.dateValue.map(s => {

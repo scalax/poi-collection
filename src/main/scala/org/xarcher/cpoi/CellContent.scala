@@ -6,27 +6,61 @@ import org.apache.poi.ss.usermodel.{Cell, CellStyle, RichTextString}
 
 import scala.language.existentials
 import scala.language.implicitConversions
+import scala.util.Try
 import scala.util.control.Exception._
 
 trait CellContent {
 
   val poiCell: Option[Cell]
 
-  lazy val formulaValue: Option[String] = allCatch.opt(poiCell.map(_.getCellFormula)).flatten
+  lazy val formulaValue: Option[String] =
+    Try {
+      poiCell.flatMap(s => Option(s.getCellFormula))
+    }.getOrElse(None)
 
-  lazy val numericValue: Option[BigDecimal] = allCatch.opt(poiCell.map(s => BigDecimal(s.getNumericCellValue))).flatten
+  lazy val numericValue: Option[BigDecimal] =
+    Try {
+      poiCell.flatMap(s => Option(s.getNumericCellValue).map(BigDecimal(_)))
+    }.getOrElse(None)
 
-  lazy val dateValue: Option[Date] = allCatch.opt(poiCell.map(_.getDateCellValue)).flatten
+  lazy val doubleValue: Option[Double] =
+    Try {
+      poiCell.flatMap(s => Option(s.getNumericCellValue))
+    }.getOrElse(None)
 
-  lazy val richTextStringValue: Option[RichTextString] = allCatch.opt(poiCell.map(_.getRichStringCellValue)).flatten
+  lazy val dateValue: Option[Date] =
+    Try {
+      poiCell.flatMap(s => Option(s.getDateCellValue))
+    }.getOrElse(None)
 
-  lazy val stringValue: Option[String] = allCatch.opt(poiCell.map(_.getStringCellValue)).flatten
+  lazy val richTextStringValue: Option[RichTextString] =
+    Try {
+      poiCell.flatMap(s => Option(s.getRichStringCellValue))
+    }.getOrElse(None)
 
-  lazy val booleanValue: Option[Boolean] = allCatch.opt(poiCell.map(_.getBooleanCellValue)).flatten
+  lazy val stringValue: Option[String] =
+    Try {
+      poiCell.flatMap(s => Option(s.getStringCellValue))
+    }.getOrElse(None)
 
-  lazy val errorValue: Option[Byte] = allCatch.opt(poiCell.map(_.getErrorCellValue)).flatten
+  lazy val booleanValue: Option[Boolean] =
+    Try {
+      poiCell.flatMap(s => Option(s.getBooleanCellValue))
+    }.getOrElse(None)
 
-  lazy val cellType: Option[Int] = allCatch.opt(poiCell.map(_.getCellType)).flatten
+  lazy val errorValue: Option[Byte] =
+    Try {
+      poiCell.flatMap(s => Option(s.getErrorCellValue))
+    }.getOrElse(None)
+
+  lazy val isEmpty: Boolean = {
+    poiCell.map(_.getCellType == Cell.CELL_TYPE_BLANK).getOrElse(true)
+    //doubleValue == Option(0d) && dateValue == None && stringValue == Option("") && booleanValue == Option(false)
+  }
+
+  lazy val isDefined: Boolean = ! isEmpty
+
+  lazy val cellType: Option[Int] = Try(poiCell.map(_.getCellType)).getOrElse(None)
   lazy val cellStyle: Option[CellStyle] = poiCell.map(_.getCellStyle)
   lazy val rowIndex: Option[Int] = poiCell.map(_.getRowIndex)
   lazy val columnIndex: Option[Int] = poiCell.map(_.getColumnIndex)
