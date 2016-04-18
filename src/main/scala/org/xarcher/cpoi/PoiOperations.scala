@@ -14,10 +14,10 @@ trait PoiOperations {
 
   implicit class CellContentOptExtensionMethon(cellOpt: Option[CellContent]) {
 
-    def openAlways = {
+    def openAlways: CellContent = {
       cellOpt match {
         case Some(s) => s
-        case None => new CCell(None)
+        case None => CCell(None)
       }
     }
 
