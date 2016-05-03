@@ -1,4 +1,4 @@
-organization := "org.xarcher"
+organization := "net.scalax"
 
 name := "poi-collection"
 
