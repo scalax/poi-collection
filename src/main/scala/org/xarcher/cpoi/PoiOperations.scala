@@ -25,6 +25,16 @@ trait PoiOperations {
 
   import scala.util.control.Exception._
 
+  implicit def optionCellReaderToNoneOptionCellReader[T](implicit reader: ReadableCellOperationAbs[T], wTypeTag: WeakTypeTag[Option[T]]): ReadableCellOperationAbs[Option[T]] = {
+    new ReadableCellOperationAbs[Option[T]] {
+      override type DataType = Option[T]
+      override val typeTag = wTypeTag
+      override def get(cellOpt: Option[Cell]): Option[Option[T]] = {
+        Option(implicitly[ReadableCellOperationAbs[T]].get(cellOpt))
+      }
+    }
+  }
+
   implicit def optionCellOperationToNoneOptionCellOpreation[T : WriteableCellOperationAbs](implicit weakTypeTag: WeakTypeTag[Option[T]]): WriteableCellOperationAbs[Option[T]] = {
     new WriteableCellOperationAbs[Option[T]] {
       override type DataType = Option[T]
@@ -70,6 +80,8 @@ trait PoiOperations {
     }*/
 
   }
+
+  implicitly[ReadableCellOperationAbs[Option[String]]]
 
   implicit def poiCollectionDoubleDefaultConvert: CellContentOperation[Double] = new CellContentOperation[Double] {
 
