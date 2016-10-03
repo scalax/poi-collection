@@ -6,8 +6,8 @@ version := "0.1.1"
 
 scalaVersion := "2.11.8"
 
-libraryDependencies ++= {
-  val poiVersion = "3.15-beta1"
+libraryDependencies <++= scalaVersion.apply { scalaVersionValue =>
+  val poiVersion = "3.15"
   Seq(
     //poi
     "org.apache.poi" % "poi" % poiVersion exclude("stax", "stax-api"),
@@ -18,6 +18,8 @@ libraryDependencies ++= {
     "joda-time" % "joda-time" % "2.9.4",
     "org.joda" % "joda-convert" % "1.8.1",
     
-    "org.scala-lang" % "scala-reflect" % scalaVersion.value
+    "org.scala-lang" % "scala-reflect" % scalaVersionValue
   )
 }
+
+scalacOptions ++= Seq("-feature", "-deprecation")

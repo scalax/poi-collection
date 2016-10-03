@@ -2,12 +2,11 @@ package org.xarcher.cpoi
 
 import java.util.Date
 
-import org.apache.poi.ss.usermodel.{Cell, CellStyle, RichTextString}
+import org.apache.poi.ss.usermodel.{Cell, CellStyle, CellType, RichTextString}
 
 import scala.language.existentials
 import scala.language.implicitConversions
 import scala.util.Try
-import scala.util.control.Exception._
 
 trait CellContent {
 
@@ -54,13 +53,13 @@ trait CellContent {
     }.getOrElse(None)
 
   lazy val isEmpty: Boolean = {
-    poiCell.map(_.getCellType == Cell.CELL_TYPE_BLANK).getOrElse(true)
+    poiCell.map(_.getCellTypeEnum == CellType.BLANK).getOrElse(true)
     //doubleValue == Option(0d) && dateValue == None && stringValue == Option("") && booleanValue == Option(false)
   }
 
   lazy val isDefined: Boolean = ! isEmpty
 
-  lazy val cellType: Option[Int] = Try(poiCell.map(_.getCellType)).getOrElse(None)
+  lazy val cellType: Option[CellType] = Try(poiCell.map(_.getCellTypeEnum)).getOrElse(None)
   lazy val cellStyle: Option[CellStyle] = poiCell.map(_.getCellStyle)
   lazy val rowIndex: Option[Int] = poiCell.map(_.getRowIndex)
   lazy val columnIndex: Option[Int] = poiCell.map(_.getColumnIndex)
