@@ -1,13 +1,9 @@
 package org.xarcher.cpoi
 
-import java.util.Date
-
-import org.apache.poi.ss.usermodel.{Cell, CellStyle, RichTextString, Workbook}
+import org.apache.poi.ss.usermodel.{Cell, CellStyle}
 
 import scala.language.existentials
 import scala.language.implicitConversions
-import scala.reflect.runtime.universe._
-import scala.util.control.Exception._
 
 case class CellData[T : WriteableCellOperationAbs](val data: Option[T]) {
 
@@ -23,10 +19,10 @@ case class CellData[T : WriteableCellOperationAbs](val data: Option[T]) {
     operation.set(data, Option(cell), style)
   }
 
-  def setValue(cell: Cell, styleGen: StyleGen): Boolean = {
+  /*def setValue(cell: Cell, styleGen: StyleGen): Boolean = {
     val style = styleGen.getCellStyle(styleTrans)
     operation.set(data, Option(cell), style)
-  }
+  }*/
 
   def withTransforms(trans: List[StyleTransform]) = {
     new CellData(data) {

@@ -2,29 +2,37 @@ package org.xarcher.cpoi
 
 import org.apache.poi.ss.usermodel.CellStyle
 
-trait StyleGen {
+case class StyleGenWrap(styleGen: StyleGen, cellStyle: Option[CellStyle])
 
-  var cellMap: Map[List[StyleTransform], CellStyle] = Map()
+trait StyleGen {
+  self =>
+
+  val cellMap: Map[List[StyleTransform], CellStyle] = Map.empty
   val createCellStyle: () => CellStyle
 
-  def getCellStyle(transformNew: StyleTransform*): Option[CellStyle] = {
+  def getCellStyle(transformNew: StyleTransform*): StyleGenWrap = {
     getCellStyle(transformNew.toList)
   }
 
-  def getCellStyle(transformNew: List[StyleTransform]): Option[CellStyle] = {
+  def getCellStyle(transformNew: List[StyleTransform]): StyleGenWrap = {
     transformNew match {
-      case Nil => None
+      case Nil => StyleGenWrap(self, None)
       case trans =>
         cellMap.get(trans) match {
           case styleSome@Some(s) =>
-            styleSome
+            StyleGenWrap(self, styleSome)
           case None =>
             val style = createCellStyle()
-            val style1 = trans.foldLeft(style)((style, tranform) => {
+            val style1 = trans.foldLeft(style) { (style, tranform) =>
               tranform.operation(style)
-            })
-            cellMap += (trans -> style1)
-            getCellStyle(trans: _*)
+            }
+            val newCellMap = cellMap + (trans -> style1)
+            //getCellStyle(trans: _*)
+            val newStyleGen = new StyleGen {
+              override val cellMap = newCellMap
+              override val createCellStyle = self.createCellStyle
+            }
+            StyleGenWrap(newStyleGen, Option(style1))
         }
     }
   }
@@ -33,8 +41,8 @@ trait StyleGen {
 
 object StyleGen {
 
-  def apply(styleGen: => CellStyle) = new StyleGen {
-    override val createCellStyle: () => CellStyle = () => styleGen
+  def apply(styleGen: () => CellStyle): StyleGen = new StyleGen {
+    override val createCellStyle = styleGen
   }
 
 }
