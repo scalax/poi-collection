@@ -39,8 +39,8 @@ trait PoiOperations {
     new WriteableCellOperationAbs[Option[T]] {
       override type DataType = Option[T]
       override val typeTag = weakTypeTag
-      override def set(value: Option[DataType], cell: Option[Cell], style: Option[CellStyle] = None): Boolean = {
-        implicitly[WriteableCellOperationAbs[T]].set(value.flatten, cell, style)
+      override def set(value: Option[DataType], cell: Option[Cell]): Boolean = {
+        implicitly[WriteableCellOperationAbs[T]].set(value.flatten, cell)
       }
     }
   }

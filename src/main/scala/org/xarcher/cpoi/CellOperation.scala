@@ -11,7 +11,7 @@ trait WriteableCellOperationAbs[T] {
   type DataType = T
 
   //如果被正确写入，则返回 true
-  def set(value: Option[T], cell: Option[Cell], style: Option[CellStyle] = None): Boolean
+  def set(value: Option[T], cell: Option[Cell]): Boolean
 
   val typeTag: WeakTypeTag[DataType]
 
@@ -75,14 +75,8 @@ abstract class CellContentOperation[T : WeakTypeTag] extends CellContentOperatio
 //CellContent 为基础的写入操作
 trait WriteableCellContentOperationAbs[T] extends WriteableCellOperationAbs[T] {
 
-  override def set(value: Option[T], cell: Option[Cell], style: Option[CellStyle] = None): Boolean = {
+  override def set(value: Option[T], cell: Option[Cell]): Boolean = {
     allCatch.opt {
-      for {
-        cell1 <- cell
-        style1 <- style
-      } {
-        cell1.setCellStyle(style1)
-      }
       for {
         value1 <- value
         cell1 <- cell

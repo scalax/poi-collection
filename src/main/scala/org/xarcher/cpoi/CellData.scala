@@ -15,8 +15,8 @@ case class CellData[T : WriteableCellOperationAbs](val data: Option[T]) {
 
   def typeTag = operation.typeTag
 
-  def setValue(cell: Cell, style: Option[CellStyle] = None): Boolean = {
-    operation.set(data, Option(cell), style)
+  def setValue(cell: Cell): Boolean = {
+    operation.set(data, Option(cell))
   }
 
   /*def setValue(cell: Cell, styleGen: StyleGen): Boolean = {
