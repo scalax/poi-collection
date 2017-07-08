@@ -19,7 +19,7 @@ trait StyleGen {
       case Nil => StyleGenWrap(self, None)
       case trans =>
         cellMap.get(trans) match {
-          case styleSome@Some(s) =>
+          case styleSome @ Some(s) =>
             StyleGenWrap(self, styleSome)
           case None =>
             val style = createCellStyle()

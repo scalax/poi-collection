@@ -1,11 +1,9 @@
 package org.xarcher.cpoi
 
-import java.util.{Calendar, Date}
+import java.util.{ Calendar, Date }
 
-import org.apache.poi.ss.usermodel.{Cell, CellStyle}
+import org.apache.poi.ss.usermodel.Cell
 import org.joda.time.DateTime
-
-import scala.reflect.runtime.universe._
 
 /**
  * Created by djx314 on 15-8-22.
@@ -25,20 +23,18 @@ trait PoiOperations {
 
   import scala.util.control.Exception._
 
-  implicit def optionCellReaderToNoneOptionCellReader[T](implicit reader: ReadableCellOperationAbs[T], wTypeTag: WeakTypeTag[Option[T]]): ReadableCellOperationAbs[Option[T]] = {
+  implicit def optionCellReaderToNoneOptionCellReader[T](implicit reader: ReadableCellOperationAbs[T]): ReadableCellOperationAbs[Option[T]] = {
     new ReadableCellOperationAbs[Option[T]] {
       override type DataType = Option[T]
-      override val typeTag = wTypeTag
       override def get(cellOpt: Option[Cell]): Option[Option[T]] = {
         Option(implicitly[ReadableCellOperationAbs[T]].get(cellOpt))
       }
     }
   }
 
-  implicit def optionCellOperationToNoneOptionCellOpreation[T : WriteableCellOperationAbs](implicit weakTypeTag: WeakTypeTag[Option[T]]): WriteableCellOperationAbs[Option[T]] = {
+  implicit def optionCellOperationToNoneOptionCellOpreation[T: WriteableCellOperationAbs]: WriteableCellOperationAbs[Option[T]] = {
     new WriteableCellOperationAbs[Option[T]] {
       override type DataType = Option[T]
-      override val typeTag = weakTypeTag
       override def set(value: Option[DataType], cell: Option[Cell]): Boolean = {
         implicitly[WriteableCellOperationAbs[T]].set(value.flatten, cell)
       }
@@ -50,10 +46,10 @@ trait PoiOperations {
     override def contentGet(cell: CellContent): Option[String] = {
       if (cell.isDefined)
         cell.stringValue
-        .fold(cell.numericValue.map(_.toString))(Option(_))
-        .fold(cell.dateValue.map(_.toString))(Option(_))
-        .fold(cell.booleanValue.map(_.toString))(Option(_))
-        .fold(cell.richTextStringValue.map(_.toString))(Option(_))
+          .fold(cell.numericValue.map(_.toString))(Option(_))
+          .fold(cell.dateValue.map(_.toString))(Option(_))
+          .fold(cell.booleanValue.map(_.toString))(Option(_))
+          .fold(cell.richTextStringValue.map(_.toString))(Option(_))
       else
         None
     }
@@ -144,7 +140,7 @@ trait PoiOperations {
         cell.numericValue.flatMap(s => allCatch.opt(s.toShort)).fold(cell.stringValue.flatMap(s => allCatch.opt(s.toShort)))(Option(_))
       } else
         None
-  }
+    }
     override def notNullSet(value: Short, cell: Cell): Unit = {
       cell.setCellValue(value)
     }

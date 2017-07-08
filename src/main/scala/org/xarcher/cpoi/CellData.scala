@@ -1,19 +1,17 @@
 package org.xarcher.cpoi
 
-import org.apache.poi.ss.usermodel.{Cell, CellStyle}
+import org.apache.poi.ss.usermodel.{ Cell, CellStyle }
 
 import scala.language.existentials
 import scala.language.implicitConversions
 
-case class CellData[T : WriteableCellOperationAbs](val data: Option[T]) {
+case class CellData[T: WriteableCellOperationAbs](val data: Option[T]) {
 
   val styleTrans: List[StyleTransform] = Nil
 
   type DataType = T
 
   protected val operation = implicitly[WriteableCellOperationAbs[T]]
-
-  def typeTag = operation.typeTag
 
   def setValue(cell: Cell): Boolean = {
     operation.set(data, Option(cell))
@@ -73,4 +71,4 @@ trait StyleTransform {
     }
   }
 
-}*/
+}*/ 

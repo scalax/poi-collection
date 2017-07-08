@@ -1,9 +1,8 @@
 package org.xarcher.cpoi
 
-import org.apache.poi.ss.usermodel.{CellStyle, Cell}
+import org.apache.poi.ss.usermodel.{ CellStyle, Cell }
 
 import scala.util.control.Exception._
-import scala.reflect.runtime.universe._
 
 //写入操作
 trait WriteableCellOperationAbs[T] {
@@ -13,15 +12,11 @@ trait WriteableCellOperationAbs[T] {
   //如果被正确写入，则返回 true
   def set(value: Option[T], cell: Option[Cell]): Boolean
 
-  val typeTag: WeakTypeTag[DataType]
-
 }
 
-abstract class WriteableCellOperation[T : WeakTypeTag] extends WriteableCellOperationAbs[T] {
+abstract class WriteableCellOperation[T] extends WriteableCellOperationAbs[T] {
 
   override type DataType = T
-
-  override val typeTag: WeakTypeTag[DataType] = implicitly[WeakTypeTag[T]]
 
 }
 
@@ -32,15 +27,11 @@ trait ReadableCellOperationAbs[T] {
 
   def get(cell: Option[Cell]): Option[T]
 
-  val typeTag: WeakTypeTag[DataType]
-
 }
 
-abstract class ReadableCellOperation[T : WeakTypeTag] extends ReadableCellOperationAbs[T] {
+abstract class ReadableCellOperation[T] extends ReadableCellOperationAbs[T] {
 
   override type DataType = T
-
-  override val typeTag: WeakTypeTag[DataType] = implicitly[WeakTypeTag[T]]
 
 }
 
@@ -49,26 +40,20 @@ trait CellOperationAbs[T] extends WriteableCellOperation[T] with ReadableCellOpe
 
   override type DataType = T
 
-  override val typeTag: WeakTypeTag[DataType]
-
 }
 
-abstract class CellOperation[T : WeakTypeTag] extends CellOperationAbs[T] {
+abstract class CellOperation[T] extends CellOperationAbs[T] {
 
   override type DataType = T
-
-  override val typeTag: WeakTypeTag[DataType] = implicitly[WeakTypeTag[T]]
 
 }
 
 //CellContent 为基础的写入和读取操作
 trait CellContentOperationAbs[T] extends CellOperationAbs[T] with WriteableCellContentOperationAbs[T] with ReadableCellContentOperationAbs[T]
 
-abstract class CellContentOperation[T : WeakTypeTag] extends CellContentOperationAbs[T] {
+abstract class CellContentOperation[T] extends CellContentOperationAbs[T] {
 
   override type DataType = T
-
-  override val typeTag: WeakTypeTag[DataType] = implicitly[WeakTypeTag[T]]
 
 }
 
@@ -92,11 +77,9 @@ trait WriteableCellContentOperationAbs[T] extends WriteableCellOperationAbs[T] {
 
 }
 
-abstract class WriteableCellContentOperation[T : WeakTypeTag] extends WriteableCellContentOperationAbs[T] {
+abstract class WriteableCellContentOperation[T] extends WriteableCellContentOperationAbs[T] {
 
   override type DataType = T
-
-  override val typeTag: WeakTypeTag[DataType] = implicitly[WeakTypeTag[T]]
 
 }
 
@@ -114,10 +97,8 @@ trait ReadableCellContentOperationAbs[T] extends ReadableCellOperationAbs[T] {
 
 }
 
-abstract class ReadableCellContentOperation[T : WeakTypeTag] extends ReadableCellContentOperationAbs[T] {
+abstract class ReadableCellContentOperation[T] extends ReadableCellContentOperationAbs[T] {
 
   override type DataType = T
-
-  override val typeTag: WeakTypeTag[DataType] = implicitly[WeakTypeTag[T]]
 
 }

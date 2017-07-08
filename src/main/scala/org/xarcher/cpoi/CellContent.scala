@@ -2,7 +2,7 @@ package org.xarcher.cpoi
 
 import java.util.Date
 
-import org.apache.poi.ss.usermodel.{Cell, CellStyle, CellType, RichTextString}
+import org.apache.poi.ss.usermodel.{ Cell, CellStyle, CellType, RichTextString }
 
 import scala.language.existentials
 import scala.language.implicitConversions
@@ -57,19 +57,19 @@ trait CellContent {
     //doubleValue == Option(0d) && dateValue == None && stringValue == Option("") && booleanValue == Option(false)
   }
 
-  lazy val isDefined: Boolean = ! isEmpty
+  lazy val isDefined: Boolean = !isEmpty
 
   lazy val cellType: Option[CellType] = Try(poiCell.map(_.getCellTypeEnum)).getOrElse(None)
   lazy val cellStyle: Option[CellStyle] = poiCell.map(_.getCellStyle)
   lazy val rowIndex: Option[Int] = poiCell.map(_.getRowIndex)
   lazy val columnIndex: Option[Int] = poiCell.map(_.getColumnIndex)
 
-  def genData[T : WriteableCellOperationAbs : ReadableCellOperationAbs]: CellData[T] = {
+  def genData[T: WriteableCellOperationAbs: ReadableCellOperationAbs]: CellData[T] = {
     val value = implicitly[ReadableCellOperationAbs[T]].get(poiCell)
     CellData(value)
   }
 
-  def tryValue[T : ReadableCellOperationAbs]: Option[T] = {
+  def tryValue[T: ReadableCellOperationAbs]: Option[T] = {
     implicitly[ReadableCellOperationAbs[T]].get(poiCell)
   }
 
