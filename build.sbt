@@ -2,7 +2,7 @@ organization := "net.scalax"
 
 name := "poi-collection"
 
-scalaVersion := "2.11.8"
+scalaVersion := "2.12.2"
 
 libraryDependencies ++= {
   val poiVersion = "3.17-beta1"
