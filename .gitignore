@@ -13,6 +13,7 @@
 /bin/
 /sbt
 /sbt.bat
+/sbt-launch.jar
 /elish.bat
 *.sbtserver*
 /conf/generated.keystore
