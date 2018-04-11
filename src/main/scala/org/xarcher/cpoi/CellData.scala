@@ -9,14 +9,14 @@ trait CellDataAbs {
   self =>
 
   type DataType
-  val data: Option[DataType]
+  val data: DataType
 
-  protected val operation: WriteableCellOperationAbs[DataType]
+  protected val operation: CellWriter[DataType]
 
   val styleTrans: List[StyleTransform]
 
-  def setValue(cell: Cell): Boolean = {
-    operation.set(data, Option(cell))
+  def setValue(cell: Cell, cellStlye: Option[CellStyle]): Boolean = {
+    operation.set(data, cell, cellStlye)
   }
 
   def withTransforms(trans: List[StyleTransform]): CellDataAbs = {
@@ -51,19 +51,13 @@ trait CellDataAbs {
 
 }
 
-case class CellData[T: WriteableCellOperationAbs](override val data: Option[T])
-    extends CellDataAbs {
+case class CellData[T: CellWriter](override val data: T) extends CellDataAbs {
 
   override val styleTrans: List[StyleTransform] = List.empty
 
   override type DataType = T
 
-  override protected val operation = implicitly[WriteableCellOperationAbs[T]]
-
-  /*def setValue(cell: Cell, styleGen: StyleGen): Boolean = {
-    val style = styleGen.getCellStyle(styleTrans)
-    operation.set(data, Option(cell), style)
-  }*/
+  override protected val operation = implicitly[CellWriter[T]]
 
   override def withTransforms(trans: List[StyleTransform]): CellData[T] = {
     new CellData(data) {
@@ -95,9 +89,8 @@ case class CellData[T: WriteableCellOperationAbs](override val data: Option[T])
 
 object CellData {
 
-  def gen[T](data: T)(
-      implicit operation: WriteableCellOperationAbs[T]): CellData[T] = {
-    CellData(Option(data))
+  def gen[T](data: T)(implicit operation: CellWriter[T]): CellData[T] = {
+    CellData(data)
   }
 
 }

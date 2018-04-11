@@ -23,23 +23,20 @@ trait PoiOperations {
 
   import scala.util.control.Exception._
 
-  implicit def optionCellReaderToNoneOptionCellReader[T](
-      implicit reader: ReadableCellOperationAbs[T])
-    : ReadableCellOperationAbs[Option[T]] = {
-    new ReadableCellOperationAbs[Option[T]] {
-      override type DataType = Option[T]
-      override def get(cellOpt: Option[Cell]): Option[Option[T]] = {
-        Option(implicitly[ReadableCellOperationAbs[T]].get(cellOpt))
+  implicit def optionCellReaderToNoneOptionCellReader[T:CellReader]
+    : CellReader[Option[T]] = {
+    new CellReader[Option[T]] {
+      override def get(cellOpt: Option[Cell]): PoiCellContent.CellReadResult[Option[T]] = {
+        implicitly[CellReader[T]].get(cellOpt).right.map(s => Option(s)).left.map(e => Option.empty)
       }
     }
   }
 
   implicit def optionCellOperationToNoneOptionCellOpreation[
-      T: WriteableCellOperationAbs]: WriteableCellOperationAbs[Option[T]] = {
-    new WriteableCellOperationAbs[Option[T]] {
-      override type DataType = Option[T]
-      override def set(value: Option[DataType], cell: Option[Cell]): Boolean = {
-        implicitly[WriteableCellOperationAbs[T]].set(value.flatten, cell)
+      T: CellWriter]: CellWriter[Option[T]] = {
+    new CellWriter[Option[T]] {
+      override def set(value: Option[T], cell: Option[Cell]): Boolean = {
+        implicitly[CellWriter[T]].set(value, cell)
       }
     }
   }
@@ -128,7 +125,7 @@ trait PoiOperations {
       }
       override def notNullSet(value: Int, cell: Cell): Unit = {
         cell.setCellValue(value)
-      }
+  c     }
     }
 
   implicit def poiCollectionLongDefaultConvert: CellContentOperation[Long] =
