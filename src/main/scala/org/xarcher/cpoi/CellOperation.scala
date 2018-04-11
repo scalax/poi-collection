@@ -1,6 +1,6 @@
 package org.xarcher.cpoi
 
-import org.apache.poi.ss.usermodel.{ CellStyle, Cell }
+import org.apache.poi.ss.usermodel.{CellStyle, Cell}
 
 import scala.util.control.Exception._
 
@@ -36,7 +36,9 @@ abstract class ReadableCellOperation[T] extends ReadableCellOperationAbs[T] {
 }
 
 //写入和读取操作
-trait CellOperationAbs[T] extends WriteableCellOperation[T] with ReadableCellOperationAbs[T] {
+trait CellOperationAbs[T]
+    extends WriteableCellOperation[T]
+    with ReadableCellOperationAbs[T] {
 
   override type DataType = T
 
@@ -49,7 +51,10 @@ abstract class CellOperation[T] extends CellOperationAbs[T] {
 }
 
 //CellContent 为基础的写入和读取操作
-trait CellContentOperationAbs[T] extends CellOperationAbs[T] with WriteableCellContentOperationAbs[T] with ReadableCellContentOperationAbs[T]
+trait CellContentOperationAbs[T]
+    extends CellOperationAbs[T]
+    with WriteableCellContentOperationAbs[T]
+    with ReadableCellContentOperationAbs[T]
 
 abstract class CellContentOperation[T] extends CellContentOperationAbs[T] {
 
@@ -61,23 +66,27 @@ abstract class CellContentOperation[T] extends CellContentOperationAbs[T] {
 trait WriteableCellContentOperationAbs[T] extends WriteableCellOperationAbs[T] {
 
   override def set(value: Option[T], cell: Option[Cell]): Boolean = {
-    allCatch.opt {
-      for {
-        value1 <- value
-        cell1 <- cell
-      } yield {
-        //style.map(style1 => cell1.setCellStyle(style1))
-        notNullSet(value1, cell1)
-        true
+    allCatch
+      .opt {
+        for {
+          value1 <- value
+          cell1 <- cell
+        } yield {
+          //style.map(style1 => cell1.setCellStyle(style1))
+          notNullSet(value1, cell1)
+          true
+        }
       }
-    }.flatten.getOrElse(false)
+      .flatten
+      .getOrElse(false)
   }
 
   def notNullSet(value: T, cell: Cell): Unit
 
 }
 
-abstract class WriteableCellContentOperation[T] extends WriteableCellContentOperationAbs[T] {
+abstract class WriteableCellContentOperation[T]
+    extends WriteableCellContentOperationAbs[T] {
 
   override type DataType = T
 
@@ -97,7 +106,8 @@ trait ReadableCellContentOperationAbs[T] extends ReadableCellOperationAbs[T] {
 
 }
 
-abstract class ReadableCellContentOperation[T] extends ReadableCellContentOperationAbs[T] {
+abstract class ReadableCellContentOperation[T]
+    extends ReadableCellContentOperationAbs[T] {
 
   override type DataType = T
 

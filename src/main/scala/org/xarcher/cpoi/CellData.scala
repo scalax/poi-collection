@@ -1,6 +1,6 @@
 package org.xarcher.cpoi
 
-import org.apache.poi.ss.usermodel.{ Cell, CellStyle }
+import org.apache.poi.ss.usermodel.{Cell, CellStyle}
 
 import scala.language.existentials
 import scala.language.implicitConversions
@@ -51,7 +51,8 @@ trait CellDataAbs {
 
 }
 
-case class CellData[T: WriteableCellOperationAbs](override val data: Option[T]) extends CellDataAbs {
+case class CellData[T: WriteableCellOperationAbs](override val data: Option[T])
+    extends CellDataAbs {
 
   override val styleTrans: List[StyleTransform] = List.empty
 
@@ -94,7 +95,8 @@ case class CellData[T: WriteableCellOperationAbs](override val data: Option[T]) 
 
 object CellData {
 
-  def gen[T](data: T)(implicit operation: WriteableCellOperationAbs[T]): CellData[T] = {
+  def gen[T](data: T)(
+      implicit operation: WriteableCellOperationAbs[T]): CellData[T] = {
     CellData(Option(data))
   }
 
