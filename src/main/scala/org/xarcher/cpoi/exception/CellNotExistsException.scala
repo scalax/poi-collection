@@ -1,8 +1,5 @@
 package org.xarcher.cpoi
 
-import scala.language.existentials
-import scala.language.implicitConversions
-
 sealed trait CellReaderException extends Exception {}
 
 class CellNotExistsException

@@ -4,8 +4,6 @@ import java.util.Date
 
 import org.apache.poi.ss.usermodel.{Cell, CellStyle, CellType, RichTextString}
 
-import scala.language.existentials
-import scala.language.implicitConversions
 import scala.util.Try
 
 object PoiCellContent {
@@ -26,7 +24,7 @@ trait CellContent {
         }.toEither.left.map {
           case e: IllegalStateException =>
             new ExcepectFormulaException(e)
-          case e @ (_) =>
+          case e @ (_: Throwable) =>
             throw e
         }
       }
@@ -42,7 +40,7 @@ trait CellContent {
             new ExcepectNumericCellException(e)
           case e: NumberFormatException =>
             new ExcepectNumericCellException(e)
-          case e @ (_) =>
+          case e @ (_: Throwable) =>
             throw e
         }
       }
@@ -58,7 +56,7 @@ trait CellContent {
             new ExcepectDateException(e)
           case e: NumberFormatException =>
             new ExcepectDateException(e)
-          case e @ (_) =>
+          case e @ (_: Throwable) =>
             throw e
         }
       }
@@ -70,7 +68,7 @@ trait CellContent {
         Try {
           c.getRichStringCellValue
         }.toEither.left.map {
-          case e @ (_) =>
+          case e @ (_: Throwable) =>
             new ExcepectRichTextException(e)
         }
       }
@@ -82,7 +80,7 @@ trait CellContent {
         Try {
           c.getStringCellValue
         }.toEither.left.map {
-          case e @ (_) =>
+          case e @ (_: Throwable) =>
             new ExcepectStringCellException(e)
         }
       }
@@ -96,7 +94,7 @@ trait CellContent {
         }.toEither.left.map {
           case e: IllegalStateException =>
             new ExcepectBooleanCellException(e)
-          case e @ (_) =>
+          case e @ (_: Throwable) =>
             throw e
         }
       }
@@ -110,7 +108,7 @@ trait CellContent {
         }.toEither.left.map {
           case e: IllegalStateException =>
             new ExcepectErrorCellException(e)
-          case e @ (_) =>
+          case e @ (_: Throwable) =>
             throw e
         }
       }
@@ -123,7 +121,7 @@ trait CellContent {
   lazy val isDefined: Boolean = !isEmpty
 
   lazy val cellType: Option[CellType] =
-    Try(poiCell.map(_.getCellTypeEnum)).getOrElse(None)
+    Try(poiCell.map(_.getCellTypeEnum)).toOption.flatten
 
   lazy val cellStyle: Option[CellStyle] = poiCell.map(_.getCellStyle)
 
@@ -132,7 +130,7 @@ trait CellContent {
 
   def genData[T: CellWriter: CellReader]: CellReadResult[CellData[T]] = {
     val valueEt = implicitly[CellReader[T]].get(poiCell)
-    valueEt.map(s => CellData(s))
+    valueEt.map(s => CellData(s, List.empty))
   }
 
   def tryValue[T: CellReader]: CellReadResult[T] = {
@@ -149,7 +147,6 @@ object CCell {
   def apply(poiCell: Cell): CCell = CCell(Option(poiCell))
 
 }
-
-case class CWorkbook(sheets: Set[CSheet])
+/*case class CWorkbook(sheets: Set[CSheet])
 case class CSheet(index: Int, name: String, rows: Set[CRow])
-case class CRow(index: Int, cells: Set[CCell])
+case class CRow(index: Int, cells: Set[CCell])*/
