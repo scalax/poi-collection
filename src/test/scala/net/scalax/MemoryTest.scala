@@ -14,18 +14,17 @@ class MemoryTest extends FlatSpec with Matchers {
   "Workbook's cell" should "read as string" in {
     val redomCode = UUID.randomUUID.toString
 
-   val workbook = new HSSFWorkbook()
+    val workbook = new HSSFWorkbook()
     val sheet = workbook.createSheet("SheetA")
     val row = sheet.createRow(2)
     val cell = row.createCell(3)
     cell.setCellValue(redomCode)
     val ccell = CCell(cell)
     val value = ccell.tryValue[String]
-    value.isRight should be (true)
-    value.right.get should be (redomCode)
+    value.isRight should be(true)
+    value.right.get should be(redomCode)
   }
 
-  it should "throw NoSuchElementException if an empty stack is popped" in {
-  }
+  it should "throw NoSuchElementException if an empty stack is popped" in {}
 
 }
