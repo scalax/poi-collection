@@ -2,81 +2,144 @@ package org.xarcher.cpoi
 
 import java.util.Date
 
-import org.apache.poi.ss.usermodel.{ Cell, CellStyle, CellType, RichTextString }
+import org.apache.poi.ss.usermodel.{Cell, CellStyle, CellType, RichTextString}
 
-import scala.language.existentials
-import scala.language.implicitConversions
 import scala.util.Try
+
+object PoiCellContent {
+  type CellReadResult[R] = Either[CellReaderException, R]
+}
 
 trait CellContent {
 
   val poiCell: Option[Cell]
 
-  lazy val formulaValue: Option[String] =
-    Try {
-      poiCell.flatMap(s => Option(s.getCellFormula))
-    }.getOrElse(None)
+  import PoiCellContent._
 
-  lazy val numericValue: Option[BigDecimal] =
-    Try {
-      poiCell.flatMap(s => Option(s.getNumericCellValue).map(BigDecimal(_)))
-    }.getOrElse(None)
+  lazy val formulaValue: CellReadResult[String] =
+    poiCell
+      .map { c =>
+        Try {
+          c.getCellFormula
+        }.toEither.left.map {
+          case e: IllegalStateException =>
+            new ExcepectFormulaException(e)
+          case e @ (_: Throwable) =>
+            throw e
+        }
+      }
+      .getOrElse(Left(new CellNotExistsException))
 
-  lazy val doubleValue: Option[Double] =
-    Try {
-      poiCell.flatMap(s => Option(s.getNumericCellValue))
-    }.getOrElse(None)
+  lazy val doubleValue: CellReadResult[Double] =
+    poiCell
+      .map { c =>
+        Try {
+          c.getNumericCellValue
+        }.toEither.left.map {
+          case e: IllegalStateException =>
+            new ExcepectNumericCellException(e)
+          case e: NumberFormatException =>
+            new ExcepectNumericCellException(e)
+          case e @ (_: Throwable) =>
+            throw e
+        }
+      }
+      .getOrElse(Left(new CellNotExistsException))
 
-  lazy val dateValue: Option[Date] =
-    Try {
-      poiCell.flatMap(s => Option(s.getDateCellValue))
-    }.getOrElse(None)
+  lazy val dateValue: CellReadResult[Date] =
+    poiCell
+      .map { c =>
+        Try {
+          c.getDateCellValue
+        }.toEither.left.map {
+          case e: IllegalStateException =>
+            new ExcepectDateException(e)
+          case e: NumberFormatException =>
+            new ExcepectDateException(e)
+          case e @ (_: Throwable) =>
+            throw e
+        }
+      }
+      .getOrElse(Left(new CellNotExistsException))
 
-  lazy val richTextStringValue: Option[RichTextString] =
-    Try {
-      poiCell.flatMap(s => Option(s.getRichStringCellValue))
-    }.getOrElse(None)
+  lazy val richTextStringValue: CellReadResult[RichTextString] =
+    poiCell
+      .map { c =>
+        Try {
+          c.getRichStringCellValue
+        }.toEither.left.map {
+          case e @ (_: Throwable) =>
+            new ExcepectRichTextException(e)
+        }
+      }
+      .getOrElse(Left(new CellNotExistsException))
 
-  lazy val stringValue: Option[String] =
-    Try {
-      poiCell.flatMap(s => Option(s.getStringCellValue))
-    }.getOrElse(None)
+  lazy val stringValue: CellReadResult[String] =
+    poiCell
+      .map { c =>
+        Try {
+          c.getStringCellValue
+        }.toEither.left.map {
+          case e @ (_: Throwable) =>
+            new ExcepectStringCellException(e)
+        }
+      }
+      .getOrElse(Left(new CellNotExistsException))
 
-  lazy val booleanValue: Option[Boolean] =
-    Try {
-      poiCell.flatMap(s => Option(s.getBooleanCellValue))
-    }.getOrElse(None)
+  lazy val booleanValue: CellReadResult[Boolean] =
+    poiCell
+      .map { c =>
+        Try {
+          c.getBooleanCellValue
+        }.toEither.left.map {
+          case e: IllegalStateException =>
+            new ExcepectBooleanCellException(e)
+          case e @ (_: Throwable) =>
+            throw e
+        }
+      }
+      .getOrElse(Left(new CellNotExistsException))
 
-  lazy val errorValue: Option[Byte] =
-    Try {
-      poiCell.flatMap(s => Option(s.getErrorCellValue))
-    }.getOrElse(None)
+  lazy val errorValue: CellReadResult[Byte] =
+    poiCell
+      .map { c =>
+        Try {
+          c.getErrorCellValue
+        }.toEither.left.map {
+          case e: IllegalStateException =>
+            new ExcepectErrorCellException(e)
+          case e @ (_: Throwable) =>
+            throw e
+        }
+      }
+      .getOrElse(Left(new CellNotExistsException))
 
   lazy val isEmpty: Boolean = {
     poiCell.map(_.getCellTypeEnum == CellType.BLANK).getOrElse(true)
-    //doubleValue == Option(0d) && dateValue == None && stringValue == Option("") && booleanValue == Option(false)
   }
 
   lazy val isDefined: Boolean = !isEmpty
 
-  lazy val cellType: Option[CellType] = Try(poiCell.map(_.getCellTypeEnum)).getOrElse(None)
+  lazy val cellType: Option[CellType] =
+    Try(poiCell.map(_.getCellTypeEnum)).toOption.flatten
+
   lazy val cellStyle: Option[CellStyle] = poiCell.map(_.getCellStyle)
+
   lazy val rowIndex: Option[Int] = poiCell.map(_.getRowIndex)
   lazy val columnIndex: Option[Int] = poiCell.map(_.getColumnIndex)
 
-  def genData[T: WriteableCellOperationAbs: ReadableCellOperationAbs]: CellData[T] = {
-    val value = implicitly[ReadableCellOperationAbs[T]].get(poiCell)
-    CellData(value)
+  def genData[T: CellWriter: CellReader]: CellReadResult[CellData[T]] = {
+    val valueEt = implicitly[CellReader[T]].get(poiCell)
+    valueEt.map(s => CellData(s, List.empty))
   }
 
-  def tryValue[T: ReadableCellOperationAbs]: Option[T] = {
-    implicitly[ReadableCellOperationAbs[T]].get(poiCell)
+  def tryValue[T: CellReader]: CellReadResult[T] = {
+    implicitly[CellReader[T]].get(poiCell)
   }
 
 }
 
-class CCell(override val poiCell: Option[Cell]) extends CellContent {
-}
+class CCell(override val poiCell: Option[Cell]) extends CellContent {}
 
 object CCell {
 
@@ -84,7 +147,6 @@ object CCell {
   def apply(poiCell: Cell): CCell = CCell(Option(poiCell))
 
 }
-
-case class CWorkbook(sheets: Set[CSheet])
+/*case class CWorkbook(sheets: Set[CSheet])
 case class CSheet(index: Int, name: String, rows: Set[CRow])
-case class CRow(index: Int, cells: Set[CCell])
+case class CRow(index: Int, cells: Set[CCell])*/

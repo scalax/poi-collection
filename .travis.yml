@@ -1,8 +1,10 @@
 language: scala
+sudo: required
+dist: trusty
 
 scala:
-  - 2.11.7
-  - 2.10.6
+  - 2.11.12
+  - 2.12.5
 
 jdk:
   - oraclejdk8
@@ -12,7 +14,7 @@ before_install:
 
 script:
   - sbt +test
-  - sbt clean coverage test
+  - sbt clean coverage test coverageReport
 
 after_success:
-  - codecov
+  - bash <(curl -s https://codecov.io/bash)

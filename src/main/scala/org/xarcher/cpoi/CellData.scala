@@ -1,101 +1,78 @@
 package org.xarcher.cpoi
 
-import org.apache.poi.ss.usermodel.{ Cell, CellStyle }
-
-import scala.language.existentials
-import scala.language.implicitConversions
+import org.apache.poi.ss.usermodel.{Cell, CellStyle}
 
 trait CellDataAbs {
   self =>
 
   type DataType
-  val data: Option[DataType]
+  val data: DataType
 
-  protected val operation: WriteableCellOperationAbs[DataType]
+  protected val operation: CellWriter[DataType]
 
-  val styleTrans: List[StyleTransform]
+  val styleTransform: List[StyleTransform]
 
-  def setValue(cell: Cell): Boolean = {
-    operation.set(data, Option(cell))
+  def set(cell: Cell, cellStlye: Option[CellStyle]): Boolean = {
+    operation.set(cell, data, cellStlye)
   }
 
   def withTransforms(trans: List[StyleTransform]): CellDataAbs = {
     implicit val operation1 = self.operation
-    new CellData(data) {
-      override val styleTrans = trans
-    }
+    new CellData(data, trans)
   }
 
   def withTransforms(trans: StyleTransform*): CellDataAbs = {
     implicit val operation1 = self.operation
-    new CellData(data) {
-      override val styleTrans = trans.toList
-    }
+    new CellData(data, trans.toList)
   }
 
   def addTransform(tran: List[StyleTransform]): CellDataAbs = {
     implicit val operation1 = self.operation
-    val thisTrans = this.styleTrans
-    new CellData(data) {
-      override val styleTrans = thisTrans ::: tran
-    }
+    val thisTrans = this.styleTransform
+    new CellData(data, thisTrans ::: tran)
   }
 
   def addTransform(tran: StyleTransform*): CellDataAbs = {
     implicit val operation1 = self.operation
-    val thisTrans = this.styleTrans
-    new CellData(data) {
-      override val styleTrans = thisTrans ::: tran.toList
-    }
+    val thisTrans = this.styleTransform
+    new CellData(data, thisTrans ::: tran.toList)
   }
 
 }
 
-case class CellData[T: WriteableCellOperationAbs](override val data: Option[T]) extends CellDataAbs {
-
-  override val styleTrans: List[StyleTransform] = List.empty
+case class CellData[T: CellWriter](
+    override val data: T,
+    override val styleTransform: List[StyleTransform])
+    extends CellDataAbs {
 
   override type DataType = T
 
-  override protected val operation = implicitly[WriteableCellOperationAbs[T]]
-
-  /*def setValue(cell: Cell, styleGen: StyleGen): Boolean = {
-    val style = styleGen.getCellStyle(styleTrans)
-    operation.set(data, Option(cell), style)
-  }*/
+  override protected val operation = implicitly[CellWriter[T]]
 
   override def withTransforms(trans: List[StyleTransform]): CellData[T] = {
-    new CellData(data) {
-      override val styleTrans = trans
-    }
+    new CellData(data, trans)
   }
 
   override def withTransforms(trans: StyleTransform*): CellData[T] = {
-    new CellData(data) {
-      override val styleTrans = trans.toList
-    }
+    new CellData(data, trans.toList)
   }
 
   override def addTransform(tran: List[StyleTransform]): CellData[T] = {
-    val thisTrans = this.styleTrans
-    new CellData(data) {
-      override val styleTrans = thisTrans ::: tran
-    }
+    val thisTrans = this.styleTransform
+    new CellData(data, thisTrans ::: tran)
   }
 
   override def addTransform(tran: StyleTransform*): CellData[T] = {
-    val thisTrans = this.styleTrans
-    new CellData(data) {
-      override val styleTrans = thisTrans ::: tran.toList
-    }
+    val thisTrans = this.styleTransform
+    new CellData(data, thisTrans ::: tran.toList)
   }
 
 }
 
 object CellData {
 
-  def gen[T](data: T)(implicit operation: WriteableCellOperationAbs[T]): CellData[T] = {
-    CellData(Option(data))
+  def gen[T](data: T)(implicit operation: CellWriter[T]): CellData[T] = {
+    CellData(data, List.empty)
   }
 
 }
