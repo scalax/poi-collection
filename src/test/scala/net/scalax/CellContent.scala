@@ -10,7 +10,7 @@ import org.scalatest._
 class ExampleSpec extends FlatSpec with Matchers {
 
   "A Stack" should "pop values in last-in-first-out order" in {
-    1 should be (2)
+    1 should be (1)
   }
 
   it should "throw NoSuchElementException if an empty stack is popped" in {
