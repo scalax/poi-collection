@@ -2,9 +2,6 @@ package org.xarcher.cpoi
 
 import org.apache.poi.ss.usermodel.{Cell, CellStyle}
 
-import scala.language.existentials
-import scala.language.implicitConversions
-
 trait CellDataAbs {
   self =>
 
@@ -15,8 +12,8 @@ trait CellDataAbs {
 
   val styleTrans: List[StyleTransform]
 
-  def setValue(cell: Cell, cellStlye: Option[CellStyle]): Boolean = {
-    operation.set(data, cell, cellStlye)
+  def set(cell: Cell, cellStlye: Option[CellStyle]): Boolean = {
+    operation.set(cell, data, cellStlye)
   }
 
   def withTransforms(trans: List[StyleTransform]): CellDataAbs = {

@@ -3,42 +3,73 @@ package org.xarcher.cpoi
 import scala.language.existentials
 import scala.language.implicitConversions
 
-sealed trait CellReaderException {
-  self: Throwable =>
-}
+sealed trait CellReaderException extends Exception {}
 
 class CellNotExistsException
     extends Exception("Cell not found.")
     with CellReaderException {}
 
-sealed trait CellTypeNotConfirmException extends CellReaderException {
-  self: Throwable =>
+sealed trait CellTypeNotConfirmException extends CellReaderException {}
+
+class ExcepectFormulaException
+    extends Exception("Excepect formula cell.")
+    with CellTypeNotConfirmException {
+  def this(cause: Throwable) = {
+    this()
+    initCause(cause)
+  }
 }
 
-class ExcepectFormulaException(cause: Throwable)
-    extends Exception("Excepect formula cell.", cause)
-    with CellTypeNotConfirmException {}
+class ExcepectNumericCellException
+    extends Exception("Excepect numeric cell.")
+    with CellTypeNotConfirmException {
+  def this(cause: Throwable) = {
+    this()
+    initCause(cause)
+  }
+}
 
-class ExcepectNumericCellException(cause: Throwable)
-    extends Exception("Excepect numeric cell.", cause)
-    with CellTypeNotConfirmException {}
+class ExcepectDateException
+    extends Exception("Excepect date cell.")
+    with CellTypeNotConfirmException {
+  def this(cause: Throwable) = {
+    this()
+    initCause(cause)
+  }
+}
 
-class ExcepectDateException(cause: Throwable)
-    extends Exception("Excepect date cell.", cause)
-    with CellTypeNotConfirmException {}
+class ExcepectRichTextException
+    extends Exception("Excepect rich text cell.")
+    with CellTypeNotConfirmException {
+  def this(cause: Throwable) = {
+    this()
+    initCause(cause)
+  }
+}
 
-class ExcepectRichTextException(cause: Throwable)
-    extends Exception("Excepect rich text cell.", cause)
-    with CellTypeNotConfirmException {}
+class ExcepectStringCellException
+    extends Exception("Excepect string cell.")
+    with CellTypeNotConfirmException {
+  def this(cause: Throwable) = {
+    this()
+    initCause(cause)
+  }
+}
 
-class ExcepectStringCellException(cause: Throwable)
-    extends Exception("Excepect string cell.", cause)
-    with CellTypeNotConfirmException {}
+class ExcepectBooleanCellException
+    extends Exception("Excepect boolean cell.")
+    with CellTypeNotConfirmException {
+  def this(cause: Throwable) = {
+    this()
+    initCause(cause)
+  }
+}
 
-class ExcepectBooleanCellException(cause: Throwable)
-    extends Exception("Excepect boolean cell.", cause)
-    with CellTypeNotConfirmException {}
-
-class ExcepectErrorCellException(cause: Throwable)
-    extends Exception("Excepect error cell.", cause)
-    with CellTypeNotConfirmException {}
+class ExcepectErrorCellException
+    extends Exception("Excepect error cell.")
+    with CellTypeNotConfirmException {
+  def this(cause: Throwable) = {
+    this()
+    initCause(cause)
+  }
+}
