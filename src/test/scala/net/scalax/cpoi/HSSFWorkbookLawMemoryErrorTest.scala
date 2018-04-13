@@ -1,11 +1,9 @@
-package org.xarcher.cpoi
+package net.scalax.cpoi
 
-import java.util.Date
-
-import org.apache.poi.hssf.usermodel.HSSFWorkbook
+import net.scalax.cpoi.exception.CellNotExistsException
 import org.scalatest._
 
-class LawMemoryErrorTest extends FlatSpec with Matchers {
+class HSSFWorkbookLawMemoryErrorTest extends FlatSpec with Matchers {
 
   object PoiOperations extends PoiOperations
 

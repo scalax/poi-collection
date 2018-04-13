@@ -1,5 +1,6 @@
-package org.xarcher.cpoi
+package net.scalax.cpoi
 
+import net.scalax.cpoi.rw.CellWriter
 import org.apache.poi.ss.usermodel.{Cell, CellStyle}
 
 trait CellDataAbs {

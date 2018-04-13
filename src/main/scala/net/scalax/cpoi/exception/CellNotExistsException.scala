@@ -1,4 +1,4 @@
-package org.xarcher.cpoi
+package net.scalax.cpoi.exception
 
 sealed trait CellReaderException extends Exception {}
 
