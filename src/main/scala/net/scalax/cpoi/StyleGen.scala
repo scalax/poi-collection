@@ -1,4 +1,4 @@
-package org.xarcher.cpoi
+package net.scalax.cpoi
 
 import org.apache.poi.ss.usermodel.CellStyle
 

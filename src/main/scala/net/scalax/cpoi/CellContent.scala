@@ -1,7 +1,9 @@
-package org.xarcher.cpoi
+package net.scalax.cpoi
 
 import java.util.Date
 
+import net.scalax.cpoi.exception._
+import net.scalax.cpoi.rw.{CellReader, CellWriter}
 import org.apache.poi.ss.usermodel.{Cell, CellStyle, CellType, RichTextString}
 
 import scala.util.Try
@@ -135,6 +137,21 @@ trait CellContent {
 
   def tryValue[T: CellReader]: CellReadResult[T] = {
     implicitly[CellReader[T]].get(poiCell)
+  }
+
+}
+
+object CellContent {
+
+  implicit class CellContentOptExtensionMethon(cellOpt: Option[CellContent]) {
+
+    def openAlways: CellContent = {
+      cellOpt match {
+        case Some(s) => s
+        case None    => CCell(None)
+      }
+    }
+
   }
 
 }

@@ -1,11 +1,11 @@
-package org.xarcher.cpoi
+package net.scalax.cpoi
 
 import java.util.Date
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.scalatest._
 
-class HSSFWorkbookMemoryTest extends FlatSpec with Matchers {
+class HSSFWorkbookLawMemoryTest extends FlatSpec with Matchers {
 
   object PoiOperations extends PoiOperations
 
@@ -19,7 +19,7 @@ class HSSFWorkbookMemoryTest extends FlatSpec with Matchers {
     val cell = row.createCell(3)
     cell.setCellValue(testUtf8Str)
     val ccell = CCell(cell)
-    val value = ccell.tryValue[String]
+    val value = ccell.stringValue
     value.isRight should be(true)
     value.right.get should be(testUtf8Str)
   }
@@ -32,7 +32,7 @@ class HSSFWorkbookMemoryTest extends FlatSpec with Matchers {
     val cell = row.createCell(3)
     cell.setCellValue(testDouble)
     val ccell = CCell(cell)
-    val value = ccell.tryValue[Double]
+    val value = ccell.doubleValue
     value.isRight should be(true)
     value.right.get should be(testDouble)
 
@@ -52,8 +52,8 @@ class HSSFWorkbookMemoryTest extends FlatSpec with Matchers {
     cell2.setCellValue(testBoolean2)
     val ccell1 = CCell(cell1)
     val ccell2 = CCell(cell2)
-    val value1 = ccell1.tryValue[Boolean]
-    val value2 = ccell2.tryValue[Boolean]
+    val value1 = ccell1.booleanValue
+    val value2 = ccell2.booleanValue
     value1.isRight should be(true)
     value2.isRight should be(true)
 
@@ -69,7 +69,7 @@ class HSSFWorkbookMemoryTest extends FlatSpec with Matchers {
     val cell = row.createCell(3)
     cell.setCellValue(testDate)
     val ccell = CCell(cell)
-    val value = ccell.tryValue[Date]
+    val value = ccell.dateValue
     value.isRight should be(true)
     value.right.get should be(testDate)
 
