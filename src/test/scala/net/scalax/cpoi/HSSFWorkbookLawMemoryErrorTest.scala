@@ -5,10 +5,6 @@ import org.scalatest._
 
 class HSSFWorkbookLawMemoryErrorTest extends FlatSpec with Matchers {
 
-  object PoiOperations extends PoiOperations
-
-  import PoiOperations._
-
   "CellContent" should "throw exception when read an empty cell as string" in {
     val ccell = CCell(Option.empty)
     val value = ccell.stringValue
