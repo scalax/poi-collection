@@ -7,9 +7,7 @@ import org.scalatest._
 
 class HSSFWorkbookMemoryTest extends FlatSpec with Matchers {
 
-  object PoiOperations extends PoiOperations
-
-  import PoiOperations._
+  import readers._
 
   "HSSFWorkbook's cell" should "read as string" in {
     val testUtf8Str = "Test cell str（一些 utf-8 测试字符）"
