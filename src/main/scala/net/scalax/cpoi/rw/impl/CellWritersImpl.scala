@@ -2,8 +2,6 @@ package net.scalax.cpoi.rw
 
 import java.util.Date
 
-import net.scalax.cpoi.{CCell, PoiCellContent}
-import net.scalax.cpoi.exception._
 import org.apache.poi.ss.usermodel.Cell
 
 import scala.util.Try
