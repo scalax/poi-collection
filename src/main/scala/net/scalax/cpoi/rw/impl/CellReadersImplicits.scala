@@ -4,12 +4,12 @@ trait CellReadersImplicits {
 
   protected val readers: CellReadersImpl = new CellReadersImpl {}
 
-  implicit val stringReader = readers.stringReader
+  implicit lazy val stringReader = readers.stringReader
 
-  implicit val doubleReader = readers.doubleReader
+  implicit lazy val doubleReader = readers.doubleReader
 
-  implicit val booleanReader = readers.booleanReader
+  implicit lazy val booleanReader = readers.booleanReader
 
-  implicit val dateReader = readers.dateReader
+  implicit lazy val dateReader = readers.dateReader
 
 }

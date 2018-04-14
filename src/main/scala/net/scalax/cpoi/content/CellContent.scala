@@ -4,19 +4,15 @@ import java.util.Date
 
 import net.scalax.cpoi.exception._
 import net.scalax.cpoi.rw.{CellReader, CellWriter}
+import net.scalax.cpoi._
+
 import org.apache.poi.ss.usermodel.{Cell, CellStyle, CellType, RichTextString}
 
 import scala.util.Try
 
-object PoiCellContent {
-  type CellReadResult[R] = Either[CellReaderException, R]
-}
-
 trait CellContent {
 
   val poiCell: Option[Cell]
-
-  import PoiCellContent._
 
   lazy val formulaValue: CellReadResult[String] =
     poiCell
