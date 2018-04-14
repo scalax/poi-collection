@@ -39,7 +39,8 @@ trait MutableStyleGen {
 object MutableStyleGen {
   def getInstance: MutableStyleGen = {
     new MutableStyleGen {
-      override protected val cellMap: MutableMap[StyleKeyWrap, CellStyle] = MutableMap.empty
+      override protected val cellMap: MutableMap[StyleKeyWrap, CellStyle] =
+        MutableMap.empty
     }
   }
 }
