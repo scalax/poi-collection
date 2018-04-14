@@ -1,6 +1,7 @@
 package net.scalax.cpoi.rw
 
-import net.scalax.cpoi.PoiCellContent
+import cats._
+import net.scalax.cpoi.content.PoiCellContent
 import net.scalax.cpoi.exception._
 import org.apache.poi.ss.usermodel.Cell
 
@@ -27,6 +28,16 @@ object CellReader {
         }
       }
 
+    }
+  }
+
+  implicit val functor = new Functor[CellReader] {
+    override def map[A, B](fa: CellReader[A])(f: A => B): CellReader[B] = {
+      new CellReader[B] {
+        def get(cell: Option[Cell]): PoiCellContent.CellReadResult[B] = {
+          fa.get(cell).map(f)
+        }
+      }
     }
   }
 

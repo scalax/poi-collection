@@ -1,6 +1,7 @@
-package net.scalax.cpoi
+package net.scalax.cpoi.content
 
 import net.scalax.cpoi.rw.CellWriter
+import net.scalax.cpoi.style.StyleTransform
 import org.apache.poi.ss.usermodel.{Cell, CellStyle}
 
 trait CellDataAbs {
@@ -74,22 +75,6 @@ object CellData {
 
   def gen[T](data: T)(implicit operation: CellWriter[T]): CellData[T] = {
     CellData(data, List.empty)
-  }
-
-}
-
-trait StyleTransform {
-
-  def operation(cellStyle: CellStyle): CellStyle
-
-}
-
-object StyleTransform {
-
-  def apply(tran: CellStyle => CellStyle): StyleTransform = {
-    new StyleTransform {
-      override def operation(cs: CellStyle): CellStyle = tran(cs)
-    }
   }
 
 }

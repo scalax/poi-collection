@@ -1,5 +1,6 @@
 package net.scalax.cpoi
 
+import net.scalax.cpoi.content.CCell
 import net.scalax.cpoi.exception.CellNotExistsException
 import org.scalatest._
 
