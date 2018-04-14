@@ -2,6 +2,8 @@ package net.scalax.cpoi.exception
 
 sealed trait CellReaderException extends Exception {}
 
+trait CellNotConfirmException extends CellReaderException {}
+
 class CellNotExistsException
     extends Exception("Cell not found.")
     with CellReaderException {}

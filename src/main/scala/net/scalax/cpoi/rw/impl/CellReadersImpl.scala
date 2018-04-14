@@ -2,13 +2,32 @@ package net.scalax.cpoi.rw
 
 import java.util.Date
 
+import cats.ApplicativeError
 import net.scalax.cpoi.content.{CCell, PoiCellContent}
 import net.scalax.cpoi.exception._
 import org.apache.poi.ss.usermodel.Cell
+import cats.implicits._
 
 import scala.util.Try
 
 trait CellReadersImpl {
+
+  lazy val nonEmptyStringReader: CellReader[String] = {
+
+    val m = ApplicativeError[CellReader, CellReaderException]
+
+    stringReader.flatMap { str =>
+      val trimStr = str.trim
+      val either = if (trimStr.isEmpty) {
+        Left(new CellNotExistsException())
+      } else {
+        Right(trimStr)
+      }
+
+      m.fromEither(either)
+    }
+
+  }
 
   val stringReader = new CellReader[String] {
     override def get(
