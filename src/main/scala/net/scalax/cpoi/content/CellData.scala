@@ -14,8 +14,8 @@ trait CellDataAbs {
 
   val styleTransform: List[StyleTransform]
 
-  def set(cell: Cell, cellStlye: Option[CellStyle]): Boolean = {
-    operation.set(cell, data, cellStlye)
+  def set(cell: Cell): Boolean = {
+    operation.setValue(cell, data)
   }
 
   def withTransforms(trans: List[StyleTransform]): CellDataAbs = {
@@ -44,7 +44,7 @@ trait CellDataAbs {
 
 case class CellData[T: CellWriter](
     override val data: T,
-    override val styleTransform: List[StyleTransform])
+    override val styleTransform: List[StyleTransform] = List.empty)
     extends CellDataAbs {
 
   override type DataType = T

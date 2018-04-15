@@ -21,6 +21,7 @@ trait CellReadersImpl {
 
     stringReader.flatMap { str =>
       val trimStr = str.trim
+
       val either = if (trimStr.isEmpty) {
         Left(new CellNotExistsException())
       } else {

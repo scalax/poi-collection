@@ -33,11 +33,11 @@ trait StyleGen {
         }
     }
   }*/
-  protected def getCellStyle(cellDate: CellDataAbs,
+  protected def getCellStyle(cellData: CellDataAbs,
                              cell: Cell): (CellStyle, StyleGen) = {
     val workbook = cell.getSheet.getWorkbook
     val key =
-      StyleKeyWrap(workbook = workbook, styleTrans = cellDate.styleTransform)
+      StyleKeyWrap(workbook = workbook, styleTrans = cellData.styleTransform)
     val cellStyleOpt = cellMap.get(key)
     val (cellStyle, newMap) = cellStyleOpt match {
       case Some(c) => (c, self.cellMap)
@@ -54,8 +54,8 @@ trait StyleGen {
     (cellStyle, newGen)
   }
 
-  def setCellStyle(cellDate: CellDataAbs, cell: Cell): StyleGen = {
-    val (cStyle, newStyleGen) = getCellStyle(cellDate, cell)
+  def setCellStyle(cellData: CellDataAbs, cell: Cell): StyleGen = {
+    val (cStyle, newStyleGen) = getCellStyle(cellData, cell)
     cell.setCellStyle(cStyle)
     newStyleGen
   }
