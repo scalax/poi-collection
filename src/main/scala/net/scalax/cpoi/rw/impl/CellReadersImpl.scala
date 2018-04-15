@@ -120,7 +120,7 @@ trait CellReadersImpl {
             case r: CellNotExistsException =>
               Left(r)
             case r: CellReaderException =>
-              Left(new ExcepectDateException(r))
+              Left(r)
         },
         date => Right(date)
       )
