@@ -35,7 +35,7 @@ class HSSFWorkbookLawNumbricCellTest extends FlatSpec with Matchers {
     val cell = sheet.createRow(0).createCell(0)
     cell.setCellValue(new Date(0))
     cell.setCellType(CellType.NUMERIC)
-    cell.getNumericCellValue should be(25569.333333333332d)
+    cell.getNumericCellValue.toInt should be(25569)
     cell.getDateCellValue should be(new Date(0))
   }
 
