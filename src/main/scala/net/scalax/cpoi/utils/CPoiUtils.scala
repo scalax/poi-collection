@@ -9,8 +9,9 @@ object CPoiUtils {
                   list: List[(Cell, CellDataAbs)]): StyleGen = {
     list.foldLeft(styleGen) {
       case (eachGen, (eachCell, eachCData)) =>
+        val gen = eachGen.setCellStyle(eachCData, eachCell)
         eachCData.set(eachCell)
-        eachGen.setCellStyle(eachCData, eachCell)
+        gen
     }
   }
 
@@ -18,8 +19,9 @@ object CPoiUtils {
                   list: Stream[(Cell, CellDataAbs)]): StyleGen = {
     list.foldLeft(styleGen) {
       case (eachGen, (eachCell, eachCData)) =>
+        val gen = eachGen.setCellStyle(eachCData, eachCell)
         eachCData.set(eachCell)
-        eachGen.setCellStyle(eachCData, eachCell)
+        gen
     }
   }
 
@@ -27,8 +29,8 @@ object CPoiUtils {
                   list: List[(Cell, CellDataAbs)]): Unit = {
     list.foreach {
       case (eachCell, eachCData) =>
-        eachCData.set(eachCell)
         styleGen.setCellStyle(eachCData, eachCell)
+        eachCData.set(eachCell)
     }
   }
 
@@ -36,8 +38,8 @@ object CPoiUtils {
                   list: Stream[(Cell, CellDataAbs)]): Unit = {
     list.foreach {
       case (eachCell, eachCData) =>
-        eachCData.set(eachCell)
         styleGen.setCellStyle(eachCData, eachCell)
+        eachCData.set(eachCell)
     }
   }
 

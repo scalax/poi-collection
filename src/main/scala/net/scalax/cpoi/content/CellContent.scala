@@ -112,12 +112,9 @@ trait CellContent {
       }
       .getOrElse(Left(new CellNotExistsException))
 
-  lazy val isEmpty: Boolean = {
+  lazy val isBlank: Boolean = {
     poiCell.map(_.getCellTypeEnum == CellType.BLANK).getOrElse(true)
   }
-
-  lazy val isDefined: Boolean = !isEmpty
-
   lazy val cellType: Option[CellType] =
     Try(poiCell.map(_.getCellTypeEnum)).toOption.flatten
 
@@ -128,7 +125,7 @@ trait CellContent {
 
   def genData[T: CellWriter: CellReader]: CellReadResult[CellData[T]] = {
     val valueEt = implicitly[CellReader[T]].get(poiCell)
-    valueEt.map(s => CellData(s, List.empty))
+    valueEt.map(s => CellData(s))
   }
 
   def tryValue[T: CellReader]: CellReadResult[T] = {
