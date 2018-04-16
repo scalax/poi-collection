@@ -4,62 +4,42 @@ import java.util.Date
 
 import org.apache.poi.ss.usermodel.Cell
 
-import scala.util.{Failure, Success, Try}
+import scala.util.Try
 
 trait CellWritersImpl {
 
   val stringWriter = new CellWriter[String] {
-    override def setValue(cell: Cell, value: String): Boolean = {
+    override def setValue(cell: Cell, value: String): Try[Boolean] = {
       Try {
         cell.setCellValue(value)
-      } match {
-        case Success(_: Unit) =>
-          true
-        case Failure(e) =>
-          e.printStackTrace
-          false
+        true
       }
     }
   }
 
   val doubleWriter = new CellWriter[Double] {
-    override def setValue(cell: Cell, value: Double): Boolean = {
+    override def setValue(cell: Cell, value: Double): Try[Boolean] = {
       Try {
         cell.setCellValue(value)
-      } match {
-        case Success(_: Unit) =>
-          true
-        case Failure(e) =>
-          e.printStackTrace
-          false
+        true
       }
     }
   }
 
   val booleanWriter = new CellWriter[Boolean] {
-    override def setValue(cell: Cell, value: Boolean): Boolean = {
+    override def setValue(cell: Cell, value: Boolean): Try[Boolean] = {
       Try {
         cell.setCellValue(value)
-      } match {
-        case Success(_: Unit) =>
-          true
-        case Failure(e) =>
-          e.printStackTrace
-          false
+        true
       }
     }
   }
 
   val dateWriter = new CellWriter[Date] {
-    override def setValue(cell: Cell, value: Date): Boolean = {
+    override def setValue(cell: Cell, value: Date): Try[Boolean] = {
       Try {
         cell.setCellValue(value)
-      } match {
-        case Success(_: Unit) =>
-          true
-        case Failure(e) =>
-          e.printStackTrace
-          false
+        true
       }
     }
   }
