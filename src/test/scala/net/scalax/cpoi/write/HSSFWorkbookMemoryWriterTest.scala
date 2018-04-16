@@ -1,7 +1,14 @@
 package net.scalax.cpoi
 
+import java.util.Date
+
 import net.scalax.cpoi.content.CellData
-import net.scalax.cpoi.style.{CPoiUtils, MutableStyleGen, StyleGen, StyleTransform}
+import net.scalax.cpoi.style.{
+  CPoiUtils,
+  MutableStyleGen,
+  StyleGen,
+  StyleTransform
+}
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.ss.usermodel.{CellStyle, CellType, Workbook}
 import org.scalatest._
@@ -203,16 +210,27 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
 
     val workbook = new HSSFWorkbook()
 
-    val defaultCellStyleCount = workbook.getNumCellStyles
-
     val sheet = workbook.createSheet("SheetA")
-    val poiCell = sheet.createRow(1).createCell(1)
-    val cells = List(poiCell -> CellData(Option.empty[String]))
+
+    val poiCell1 = sheet.createRow(1).createCell(1)
+    val poiCell2 = sheet.createRow(1).createCell(2)
+    val poiCell3 = sheet.createRow(1).createCell(3)
+    val poiCell4 = sheet.createRow(1).createCell(4)
+
+    val cells = List(
+      poiCell1 -> CellData(Option.empty[String]),
+      poiCell2 -> CellData(Option.empty[Double]),
+      poiCell3 -> CellData(Option.empty[Boolean]),
+      poiCell4 -> CellData(Option.empty[Date])
+    )
 
     val gen = StyleGen.getInstance
     CPoiUtils.multiplySet(gen, cells): StyleGen
 
-    poiCell.getCellTypeEnum should be(CellType.BLANK)
+    poiCell1.getCellTypeEnum should be(CellType.BLANK)
+    poiCell2.getCellTypeEnum should be(CellType.BLANK)
+    poiCell3.getCellTypeEnum should be(CellType.BLANK)
+    poiCell4.getCellTypeEnum should be(CellType.BLANK)
   }
 
 }
