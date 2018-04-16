@@ -4,7 +4,7 @@ import java.util.Date
 
 import org.apache.poi.ss.usermodel.Cell
 
-import scala.util.Try
+import scala.util.{Failure, Success, Try}
 
 trait CellWritersImpl {
 
@@ -12,7 +12,12 @@ trait CellWritersImpl {
     override def setValue(cell: Cell, value: String): Boolean = {
       Try {
         cell.setCellValue(value)
-      }.map((_: Unit) => true).getOrElse(false)
+      } match {
+        case Success(_: Unit) =>
+          true
+        case Failure(_) =>
+          false
+      }
     }
   }
 
@@ -20,8 +25,12 @@ trait CellWritersImpl {
     override def setValue(cell: Cell, value: Double): Boolean = {
       Try {
         cell.setCellValue(value)
-      }.map((_: Unit) => true)
-        .getOrElse(false)
+      } match {
+        case Success(_: Unit) =>
+          true
+        case Failure(_) =>
+          false
+      }
     }
   }
 
@@ -29,8 +38,12 @@ trait CellWritersImpl {
     override def setValue(cell: Cell, value: Boolean): Boolean = {
       Try {
         cell.setCellValue(value)
-      }.map((_: Unit) => true)
-        .getOrElse(false)
+      } match {
+        case Success(_: Unit) =>
+          true
+        case Failure(_) =>
+          false
+      }
     }
   }
 
@@ -38,7 +51,12 @@ trait CellWritersImpl {
     override def setValue(cell: Cell, value: Date): Boolean = {
       Try {
         cell.setCellValue(value)
-      }.map((_: Unit) => true).getOrElse(false)
+      } match {
+        case Success(_: Unit) =>
+          true
+        case Failure(_) =>
+          false
+      }
     }
   }
 

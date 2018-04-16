@@ -89,7 +89,12 @@ trait CellReadersImpl {
         case Some(c) =>
           c.getCellTypeEnum match {
             case CellType.NUMERIC =>
-              Right(c.getDateCellValue)
+              Option(c.getDateCellValue) match {
+                case Some(date) =>
+                  Right(date)
+                case _ =>
+                  Left(new ExcepectDateException())
+              }
             case _ =>
               Left(new ExcepectDateException())
           }
