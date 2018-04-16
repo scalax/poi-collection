@@ -3,15 +3,10 @@ package net.scalax.cpoi.rw
 import java.util.Date
 
 import cats.ApplicativeError
-import net.scalax.cpoi.content.CCell
 import net.scalax.cpoi.exception._
 import net.scalax.cpoi._
-
-import org.apache.poi.ss.usermodel.Cell
-
+import org.apache.poi.ss.usermodel.{Cell, CellType}
 import cats.implicits._
-
-import scala.util.Try
 
 trait CellReadersImpl {
 
@@ -35,95 +30,72 @@ trait CellReadersImpl {
 
   def stringReader = new CellReader[String] {
     override def get(cell: Option[Cell]): CellReadResult[String] = {
-      val content = CCell(cell)
-      content.stringValue
-        .fold(
-          (e: CellReaderException) =>
-            e match {
-              case r: CellNotExistsException =>
-                Left(r)
-              case _: CellReaderException =>
-                content.doubleValue.fold(
-                  (_: CellReaderException) =>
-                    content.dateValue.fold(
-                      (_: CellReaderException) =>
-                        content.booleanValue.fold(
-                          (_: CellReaderException) =>
-                            content.richTextStringValue.fold(
-                              (_: CellReaderException) =>
-                                Left(new ExcepectStringCellException()),
-                              rich => Right(rich.getString)),
-                          bool => Right(bool.toString)
-                      ),
-                      date => Right(date.toString)
-                  ),
-                  dou => Right(dou.toString)
-                )
-          },
-          str => Right(str)
-        )
+      cell match {
+        case Some(c) =>
+          c.getCellTypeEnum match {
+            case CellType.STRING =>
+              Right(c.getStringCellValue)
+            case CellType.NUMERIC =>
+              c.setCellType(CellType.STRING)
+              Right(c.getStringCellValue)
+            //convert boolean to string is meaningless.
+            //case CellType.BOOLEAN =>
+            //c.setCellType(CellType.STRING)
+            //Right(c.getStringCellValue)
+            case _ =>
+              Left(new ExcepectStringCellException())
+          }
+        case _ =>
+          Left(new CellNotExistsException())
+      }
     }
   }
 
   def doubleReader = new CellReader[Double] {
     override def get(cell: Option[Cell]): CellReadResult[Double] = {
-      val content = CCell(cell)
-      content.doubleValue.fold(
-        (e: CellReaderException) =>
-          e match {
-            case r: CellNotExistsException =>
-              Left(r)
-            case _: CellReaderException =>
-              content.stringValue.fold(
-                (_: CellReaderException) =>
-                  Left(new ExcepectNumericCellException()),
-                str =>
-                  Try { str.toDouble }.toEither.fold(
-                    (_: Throwable) => Left(new ExcepectNumericCellException()),
-                    d => Right(d))
-              )
-        },
-        dou => Right(dou)
-      )
+      cell match {
+        case Some(c) =>
+          c.getCellTypeEnum match {
+            case CellType.NUMERIC =>
+              Right(c.getNumericCellValue)
+            case _ =>
+              Left(new ExcepectNumericCellException())
+          }
+        case _ =>
+          Left(new CellNotExistsException())
+      }
     }
   }
 
   def booleanReader = new CellReader[Boolean] {
     override def get(cell: Option[Cell]): CellReadResult[Boolean] = {
-      val content = CCell(cell)
-      content.booleanValue.fold(
-        (e: CellReaderException) =>
-          e match {
-            case r: CellNotExistsException =>
-              Left(r)
-            case _: CellReaderException =>
-              content.stringValue.fold(
-                (_: CellReaderException) =>
-                  Left(new ExcepectBooleanCellException()),
-                str =>
-                  Try { str.toBoolean }.toEither.fold(
-                    (_: Throwable) => Left(new ExcepectBooleanCellException()),
-                    d => Right(d))
-              )
-        },
-        dou => Right(dou)
-      )
+      cell match {
+        case Some(c) =>
+          c.getCellTypeEnum match {
+            case CellType.BOOLEAN =>
+              Right(c.getBooleanCellValue)
+            case _ =>
+              Left(new ExcepectBooleanCellException())
+          }
+        case _ =>
+          Left(new CellNotExistsException())
+      }
     }
   }
 
   def dateReader = new CellReader[Date] {
     override def get(cell: Option[Cell]): CellReadResult[Date] = {
-      val content = CCell(cell)
-      content.dateValue.fold(
-        (e: CellReaderException) =>
-          e match {
-            case r: CellNotExistsException =>
-              Left(r)
-            case r: CellReaderException =>
-              Left(r)
-        },
-        date => Right(date)
-      )
+      cell match {
+        case Some(c) =>
+          c.getCellTypeEnum match {
+            case CellType.NUMERIC =>
+              Right(c.getDateCellValue)
+            case _ =>
+              Left(new ExcepectDateException())
+          }
+        case _ =>
+          Left(new CellNotExistsException())
+      }
     }
   }
 

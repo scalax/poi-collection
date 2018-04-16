@@ -1,6 +1,6 @@
 package net.scalax.cpoi.style
 
-import net.scalax.cpoi.content.CellDataAbs
+import net.scalax.cpoi.content.{CellContentAbs, CellDataAbs}
 import org.apache.poi.ss.usermodel.Cell
 
 object CPoiUtils {
@@ -40,6 +40,20 @@ object CPoiUtils {
       case (eachCell, eachCData) =>
         styleGen.setCellStyle(eachCData, eachCell)
         eachCData.set(eachCell)
+    }
+  }
+
+  def wrapCell(poiCell: Option[Cell]): CellContentAbs = {
+    val c1 = poiCell
+    new CellContentAbs {
+      override val poiCell = c1
+    }
+  }
+
+  def wrapCell(poiCell: Cell): CellContentAbs = {
+    val c1 = poiCell
+    new CellContentAbs {
+      override val poiCell = Option(c1)
     }
   }
 

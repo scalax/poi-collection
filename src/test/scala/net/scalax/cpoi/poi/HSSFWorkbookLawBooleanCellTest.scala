@@ -31,7 +31,6 @@ class HSSFWorkbookLawBooleanCellTest extends FlatSpec with Matchers {
     cell2.getBooleanCellValue should be(true)
   }
 
-
   "Date cell" should "be set a boolean cell type" in {
     val workbook = new HSSFWorkbook()
     val sheet = workbook.createSheet("Sheet1")

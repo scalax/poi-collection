@@ -18,7 +18,6 @@ class HSSFWorkbookLawNumbricCellTest extends FlatSpec with Matchers {
     }
   }
 
-
   "Boolean cell" should "be set a numberic cell type" in {
     val workbook = new HSSFWorkbook()
     val sheet = workbook.createSheet("Sheet1")
