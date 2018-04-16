@@ -15,7 +15,8 @@ trait CellWritersImpl {
       } match {
         case Success(_: Unit) =>
           true
-        case Failure(_) =>
+        case Failure(e) =>
+          e.printStackTrace
           false
       }
     }
@@ -28,7 +29,8 @@ trait CellWritersImpl {
       } match {
         case Success(_: Unit) =>
           true
-        case Failure(_) =>
+        case Failure(e) =>
+          e.printStackTrace
           false
       }
     }
@@ -41,7 +43,8 @@ trait CellWritersImpl {
       } match {
         case Success(_: Unit) =>
           true
-        case Failure(_) =>
+        case Failure(e) =>
+          e.printStackTrace
           false
       }
     }
@@ -54,7 +57,8 @@ trait CellWritersImpl {
       } match {
         case Success(_: Unit) =>
           true
-        case Failure(_) =>
+        case Failure(e) =>
+          e.printStackTrace
           false
       }
     }
