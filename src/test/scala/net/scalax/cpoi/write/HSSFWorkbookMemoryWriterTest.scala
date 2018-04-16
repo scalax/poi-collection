@@ -1,14 +1,9 @@
 package net.scalax.cpoi
 
 import net.scalax.cpoi.content.CellData
-import net.scalax.cpoi.style.{
-  CPoiUtils,
-  MutableStyleGen,
-  StyleGen,
-  StyleTransform
-}
+import net.scalax.cpoi.style.{CPoiUtils, MutableStyleGen, StyleGen, StyleTransform}
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
-import org.apache.poi.ss.usermodel.{CellStyle, Workbook}
+import org.apache.poi.ss.usermodel.{CellStyle, CellType, Workbook}
 import org.scalatest._
 
 class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
@@ -201,6 +196,23 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
       yield {
         workbook.createCellStyle
       })
+  }
+
+  "HSSFWorkbook" should "not write to cell when data is None" in {
+    import writers._
+
+    val workbook = new HSSFWorkbook()
+
+    val defaultCellStyleCount = workbook.getNumCellStyles
+
+    val sheet = workbook.createSheet("SheetA")
+    val poiCell = sheet.createRow(1).createCell(1)
+    val cells = List(poiCell -> CellData(Option.empty[String]))
+
+    val gen = StyleGen.getInstance
+    CPoiUtils.multiplySet(gen, cells): StyleGen
+
+    poiCell.getCellTypeEnum should be(CellType.BLANK)
   }
 
 }
