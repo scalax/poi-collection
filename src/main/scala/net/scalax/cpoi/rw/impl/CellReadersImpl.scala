@@ -10,12 +10,30 @@ import cats.implicits._
 
 trait CellReadersImpl {
 
-  def nonEmptyStringReader: CellReader[String] = {
+  def nonBlankStringReader: CellReader[String] = {
 
     val m = ApplicativeError[CellReader, CellReaderException]
 
     stringReader.flatMap { str =>
       val trimStr = str.trim
+
+      val either = if (trimStr.isEmpty) {
+        Left(new CellNotExistsException())
+      } else {
+        Right(trimStr)
+      }
+
+      m.fromEither(either)
+    }
+
+  }
+
+  def nonEmptyStringReader: CellReader[String] = {
+
+    val m = ApplicativeError[CellReader, CellReaderException]
+
+    stringReader.flatMap { str =>
+      val trimStr = str
 
       val either = if (trimStr.isEmpty) {
         Left(new CellNotExistsException())
