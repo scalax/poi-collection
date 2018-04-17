@@ -60,7 +60,7 @@ trait CellReadersImpl {
         case Some(c) =>
           c.getCellTypeEnum match {
             case CellType.BLANK =>
-              Right(c.getNumericCellValue)
+              Left(new CellNotExistsException())
             case CellType.NUMERIC =>
               Right(c.getNumericCellValue)
             case _ =>
@@ -78,7 +78,7 @@ trait CellReadersImpl {
         case Some(c) =>
           c.getCellTypeEnum match {
             case CellType.BLANK =>
-              Right(c.getBooleanCellValue)
+              Left(new CellNotExistsException())
             case CellType.BOOLEAN =>
               Right(c.getBooleanCellValue)
             case _ =>
