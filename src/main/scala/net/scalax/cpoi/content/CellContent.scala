@@ -11,13 +11,13 @@ trait CellContentAbs {
 
   val poiCell: Option[Cell]
 
-  lazy val isBlank: Boolean =
+  def isBlank: Boolean =
     poiCell.map(_.getCellTypeEnum == CellType.BLANK).getOrElse(true)
 
-  lazy val cellType: Option[CellType] =
+  def cellType: Option[CellType] =
     Try(poiCell.map(_.getCellTypeEnum)).toOption.flatten
 
-  lazy val cellStyle: Option[CellStyle] = poiCell.map(_.getCellStyle)
+  def cellStyle: Option[CellStyle] = poiCell.map(_.getCellStyle)
 
   lazy val rowIndex: Option[Int] = poiCell.map(_.getRowIndex)
   lazy val columnIndex: Option[Int] = poiCell.map(_.getColumnIndex)

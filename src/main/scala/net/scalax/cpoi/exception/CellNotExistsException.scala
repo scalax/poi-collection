@@ -10,8 +10,8 @@ class CellNotExistsException
 
 sealed trait CellTypeNotConfirmException extends CellReaderException {}
 
-class ExcepectFormulaException
-    extends Exception("Excepect formula cell.")
+class ExpectFormulaException
+    extends Exception("Expect formula cell.")
     with CellTypeNotConfirmException {
   def this(cause: Throwable) = {
     this()
@@ -19,8 +19,8 @@ class ExcepectFormulaException
   }
 }
 
-class ExcepectNumericCellException
-    extends Exception("Excepect numeric cell.")
+class ExpectNumericCellException
+    extends Exception("Expect numeric cell.")
     with CellTypeNotConfirmException {
   def this(cause: Throwable) = {
     this()
@@ -28,8 +28,8 @@ class ExcepectNumericCellException
   }
 }
 
-class ExcepectDateException
-    extends Exception("Excepect date cell.")
+class ExpectDateException
+    extends Exception("Expect date cell.")
     with CellTypeNotConfirmException {
   def this(cause: Throwable) = {
     this()
@@ -37,8 +37,8 @@ class ExcepectDateException
   }
 }
 
-class ExcepectRichTextException
-    extends Exception("Excepect rich text cell.")
+class ExpectRichTextException
+    extends Exception("Expect rich text cell.")
     with CellTypeNotConfirmException {
   def this(cause: Throwable) = {
     this()
@@ -46,8 +46,8 @@ class ExcepectRichTextException
   }
 }
 
-class ExcepectStringCellException
-    extends Exception("Excepect string cell.")
+class ExpectStringCellException
+    extends Exception("Expect string cell.")
     with CellTypeNotConfirmException {
   def this(cause: Throwable) = {
     this()
@@ -55,8 +55,8 @@ class ExcepectStringCellException
   }
 }
 
-class ExcepectBooleanCellException
-    extends Exception("Excepect boolean cell.")
+class ExpectBooleanCellException
+    extends Exception("Expect boolean cell.")
     with CellTypeNotConfirmException {
   def this(cause: Throwable) = {
     this()
@@ -64,8 +64,8 @@ class ExcepectBooleanCellException
   }
 }
 
-class ExcepectErrorCellException
-    extends Exception("Excepect error cell.")
+class ExpectErrorCellException
+    extends Exception("Expect error cell.")
     with CellTypeNotConfirmException {
   def this(cause: Throwable) = {
     this()

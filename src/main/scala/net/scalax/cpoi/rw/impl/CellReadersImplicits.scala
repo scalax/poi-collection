@@ -6,9 +6,11 @@ trait CellReadersImplicits {
 
   protected val readers: CellReadersImpl = new CellReadersImpl {}
 
-  lazy val nonEmptyStringReader: CellReader[String] = readers.nonEmptyStringReader
+  lazy val nonEmptyStringReader: CellReader[String] =
+    readers.nonEmptyStringReader
 
-  lazy val nonBlankStringReader: CellReader[String] = readers.nonBlankStringReader
+  lazy val nonBlankStringReader: CellReader[String] =
+    readers.nonBlankStringReader
 
   implicit lazy val stringReader: CellReader[String] = readers.stringReader
 

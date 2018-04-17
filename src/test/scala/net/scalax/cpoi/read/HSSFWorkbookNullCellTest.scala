@@ -7,7 +7,7 @@ import net.scalax.cpoi.style.CPoiUtils
 import org.apache.poi.ss.usermodel.Cell
 import org.scalatest._
 
-class HSSFWorkbookLawMemoryErrorTest extends FlatSpec with Matchers {
+class HSSFWorkbookNullCellTest extends FlatSpec with Matchers {
 
   "null cell" should "read as empty string by common string reader" in {
     import readers._
@@ -49,16 +49,16 @@ class HSSFWorkbookLawMemoryErrorTest extends FlatSpec with Matchers {
     value.right.get should be("")
   }
 
-  it should "throw exception when read by non blank string reader" in {
-    implicit val ec = readers.nonBlankStringReader
+  it should "throw exception when read by non empty string reader" in {
+    implicit val ec = readers.nonEmptyStringReader
     val wrap = CPoiUtils.wrapCell(null: Cell)
     val value = wrap.tryValue[String]
     value.isLeft should be(true)
     value.left.get.isInstanceOf[CellNotExistsException] should be(true)
   }
 
-  it should "throw exception when read by non empty string reader" in {
-    implicit val ec = readers.nonEmptyStringReader
+  it should "throw exception when read by non blank string reader" in {
+    implicit val ec = readers.nonBlankStringReader
     val wrap = CPoiUtils.wrapCell(null: Cell)
     val value = wrap.tryValue[String]
     value.isLeft should be(true)
