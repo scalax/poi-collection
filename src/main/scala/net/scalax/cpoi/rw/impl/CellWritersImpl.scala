@@ -8,7 +8,7 @@ import scala.util.Try
 
 trait CellWritersImpl {
 
-  val stringWriter = new CellWriter[String] {
+  val stringWriter: CellWriter[String] = new CellWriter[String] {
     override def setValue(cell: Cell, value: String): Try[Boolean] = {
       Try {
         cell.setCellValue(value)
@@ -17,7 +17,7 @@ trait CellWritersImpl {
     }
   }
 
-  val doubleWriter = new CellWriter[Double] {
+  val doubleWriter: CellWriter[Double] = new CellWriter[Double] {
     override def setValue(cell: Cell, value: Double): Try[Boolean] = {
       Try {
         cell.setCellValue(value)
@@ -26,7 +26,7 @@ trait CellWritersImpl {
     }
   }
 
-  val booleanWriter = new CellWriter[Boolean] {
+  val booleanWriter: CellWriter[Boolean] = new CellWriter[Boolean] {
     override def setValue(cell: Cell, value: Boolean): Try[Boolean] = {
       Try {
         cell.setCellValue(value)
@@ -35,7 +35,7 @@ trait CellWritersImpl {
     }
   }
 
-  val dateWriter = new CellWriter[Date] {
+  val dateWriter: CellWriter[Date] = new CellWriter[Date] {
     override def setValue(cell: Cell, value: Date): Try[Boolean] = {
       Try {
         cell.setCellValue(value)

@@ -13,8 +13,8 @@ class HSSFWorkbookLawMemoryErrorTest extends FlatSpec with Matchers {
   "CellContent" should "throw exception when read an empty cell as string" in {
     val ccell = CPoiUtils.wrapCell(Option.empty)
     val value = ccell.tryValue[String]
-    value.isLeft should be(true)
-    value.left.get.isInstanceOf[CellNotExistsException] should be(true)
+    value.isRight should be(true)
+    value.right.get should be("")
   }
 
   it should "throw exception when read an empty cell as numbric" in {
