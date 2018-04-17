@@ -20,7 +20,7 @@ trait ImmutableCellReadersImpl extends CellReadersImpl {
             case CellType.STRING =>
               Right(c.getStringCellValue)
             case _ =>
-              Left(new ExcepectStringCellException())
+              Left(new ExpectStringCellException())
           }
         case _ =>
           //read null as empty cell

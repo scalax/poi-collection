@@ -10,12 +10,30 @@ import cats.implicits._
 
 trait CellReadersImpl {
 
-  def nonEmptyStringReader: CellReader[String] = {
+  def nonBlankStringReader: CellReader[String] = {
 
     val m = ApplicativeError[CellReader, CellReaderException]
 
     stringReader.flatMap { str =>
       val trimStr = str.trim
+
+      val either = if (trimStr.isEmpty) {
+        Left(new CellNotExistsException())
+      } else {
+        Right(trimStr)
+      }
+
+      m.fromEither(either)
+    }
+
+  }
+
+  def nonEmptyStringReader: CellReader[String] = {
+
+    val m = ApplicativeError[CellReader, CellReaderException]
+
+    stringReader.flatMap { str =>
+      val trimStr = str
 
       val either = if (trimStr.isEmpty) {
         Left(new CellNotExistsException())
@@ -45,7 +63,7 @@ trait CellReadersImpl {
             //c.setCellType(CellType.STRING)
             //Right(c.getStringCellValue)
             case _ =>
-              Left(new ExcepectStringCellException())
+              Left(new ExpectStringCellException())
           }
         case _ =>
           //read null as empty cell
@@ -64,7 +82,7 @@ trait CellReadersImpl {
             case CellType.NUMERIC =>
               Right(c.getNumericCellValue)
             case _ =>
-              Left(new ExcepectNumericCellException())
+              Left(new ExpectNumericCellException())
           }
         case _ =>
           Left(new CellNotExistsException())
@@ -82,7 +100,7 @@ trait CellReadersImpl {
             case CellType.BOOLEAN =>
               Right(c.getBooleanCellValue)
             case _ =>
-              Left(new ExcepectBooleanCellException())
+              Left(new ExpectBooleanCellException())
           }
         case _ =>
           Left(new CellNotExistsException())
@@ -98,9 +116,14 @@ trait CellReadersImpl {
             case CellType.BLANK =>
               Left(new CellNotExistsException())
             case CellType.NUMERIC =>
-              Right(c.getDateCellValue)
+              Option(c.getDateCellValue) match {
+                case Some(s) =>
+                  Right(s)
+                case _ =>
+                  Left(new ExpectDateException())
+              }
             case _ =>
-              Left(new ExcepectDateException())
+              Left(new ExpectDateException())
           }
         case _ =>
           Left(new CellNotExistsException())
