@@ -28,11 +28,13 @@ trait CellReadersImpl {
 
   }
 
-  def stringReader = new CellReader[String] {
+  def stringReader: CellReader[String] = new CellReader[String] {
     override def get(cell: Option[Cell]): CellReadResult[String] = {
       cell match {
         case Some(c) =>
           c.getCellTypeEnum match {
+            case CellType.BLANK =>
+              Right(c.getStringCellValue)
             case CellType.STRING =>
               Right(c.getStringCellValue)
             case CellType.NUMERIC =>
@@ -46,16 +48,19 @@ trait CellReadersImpl {
               Left(new ExcepectStringCellException())
           }
         case _ =>
-          Left(new CellNotExistsException())
+          //read null as empty cell
+          Right("")
       }
     }
   }
 
-  def doubleReader = new CellReader[Double] {
+  def doubleReader: CellReader[Double] = new CellReader[Double] {
     override def get(cell: Option[Cell]): CellReadResult[Double] = {
       cell match {
         case Some(c) =>
           c.getCellTypeEnum match {
+            case CellType.BLANK =>
+              Left(new CellNotExistsException())
             case CellType.NUMERIC =>
               Right(c.getNumericCellValue)
             case _ =>
@@ -67,11 +72,13 @@ trait CellReadersImpl {
     }
   }
 
-  def booleanReader = new CellReader[Boolean] {
+  def booleanReader: CellReader[Boolean] = new CellReader[Boolean] {
     override def get(cell: Option[Cell]): CellReadResult[Boolean] = {
       cell match {
         case Some(c) =>
           c.getCellTypeEnum match {
+            case CellType.BLANK =>
+              Left(new CellNotExistsException())
             case CellType.BOOLEAN =>
               Right(c.getBooleanCellValue)
             case _ =>
@@ -83,18 +90,15 @@ trait CellReadersImpl {
     }
   }
 
-  def dateReader = new CellReader[Date] {
+  def dateReader: CellReader[Date] = new CellReader[Date] {
     override def get(cell: Option[Cell]): CellReadResult[Date] = {
       cell match {
         case Some(c) =>
           c.getCellTypeEnum match {
+            case CellType.BLANK =>
+              Left(new CellNotExistsException())
             case CellType.NUMERIC =>
-              Option(c.getDateCellValue) match {
-                case Some(date) =>
-                  Right(date)
-                case _ =>
-                  Left(new ExcepectDateException())
-              }
+              Right(c.getDateCellValue)
             case _ =>
               Left(new ExcepectDateException())
           }

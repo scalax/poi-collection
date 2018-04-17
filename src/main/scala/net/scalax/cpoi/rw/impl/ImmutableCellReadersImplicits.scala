@@ -2,9 +2,10 @@ package net.scalax.cpoi.rw
 
 import java.util.Date
 
-trait CellReadersImplicits {
+trait ImmutableCellReadersImplicits {
 
-  protected val readers: CellReadersImpl = new CellReadersImpl {}
+  protected val readers: ImmutableCellReadersImpl =
+    new ImmutableCellReadersImpl {}
 
   implicit lazy val stringReader: CellReader[String] = readers.stringReader
 
