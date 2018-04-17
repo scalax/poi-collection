@@ -1,6 +1,6 @@
 package net.scalax.cpoi
 
-import java.util.Date
+import java.util.{Calendar, Date}
 
 import net.scalax.cpoi.exception._
 import net.scalax.cpoi.style.CPoiUtils
@@ -61,7 +61,9 @@ class HSSFWorkbookNumbericCellTest1 extends FlatSpec with Matchers {
     val wrap = CPoiUtils.wrapCell(cell)
     val value = wrap.tryValue[Date]
     value.isRight should be(true)
-    value.right.get should be(new Date(-2198535808600L))
+    val calendar = Calendar.getInstance
+    calendar.setTime(value.right.get)
+    calendar.get(Calendar.YEAR) should be(1900)
   }
 
   it should "throw exception when read by immutable string reader" in {
