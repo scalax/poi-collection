@@ -1,4 +1,4 @@
 # poi-collection
-A scala wrapper for apache poi excel.
+A Scala wrapper for Apache POI's Excel API.
 
 [Chinese documentation](https://github.com/scalax/poi-collection-chinese-documentation)
