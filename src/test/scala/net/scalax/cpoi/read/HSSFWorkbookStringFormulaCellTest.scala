@@ -2,25 +2,31 @@ package net.scalax.cpoi
 
 import java.util.Date
 
-import net.scalax.cpoi.exception._
+import net.scalax.cpoi.exception.{
+  CellNotExistsException,
+  ExpectBooleanCellException,
+  ExpectDateException,
+  ExpectNumericCellException
+}
 import net.scalax.cpoi.style.CPoiUtils
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
-import org.apache.poi.ss.usermodel.CellType
 import org.scalatest._
 
-class HSSFWorkbookTrueBooleanCellTest extends FlatSpec with Matchers {
+class HSSFWorkbookStringFormulaCellTest extends FlatSpec with Matchers {
 
-  "boolean cell" should "read as empty string by common string reader" in {
+  val testUTF8Str = " 测试 "
+
+  "string formula cell" should "read as empty string by common string reader" in {
     import readers._
     val workbook = new HSSFWorkbook()
     val sheet = workbook.createSheet("Sheet1")
     val row = sheet.createRow(1)
     val cell = row.createCell(1)
-    cell.setCellValue(true)
+    cell.setCellFormula(s"""CONCATENATE("a", "${testUTF8Str}")""")
     val wrap = CPoiUtils.wrapCell(cell)
     val value = wrap.tryValue[String]
-    value.isLeft should be(true)
-    value.left.get.isInstanceOf[ExpectStringCellException] should be(true)
+    value.isRight should be(true)
+    value.right.get should be(s"a${testUTF8Str}")
   }
 
   it should "throw exception when read by double reader" in {
@@ -29,24 +35,24 @@ class HSSFWorkbookTrueBooleanCellTest extends FlatSpec with Matchers {
     val sheet = workbook.createSheet("Sheet1")
     val row = sheet.createRow(1)
     val cell = row.createCell(1)
-    cell.setCellValue(true)
+    cell.setCellFormula(s"""CONCATENATE("a", "${testUTF8Str}")""")
     val wrap = CPoiUtils.wrapCell(cell)
     val value = wrap.tryValue[Double]
     value.isLeft should be(true)
     value.left.get.isInstanceOf[ExpectNumericCellException] should be(true)
   }
 
-  it should "read as boolean by boolean reader" in {
+  it should "throw exception when read by boolean reader" in {
     import readers._
     val workbook = new HSSFWorkbook()
     val sheet = workbook.createSheet("Sheet1")
     val row = sheet.createRow(1)
     val cell = row.createCell(1)
-    cell.setCellValue(true)
+    cell.setCellFormula(s"""CONCATENATE("a", "${testUTF8Str}")""")
     val wrap = CPoiUtils.wrapCell(cell)
     val value = wrap.tryValue[Boolean]
-    value.isRight should be(true)
-    value.right.get should be(true)
+    value.isLeft should be(true)
+    value.left.get.isInstanceOf[ExpectBooleanCellException] should be(true)
   }
 
   it should "throw exception when read by date reader" in {
@@ -55,50 +61,50 @@ class HSSFWorkbookTrueBooleanCellTest extends FlatSpec with Matchers {
     val sheet = workbook.createSheet("Sheet1")
     val row = sheet.createRow(1)
     val cell = row.createCell(1)
-    cell.setCellValue(true)
+    cell.setCellFormula(s"""CONCATENATE("a", "${testUTF8Str}")""")
     val wrap = CPoiUtils.wrapCell(cell)
     val value = wrap.tryValue[Date]
     value.isLeft should be(true)
     value.left.get.isInstanceOf[ExpectDateException] should be(true)
   }
 
-  it should "throw exception when read by immutable string reader" in {
+  it should "read as empty string by immutable string reader" in {
     import immutableReaders._
     val workbook = new HSSFWorkbook()
     val sheet = workbook.createSheet("Sheet1")
     val row = sheet.createRow(1)
     val cell = row.createCell(1)
-    cell.setCellValue(true)
+    cell.setCellFormula(s"""CONCATENATE("a", "${testUTF8Str}")""")
     val wrap = CPoiUtils.wrapCell(cell)
     val value = wrap.tryValue[String]
-    value.isLeft should be(true)
-    value.left.get.isInstanceOf[ExpectStringCellException] should be(true)
+    value.isRight should be(true)
+    value.right.get should be(s"a${testUTF8Str}")
   }
 
-  it should "throw exception when read by non empty string reader" in {
+  it should "read as string by non empty string reader" in {
     implicit val ec = readers.nonEmptyStringReader
     val workbook = new HSSFWorkbook()
     val sheet = workbook.createSheet("Sheet1")
     val row = sheet.createRow(1)
     val cell = row.createCell(1)
-    cell.setCellValue(true)
+    cell.setCellFormula(s"""CONCATENATE("a", "${testUTF8Str}")""")
     val wrap = CPoiUtils.wrapCell(cell)
     val value = wrap.tryValue[String]
-    value.isLeft should be(true)
-    value.left.get.isInstanceOf[ExpectStringCellException] should be(true)
+    value.isRight should be(true)
+    value.right.get should be(s"a${testUTF8Str}")
   }
 
-  it should "throw exception when read by non blank string reader" in {
+  it should "read as trim string by non blank string reader" in {
     implicit val ec = readers.nonBlankStringReader
     val workbook = new HSSFWorkbook()
     val sheet = workbook.createSheet("Sheet1")
     val row = sheet.createRow(1)
     val cell = row.createCell(1)
-    cell.setCellValue(true)
+    cell.setCellFormula(s"""CONCATENATE("a", "${testUTF8Str}")""")
     val wrap = CPoiUtils.wrapCell(cell)
     val value = wrap.tryValue[String]
-    value.isLeft should be(true)
-    value.left.get.isInstanceOf[ExpectStringCellException] should be(true)
+    value.isRight should be(true)
+    value.right.get should be(s"a${testUTF8Str.reverse.dropWhile(s => s == ' ').reverse}")
   }
 
 }
