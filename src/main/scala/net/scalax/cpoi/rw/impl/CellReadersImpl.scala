@@ -47,6 +47,8 @@ trait CellReadersImpl {
   }
 
   def stringReader: CellReader[String] = new CellReader[String] {
+    self =>
+
     override def get(cell: Option[Cell]): CellReadResult[String] = {
       cell match {
         case Some(c) =>
@@ -62,6 +64,11 @@ trait CellReadersImpl {
             //case CellType.BOOLEAN =>
             //c.setCellType(CellType.STRING)
             //Right(c.getStringCellValue)
+            case CellType.FORMULA =>
+              val wb = c.getSheet.getWorkbook
+              val crateHelper = wb.getCreationHelper
+              val evaluator = crateHelper.createFormulaEvaluator
+              self.get(Option(evaluator.evaluateInCell(c)))
             case _ =>
               Left(new ExpectStringCellException())
           }
@@ -73,6 +80,8 @@ trait CellReadersImpl {
   }
 
   def doubleReader: CellReader[Double] = new CellReader[Double] {
+    self =>
+
     override def get(cell: Option[Cell]): CellReadResult[Double] = {
       cell match {
         case Some(c) =>
@@ -81,6 +90,11 @@ trait CellReadersImpl {
               Left(new CellNotExistsException())
             case CellType.NUMERIC =>
               Right(c.getNumericCellValue)
+            case CellType.FORMULA =>
+              val wb = c.getSheet.getWorkbook
+              val crateHelper = wb.getCreationHelper
+              val evaluator = crateHelper.createFormulaEvaluator
+              self.get(Option(evaluator.evaluateInCell(c)))
             case _ =>
               Left(new ExpectNumericCellException())
           }
@@ -91,6 +105,8 @@ trait CellReadersImpl {
   }
 
   def booleanReader: CellReader[Boolean] = new CellReader[Boolean] {
+    self =>
+
     override def get(cell: Option[Cell]): CellReadResult[Boolean] = {
       cell match {
         case Some(c) =>
@@ -99,6 +115,11 @@ trait CellReadersImpl {
               Left(new CellNotExistsException())
             case CellType.BOOLEAN =>
               Right(c.getBooleanCellValue)
+            case CellType.FORMULA =>
+              val wb = c.getSheet.getWorkbook
+              val crateHelper = wb.getCreationHelper
+              val evaluator = crateHelper.createFormulaEvaluator
+              self.get(Option(evaluator.evaluateInCell(c)))
             case _ =>
               Left(new ExpectBooleanCellException())
           }
@@ -109,6 +130,8 @@ trait CellReadersImpl {
   }
 
   def dateReader: CellReader[Date] = new CellReader[Date] {
+    self =>
+
     override def get(cell: Option[Cell]): CellReadResult[Date] = {
       cell match {
         case Some(c) =>
@@ -122,6 +145,11 @@ trait CellReadersImpl {
                 case _ =>
                   Left(new ExpectDateException())
               }
+            case CellType.FORMULA =>
+              val wb = c.getSheet.getWorkbook
+              val crateHelper = wb.getCreationHelper
+              val evaluator = crateHelper.createFormulaEvaluator
+              self.get(Option(evaluator.evaluateInCell(c)))
             case _ =>
               Left(new ExpectDateException())
           }

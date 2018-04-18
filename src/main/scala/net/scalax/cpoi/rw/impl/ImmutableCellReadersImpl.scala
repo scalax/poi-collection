@@ -11,6 +11,8 @@ import cats.implicits._
 trait ImmutableCellReadersImpl extends CellReadersImpl {
 
   override def stringReader: CellReader[String] = new CellReader[String] {
+    self =>
+
     override def get(cell: Option[Cell]): CellReadResult[String] = {
       cell match {
         case Some(c) =>
@@ -19,6 +21,11 @@ trait ImmutableCellReadersImpl extends CellReadersImpl {
               Right(c.getStringCellValue)
             case CellType.STRING =>
               Right(c.getStringCellValue)
+            case CellType.FORMULA =>
+              val wb = c.getSheet.getWorkbook
+              val crateHelper = wb.getCreationHelper
+              val evaluator = crateHelper.createFormulaEvaluator
+              self.get(Option(evaluator.evaluateInCell(c)))
             case _ =>
               Left(new ExpectStringCellException())
           }

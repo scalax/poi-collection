@@ -75,7 +75,7 @@ class HSSFWorkbookFalseBooleanCellTest extends FlatSpec with Matchers {
     value.left.get.isInstanceOf[ExpectStringCellException] should be(true)
   }
 
-  it should "read as string by non empty string reader" in {
+  it should "throw exception when read by non empty string reader" in {
     implicit val ec = readers.nonEmptyStringReader
     val workbook = new HSSFWorkbook()
     val sheet = workbook.createSheet("Sheet1")
@@ -88,7 +88,7 @@ class HSSFWorkbookFalseBooleanCellTest extends FlatSpec with Matchers {
     value.left.get.isInstanceOf[ExpectStringCellException] should be(true)
   }
 
-  it should "read as trim string by non blank string reader" in {
+  it should "throw exception when read by non blank string reader" in {
     implicit val ec = readers.nonBlankStringReader
     val workbook = new HSSFWorkbook()
     val sheet = workbook.createSheet("Sheet1")
