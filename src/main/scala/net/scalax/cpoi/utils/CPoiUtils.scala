@@ -1,6 +1,7 @@
 package net.scalax.cpoi.style
 
-import net.scalax.cpoi.content.{CellContentAbs, CellDataAbs}
+import net.scalax.cpoi.content.{CellContentAbs, CellData, CellDataAbs}
+import net.scalax.cpoi.rw.CellWriter
 import org.apache.poi.ss.usermodel.Cell
 
 object CPoiUtils {
@@ -55,6 +56,11 @@ object CPoiUtils {
     new CellContentAbs {
       override val poiCell = Option(c1)
     }
+  }
+
+  def wrapData[T](data: T, styleTransform: List[StyleTransform] = List.empty)(
+      implicit operation: CellWriter[T]): CellData[T] = {
+    CellData.gen(data, styleTransform)
   }
 
 }

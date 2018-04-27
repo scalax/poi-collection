@@ -10,18 +10,18 @@ import org.scalatest._
 
 class HSSFWorkbookBooleanFormulaCellTest extends FlatSpec with Matchers {
 
-    "boolean formula cell" should "read as empty string by common string reader" in {
-      import readers._
-      val workbook = new HSSFWorkbook()
-      val sheet = workbook.createSheet("Sheet1")
-      val row = sheet.createRow(1)
-      val cell = row.createCell(1)
-      cell.setCellFormula("3 > 2")
-      val wrap = CPoiUtils.wrapCell(cell)
-      val value = wrap.tryValue[String]
-      value.isLeft should be(true)
-      value.left.get.isInstanceOf[ExpectStringCellException] should be(true)
-    }
+  "boolean formula cell" should "read as empty string by common string reader" in {
+    import readers._
+    val workbook = new HSSFWorkbook()
+    val sheet = workbook.createSheet("Sheet1")
+    val row = sheet.createRow(1)
+    val cell = row.createCell(1)
+    cell.setCellFormula("3 > 2")
+    val wrap = CPoiUtils.wrapCell(cell)
+    val value = wrap.tryValue[String]
+    value.isLeft should be(true)
+    value.left.get.isInstanceOf[ExpectStringCellException] should be(true)
+  }
 
   it should "throw exception when read by double reader" in {
     import readers._

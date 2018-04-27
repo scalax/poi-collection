@@ -104,7 +104,8 @@ class HSSFWorkbookStringFormulaCellTest extends FlatSpec with Matchers {
     val wrap = CPoiUtils.wrapCell(cell)
     val value = wrap.tryValue[String]
     value.isRight should be(true)
-    value.right.get should be(s"a${testUTF8Str.reverse.dropWhile(s => s == ' ').reverse}")
+    value.right.get should be(
+      s"a${testUTF8Str.reverse.dropWhile(s => s == ' ').reverse}")
   }
 
 }

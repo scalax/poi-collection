@@ -22,61 +22,74 @@ trait CellDataAbs {
 
   def withTransforms(trans: List[StyleTransform]): CellDataAbs = {
     implicit val operation1 = self.operation
-    new CellData(data, trans)
+    CellData.gen(data, trans)
   }
 
   def withTransforms(trans: StyleTransform*): CellDataAbs = {
     implicit val operation1 = self.operation
-    new CellData(data, trans.toList)
+    CellData.gen(data, trans.toList)
   }
 
   def addTransform(tran: List[StyleTransform]): CellDataAbs = {
     implicit val operation1 = self.operation
     val thisTrans = this.styleTransform
-    new CellData(data, thisTrans ::: tran)
+    CellData.gen(data, thisTrans ::: tran)
   }
 
   def addTransform(tran: StyleTransform*): CellDataAbs = {
     implicit val operation1 = self.operation
     val thisTrans = this.styleTransform
-    new CellData(data, thisTrans ::: tran.toList)
+    CellData.gen(data, thisTrans ::: tran.toList)
   }
 
 }
 
-case class CellData[T: CellWriter](
-    override val data: T,
-    override val styleTransform: List[StyleTransform] = List.empty)
-    extends CellDataAbs {
+trait CellData[T] extends CellDataAbs {
+  self =>
+
+  override val data: T
+  override val styleTransform: List[StyleTransform]
 
   override type DataType = T
 
-  override protected val operation = implicitly[CellWriter[T]]
+  override protected val operation: CellWriter[T]
 
   override def withTransforms(trans: List[StyleTransform]): CellData[T] = {
-    new CellData(data, trans)
+    implicit val operation1 = self.operation
+    CellData.gen(data, trans)
   }
 
   override def withTransforms(trans: StyleTransform*): CellData[T] = {
-    new CellData(data, trans.toList)
+    implicit val operation1 = self.operation
+    CellData.gen(data, trans.toList)
   }
 
   override def addTransform(tran: List[StyleTransform]): CellData[T] = {
     val thisTrans = this.styleTransform
-    new CellData(data, thisTrans ::: tran)
+    implicit val operation1 = self.operation
+    CellData.gen(data, thisTrans ::: tran)
   }
 
   override def addTransform(tran: StyleTransform*): CellData[T] = {
     val thisTrans = this.styleTransform
-    new CellData(data, thisTrans ::: tran.toList)
+    implicit val operation1 = self.operation
+    CellData.gen(data, thisTrans ::: tran.toList)
   }
 
 }
 
 object CellData {
 
-  def gen[T](data: T)(implicit operation: CellWriter[T]): CellData[T] = {
-    CellData(data, List.empty)
+  def gen[T](data: T, styleTransform: List[StyleTransform])(
+      implicit operation: CellWriter[T]): CellData[T] = {
+    val data1 = data
+    val styleTransform1 = styleTransform
+    val operation1 = operation
+    new CellData[T] {
+      override val data = data1
+      override val styleTransform = styleTransform1
+      override protected val operation = operation1
+    }
   }
 
 }

@@ -24,7 +24,7 @@ trait CellContentAbs {
 
   def genData[T: CellWriter: CellReader]: CellReadResult[CellData[T]] = {
     val valueEt = implicitly[CellReader[T]].get(poiCell)
-    valueEt.map(s => CellData(s))
+    valueEt.map(s => CellData.gen(s, List.empty))
   }
 
   def tryValue[T: CellReader]: CellReadResult[T] = {
