@@ -54,6 +54,8 @@ trait CellData[T] extends CellDataAbs {
 
   override protected val operation: CellWriter[T]
 
+  def untyped: CellDataAbs = this
+
   override def withTransforms(trans: List[StyleTransform]): CellData[T] = {
     implicit val operation1 = self.operation
     CellData.gen(data, trans)
