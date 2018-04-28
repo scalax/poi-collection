@@ -63,4 +63,12 @@ object CPoiUtils {
     CellData.gen(data, styleTransform)
   }
 
+  def newStyleGenInstance: StyleGen = {
+    StyleGen.newInstance
+  }
+
+  def newMutableStyleGenInstance: MutableStyleGen = {
+    MutableStyleGen.newInstance
+  }
+
 }
