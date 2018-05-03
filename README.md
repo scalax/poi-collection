@@ -13,4 +13,5 @@ How to get it
 - Add dependency
 
 > resolvers += Resolver.bintrayRepo("djx314", "maven")
+
 > libraryDependencies += "net.scalax" %% "poi-collection" % "0.1.2"
