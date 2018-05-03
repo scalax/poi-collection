@@ -7,32 +7,7 @@ trait StyleGen {
   self =>
 
   protected val cellMap: Map[StyleKeyWrap, CellStyle]
-  /*def getCellStyle(transformNew: StyleTransform*): StyleGenWrap = {
-    getCellStyle(transformNew.toList)
-  }
 
-  def getCellStyle(transformNew: List[StyleTransform]): StyleGenWrap = {
-    transformNew match {
-      case Nil => StyleGenWrap(self, None)
-      case trans =>
-        cellMap.get(trans) match {
-          case styleSome @ Some(s) =>
-            StyleGenWrap(self, styleSome)
-          case None =>
-            val style = createCellStyle()
-            val style1 = trans.foldLeft(style) { (style, tranform) =>
-              tranform.operation(style)
-            }
-            val newCellMap = cellMap + (trans -> style1)
-            //getCellStyle(trans: _*)
-            val newStyleGen = new StyleGen {
-              override val cellMap = newCellMap
-              override val createCellStyle = self.createCellStyle
-            }
-            StyleGenWrap(newStyleGen, Option(style1))
-        }
-    }
-  }*/
   protected def getCellStyle(cellData: CellDataAbs,
                              cell: Cell): (CellStyle, StyleGen) = {
     val workbook = cell.getSheet.getWorkbook
@@ -63,7 +38,7 @@ trait StyleGen {
 }
 
 object StyleGen {
-  def getInstance: StyleGen = {
+  def newInstance: StyleGen = {
     new StyleGen {
       override protected val cellMap: Map[StyleKeyWrap, CellStyle] = Map.empty
     }

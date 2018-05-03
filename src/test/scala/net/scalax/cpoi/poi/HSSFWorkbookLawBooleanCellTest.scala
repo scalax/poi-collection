@@ -3,7 +3,7 @@ package net.scalax.cpoi
 import java.util.Date
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
-import org.apache.poi.ss.usermodel.{Cell, CellType}
+import org.apache.poi.ss.usermodel.CellType
 import org.scalatest._
 
 class HSSFWorkbookLawBooleanCellTest extends FlatSpec with Matchers {

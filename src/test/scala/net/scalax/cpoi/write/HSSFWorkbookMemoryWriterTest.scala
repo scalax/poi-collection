@@ -2,13 +2,7 @@ package net.scalax.cpoi
 
 import java.util.Date
 
-import net.scalax.cpoi.content.CellData
-import net.scalax.cpoi.style.{
-  CPoiUtils,
-  MutableStyleGen,
-  StyleGen,
-  StyleTransform
-}
+import net.scalax.cpoi.style.{CPoiUtils, StyleGen, StyleTransform}
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.ss.usermodel.{CellStyle, CellType, Workbook}
 import org.scalatest._
@@ -62,7 +56,7 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
           .addTransform(DoubleStyle, Locked(true))
       )
     }).flatten.toList
-    val gen = StyleGen.getInstance
+    val gen = CPoiUtils.newStyleGenInstance
     CPoiUtils.multiplySet(gen, cells): StyleGen
 
     (for (rowIndex <- (1 to 8000)) yield {
@@ -103,7 +97,7 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
           .addTransform(DoubleStyle, Locked(true))
       )
     }).flatten.toList
-    val gen = MutableStyleGen.getInstance
+    val gen = CPoiUtils.newMutableStyleGenInstance
     CPoiUtils.multiplySet(gen, cells): Unit
 
     (for (rowIndex <- (1 to 8000)) yield {
@@ -144,7 +138,7 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
           .addTransform(DoubleStyle, Locked(true))
       )
     }).flatten.toList.toStream
-    val gen = StyleGen.getInstance
+    val gen = CPoiUtils.newStyleGenInstance
     CPoiUtils.multiplySet(gen, cells): StyleGen
 
     (for (rowIndex <- (1 to 8000)) yield {
@@ -185,7 +179,7 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
           .addTransform(DoubleStyle, Locked(true))
       )
     }).flatten.toList.toStream
-    val gen = MutableStyleGen.getInstance
+    val gen = CPoiUtils.newMutableStyleGenInstance
     CPoiUtils.multiplySet(gen, cells): Unit
 
     (for (rowIndex <- (1 to 8000)) yield {
@@ -232,7 +226,7 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
       poiCell4 -> CPoiUtils.wrapData(Option.empty[Date])
     )
 
-    val gen = StyleGen.getInstance
+    val gen = CPoiUtils.newStyleGenInstance
     CPoiUtils.multiplySet(gen, cells): StyleGen
 
     poiCell1.getCellTypeEnum should be(CellType.BLANK)

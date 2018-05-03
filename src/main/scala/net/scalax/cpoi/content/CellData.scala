@@ -14,6 +14,8 @@ trait CellDataAbs {
 
   protected val operation: CellWriter[DataType]
 
+  def untyped: CellDataAbs = self
+
   val styleTransform: List[StyleTransform]
 
   def set(cell: Cell): Try[Boolean] = {
@@ -54,7 +56,7 @@ trait CellData[T] extends CellDataAbs {
 
   override protected val operation: CellWriter[T]
 
-  def untyped: CellDataAbs = this
+  override def untyped: CellDataAbs = self
 
   override def withTransforms(trans: List[StyleTransform]): CellData[T] = {
     implicit val operation1 = self.operation
