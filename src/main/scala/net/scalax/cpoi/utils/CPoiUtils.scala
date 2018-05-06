@@ -1,46 +1,51 @@
 package net.scalax.cpoi.style
 
 import net.scalax.cpoi.content.{CellContentAbs, CellData, CellDataAbs}
-import net.scalax.cpoi.rw.CellWriter
+import net.scalax.cpoi.rw.{CPoiDone, CellWriter}
 import org.apache.poi.ss.usermodel.Cell
+
+import scala.util.{Failure, Try}
 
 object CPoiUtils {
 
   def multiplySet(styleGen: StyleGen,
-                  list: List[(Cell, CellDataAbs)]): StyleGen = {
-    list.foldLeft(styleGen) {
-      case (eachGen, (eachCell, eachCData)) =>
-        val gen = eachGen.setCellStyle(eachCData, eachCell)
-        eachCData.set(eachCell)
-        gen
-    }
-  }
-
-  def multiplySet(styleGen: StyleGen,
-                  list: Stream[(Cell, CellDataAbs)]): StyleGen = {
-    list.foldLeft(styleGen) {
-      case (eachGen, (eachCell, eachCData)) =>
-        val gen = eachGen.setCellStyle(eachCData, eachCell)
-        eachCData.set(eachCell)
-        gen
-    }
-  }
-
-  def multiplySet(styleGen: MutableStyleGen,
-                  list: List[(Cell, CellDataAbs)]): Unit = {
-    list.foreach {
-      case (eachCell, eachCData) =>
-        styleGen.setCellStyle(eachCData, eachCell)
-        eachCData.set(eachCell)
+                  seq: Seq[(Cell, CellDataAbs)]): Try[StyleGen] = {
+    val ms = styleGen.toMutable
+    seq.toStream
+      .map { item =>
+        Try {
+          item match {
+            case (eachCell, eachCData) =>
+              ms.setCellStyle(eachCData, eachCell)
+              eachCData.set(eachCell)
+          }
+        }.flatten: Try[CPoiDone]
+      }
+      .collectFirst { case Failure(e) => e } match {
+      case Some(e) =>
+        Failure(e)
+      case None =>
+        Try { ms.toImmutable }
     }
   }
 
   def multiplySet(styleGen: MutableStyleGen,
-                  list: Stream[(Cell, CellDataAbs)]): Unit = {
-    list.foreach {
-      case (eachCell, eachCData) =>
-        styleGen.setCellStyle(eachCData, eachCell)
-        eachCData.set(eachCell)
+                  seq: Seq[(Cell, CellDataAbs)]): Try[Unit] = {
+    seq.toStream
+      .map { item =>
+        Try {
+          item match {
+            case (eachCell, eachCData) =>
+              styleGen.setCellStyle(eachCData, eachCell)
+              eachCData.set(eachCell)
+          }
+        }.flatten: Try[CPoiDone]
+      }
+      .collectFirst { case Failure(e) => e } match {
+      case Some(e) =>
+        Failure(e)
+      case None =>
+        Try { () }
     }
   }
 

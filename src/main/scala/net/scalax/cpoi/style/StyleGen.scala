@@ -35,6 +35,16 @@ trait StyleGen {
     newStyleGen
   }
 
+  def toMutable: MutableStyleGen = {
+    val b = scala.collection.mutable.Map.canBuildFrom[StyleKeyWrap, CellStyle]()
+    b ++= self.cellMap
+    val newMap = b.result
+
+    new MutableStyleGen {
+      override protected val cellMap = newMap
+    }
+  }
+
 }
 
 object StyleGen {
