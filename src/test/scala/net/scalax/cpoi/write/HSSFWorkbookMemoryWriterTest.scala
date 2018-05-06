@@ -2,10 +2,13 @@ package net.scalax.cpoi
 
 import java.util.Date
 
+import net.scalax.cpoi.rw.CPoiDone
 import net.scalax.cpoi.style.{CPoiUtils, StyleGen, StyleTransform}
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.ss.usermodel.{CellStyle, CellType, Workbook}
 import org.scalatest._
+
+import scala.util.Try
 
 class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
 
@@ -57,7 +60,7 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
       )
     }).flatten.toList
     val gen = CPoiUtils.newStyleGenInstance
-    CPoiUtils.multiplySet(gen, cells): StyleGen
+    CPoiUtils.multiplySet(gen, cells): Try[StyleGen]
 
     (for (rowIndex <- (1 to 8000)) yield {
       val row = sheet.getRow(rowIndex + 2)
@@ -139,7 +142,7 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
       )
     }).flatten.toList.toStream
     val gen = CPoiUtils.newStyleGenInstance
-    CPoiUtils.multiplySet(gen, cells): StyleGen
+    CPoiUtils.multiplySet(gen, cells): Try[StyleGen]
 
     (for (rowIndex <- (1 to 8000)) yield {
       val row = sheet.getRow(rowIndex + 2)
@@ -227,12 +230,74 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
     )
 
     val gen = CPoiUtils.newStyleGenInstance
-    CPoiUtils.multiplySet(gen, cells): StyleGen
+    CPoiUtils.multiplySet(gen, cells): Try[StyleGen]
 
     poiCell1.getCellTypeEnum should be(CellType.BLANK)
     poiCell2.getCellTypeEnum should be(CellType.BLANK)
     poiCell3.getCellTypeEnum should be(CellType.BLANK)
     poiCell4.getCellTypeEnum should be(CellType.BLANK)
+  }
+
+  "HSSFWorkbook" should "not write to cell with immutable style gen when there is a exception thrown" in {
+    import writers._
+
+    val workbook = new HSSFWorkbook()
+
+    val sheet = workbook.createSheet("SheetA")
+
+    val poiCells = (1 to 1000).map { i =>
+      sheet.createRow(i).createCell(1)
+    }
+
+    val cellData = CPoiUtils.wrapData("2333").addTransform(TextStyle)
+    val cellDataList = (1 to 1000).map(_ => cellData)
+    val gen = CPoiUtils.newStyleGenInstance
+
+    val tuple2List = poiCells
+      .zip(cellDataList)
+      .zipWithIndex
+      .map {
+        case (_, index) if index == 602 => null
+        case (item, _)                  => item
+      }
+
+    CPoiUtils.multiplySet(gen, tuple2List): Try[StyleGen]
+
+    poiCells(600).getCellTypeEnum should be(CellType.STRING)
+    poiCells(601).getCellTypeEnum should be(CellType.STRING)
+    poiCells(602).getCellTypeEnum should be(CellType.BLANK)
+    poiCells(603).getCellTypeEnum should be(CellType.BLANK)
+  }
+
+  "HSSFWorkbook" should "not write to cell with mutable style gen when there is a exception thrown" in {
+    import writers._
+
+    val workbook = new HSSFWorkbook()
+
+    val sheet = workbook.createSheet("SheetA")
+
+    val poiCells = (1 to 1000).map { i =>
+      sheet.createRow(i).createCell(1)
+    }
+
+    val cellData = CPoiUtils.wrapData("2333").addTransform(TextStyle)
+    val cellDataList = (1 to 1000).map(_ => cellData)
+    val gen = CPoiUtils.newMutableStyleGenInstance
+
+    val tuple2List = poiCells
+      .zip(cellDataList)
+      .zipWithIndex
+      .map {
+        case (_, index) if index == 602 => null
+        case (item, _)                  => item
+      }
+
+    CPoiUtils.multiplySet(gen, tuple2List): Try[CPoiDone]
+
+    poiCells(600).getCellTypeEnum should be(CellType.STRING)
+    poiCells(601).getCellTypeEnum should be(CellType.STRING)
+    poiCells(602).getCellTypeEnum should be(CellType.BLANK)
+    poiCells(603).getCellTypeEnum should be(CellType.BLANK)
   }
 
 }

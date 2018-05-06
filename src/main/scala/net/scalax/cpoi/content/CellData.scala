@@ -1,6 +1,6 @@
 package net.scalax.cpoi.content
 
-import net.scalax.cpoi.rw.CellWriter
+import net.scalax.cpoi.rw.{CPoiDone, CellWriter}
 import net.scalax.cpoi.style.StyleTransform
 import org.apache.poi.ss.usermodel.Cell
 
@@ -18,7 +18,7 @@ trait CellDataAbs {
 
   val styleTransform: List[StyleTransform]
 
-  def set(cell: Cell): Try[Boolean] = {
+  def set(cell: Cell): Try[CPoiDone] = {
     operation.setValue(cell, data)
   }
 

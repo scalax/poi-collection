@@ -34,6 +34,10 @@ trait MutableStyleGen {
     cell.setCellStyle(cStyle)
   }
 
+  def toImmutable: StyleGen = new StyleGen {
+    override protected val cellMap = self.cellMap.toMap
+  }
+
 }
 
 object MutableStyleGen {
