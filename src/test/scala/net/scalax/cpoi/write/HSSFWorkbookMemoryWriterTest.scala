@@ -2,6 +2,7 @@ package net.scalax.cpoi
 
 import java.util.Date
 
+import net.scalax.cpoi.rw.CPoiDone
 import net.scalax.cpoi.style.{CPoiUtils, StyleGen, StyleTransform}
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.ss.usermodel.{CellStyle, CellType, Workbook}
@@ -291,7 +292,7 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
         case (item, _)                  => item
       }
 
-    CPoiUtils.multiplySet(gen, tuple2List): Try[Unit]
+    CPoiUtils.multiplySet(gen, tuple2List): Try[CPoiDone]
 
     poiCells(600).getCellTypeEnum should be(CellType.STRING)
     poiCells(601).getCellTypeEnum should be(CellType.STRING)

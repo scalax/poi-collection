@@ -30,7 +30,7 @@ object CPoiUtils {
   }
 
   def multiplySet(styleGen: MutableStyleGen,
-                  seq: Seq[(Cell, CellDataAbs)]): Try[Unit] = {
+                  seq: Seq[(Cell, CellDataAbs)]): Try[CPoiDone] = {
     seq.toStream
       .map { item =>
         Try {
@@ -45,7 +45,7 @@ object CPoiUtils {
       case Some(e) =>
         Failure(e)
       case None =>
-        Try { () }
+        Try { CPoiDone.instance }
     }
   }
 
