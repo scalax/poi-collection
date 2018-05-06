@@ -16,8 +16,9 @@ object CPoiUtils {
         Try {
           item match {
             case (eachCell, eachCData) =>
-              ms.setCellStyle(eachCData, eachCell)
-              eachCData.set(eachCell)
+              ms.setCellStyle(eachCData, eachCell).flatMap { (_: CPoiDone) =>
+                eachCData.set(eachCell)
+              }
           }
         }.flatten: Try[CPoiDone]
       }
@@ -36,8 +37,10 @@ object CPoiUtils {
         Try {
           item match {
             case (eachCell, eachCData) =>
-              styleGen.setCellStyle(eachCData, eachCell)
-              eachCData.set(eachCell)
+              styleGen.setCellStyle(eachCData, eachCell).flatMap {
+                (_: CPoiDone) =>
+                  eachCData.set(eachCell)
+              }
           }
         }.flatten: Try[CPoiDone]
       }
