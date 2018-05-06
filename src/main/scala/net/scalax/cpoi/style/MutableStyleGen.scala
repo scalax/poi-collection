@@ -1,9 +1,11 @@
 package net.scalax.cpoi.style
 
 import net.scalax.cpoi.content.CellDataAbs
+import net.scalax.cpoi.rw.CPoiDone
 import org.apache.poi.ss.usermodel.{Cell, CellStyle}
 
 import scala.collection.mutable.{Map => MutableMap}
+import scala.util.Try
 
 trait MutableStyleGen {
   self =>
@@ -29,9 +31,12 @@ trait MutableStyleGen {
     cellStyle
   }
 
-  def setCellStyle(cellDate: CellDataAbs, cell: Cell): Unit = {
-    val cStyle = getCellStyle(cellDate, cell)
-    cell.setCellStyle(cStyle)
+  def setCellStyle(cellDate: CellDataAbs, cell: Cell): Try[CPoiDone] = {
+    Try {
+      val cStyle = getCellStyle(cellDate, cell)
+      cell.setCellStyle(cStyle)
+      CPoiDone.instance
+    }
   }
 
   def toImmutable: StyleGen = new StyleGen {
