@@ -15,8 +15,7 @@ cache:
     - $HOME/.sbt/boot
     - $HOME/.coursier
 
-
-before_install:
+install:
   - pip install --user codecov
 
 script:
