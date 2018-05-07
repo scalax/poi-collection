@@ -4,7 +4,6 @@ import java.util.Date
 
 import cats.ApplicativeError
 import net.scalax.cpoi.exception._
-import net.scalax.cpoi._
 import org.apache.poi.ss.usermodel.{Cell, CellType}
 import cats.implicits._
 
@@ -49,7 +48,7 @@ trait CellReadersImpl {
   def stringReader: CellReader[String] = new CellReader[String] {
     self =>
 
-    override def get(cell: Option[Cell]): CellReadResult[String] = {
+    override def get(cell: Option[Cell]): CellReader.CellReadResult[String] = {
       cell match {
         case Some(c) =>
           c.getCellTypeEnum match {
@@ -82,7 +81,7 @@ trait CellReadersImpl {
   def doubleReader: CellReader[Double] = new CellReader[Double] {
     self =>
 
-    override def get(cell: Option[Cell]): CellReadResult[Double] = {
+    override def get(cell: Option[Cell]): CellReader.CellReadResult[Double] = {
       cell match {
         case Some(c) =>
           c.getCellTypeEnum match {
@@ -107,7 +106,7 @@ trait CellReadersImpl {
   def booleanReader: CellReader[Boolean] = new CellReader[Boolean] {
     self =>
 
-    override def get(cell: Option[Cell]): CellReadResult[Boolean] = {
+    override def get(cell: Option[Cell]): CellReader.CellReadResult[Boolean] = {
       cell match {
         case Some(c) =>
           c.getCellTypeEnum match {
@@ -132,7 +131,7 @@ trait CellReadersImpl {
   def dateReader: CellReader[Date] = new CellReader[Date] {
     self =>
 
-    override def get(cell: Option[Cell]): CellReadResult[Date] = {
+    override def get(cell: Option[Cell]): CellReader.CellReadResult[Date] = {
       cell match {
         case Some(c) =>
           c.getCellTypeEnum match {

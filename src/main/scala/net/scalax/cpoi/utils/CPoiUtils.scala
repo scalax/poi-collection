@@ -1,12 +1,24 @@
-package net.scalax.cpoi.style
+package net.scalax.cpoi.utils
 
-import net.scalax.cpoi.content.{CellContentAbs, CellData, CellDataAbs}
+import net.scalax.cpoi.content.{
+  CellContentAbs,
+  CellData,
+  CellDataAbs,
+  CellDataImpl
+}
 import net.scalax.cpoi.rw.{CPoiDone, CellWriter}
-import org.apache.poi.ss.usermodel.Cell
+import net.scalax.cpoi.style.{
+  MutableStyleGen,
+  StyleGen,
+  StyleKeyWrap,
+  StyleTransform
+}
+import org.apache.poi.ss.usermodel.{Cell, CellStyle}
 
 import scala.util.{Failure, Try}
+import scala.collection.mutable.{Map => MutableMap}
 
-object CPoiUtils {
+trait CPoiUtils {
 
   def multiplySet(styleGen: StyleGen,
                   seq: Seq[(Cell, CellDataAbs)]): Try[StyleGen] = {
@@ -67,16 +79,16 @@ object CPoiUtils {
   }
 
   def wrapData[T](data: T, styleTransform: List[StyleTransform] = List.empty)(
-      implicit operation: CellWriter[T]): CellData[T] = {
-    CellData.gen(data, styleTransform)
+      implicit operation: CellWriter[T]): CellData[T] =
+    CellDataImpl(data, styleTransform)
+
+  def newStyleGen: StyleGen = new StyleGen {
+    override protected val cellMap: Map[StyleKeyWrap, CellStyle] = Map.empty
   }
 
-  def newStyleGenInstance: StyleGen = {
-    StyleGen.newInstance
-  }
-
-  def newMutableStyleGenInstance: MutableStyleGen = {
-    MutableStyleGen.newInstance
+  def newMutableStyleGen: MutableStyleGen = new MutableStyleGen {
+    override protected val cellMap: MutableMap[StyleKeyWrap, CellStyle] =
+      MutableMap.empty
   }
 
 }

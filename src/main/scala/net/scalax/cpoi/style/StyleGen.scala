@@ -46,11 +46,3 @@ trait StyleGen {
   }
 
 }
-
-object StyleGen {
-  def newInstance: StyleGen = {
-    new StyleGen {
-      override protected val cellMap: Map[StyleKeyWrap, CellStyle] = Map.empty
-    }
-  }
-}

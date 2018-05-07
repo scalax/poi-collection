@@ -24,24 +24,24 @@ trait CellDataAbs {
 
   def withTransforms(trans: List[StyleTransform]): CellDataAbs = {
     implicit val operation1 = self.operation
-    CellData.gen(data, trans)
+    CellDataImpl(data, trans)
   }
 
   def withTransforms(trans: StyleTransform*): CellDataAbs = {
     implicit val operation1 = self.operation
-    CellData.gen(data, trans.toList)
+    CellDataImpl(data, trans.toList)
   }
 
   def addTransform(tran: List[StyleTransform]): CellDataAbs = {
     implicit val operation1 = self.operation
     val thisTrans = this.styleTransform
-    CellData.gen(data, thisTrans ::: tran)
+    CellDataImpl(data, thisTrans ::: tran)
   }
 
   def addTransform(tran: StyleTransform*): CellDataAbs = {
     implicit val operation1 = self.operation
     val thisTrans = this.styleTransform
-    CellData.gen(data, thisTrans ::: tran.toList)
+    CellDataImpl(data, thisTrans ::: tran.toList)
   }
 
 }
@@ -60,40 +60,30 @@ trait CellData[T] extends CellDataAbs {
 
   override def withTransforms(trans: List[StyleTransform]): CellData[T] = {
     implicit val operation1 = self.operation
-    CellData.gen(data, trans)
+    CellDataImpl(data, trans)
   }
 
   override def withTransforms(trans: StyleTransform*): CellData[T] = {
     implicit val operation1 = self.operation
-    CellData.gen(data, trans.toList)
+    CellDataImpl(data, trans.toList)
   }
 
   override def addTransform(tran: List[StyleTransform]): CellData[T] = {
     val thisTrans = this.styleTransform
     implicit val operation1 = self.operation
-    CellData.gen(data, thisTrans ::: tran)
+    CellDataImpl(data, thisTrans ::: tran)
   }
 
   override def addTransform(tran: StyleTransform*): CellData[T] = {
     val thisTrans = this.styleTransform
     implicit val operation1 = self.operation
-    CellData.gen(data, thisTrans ::: tran.toList)
+    CellDataImpl(data, thisTrans ::: tran.toList)
   }
 
 }
 
-object CellData {
-
-  def gen[T](data: T, styleTransform: List[StyleTransform])(
-      implicit operation: CellWriter[T]): CellData[T] = {
-    val data1 = data
-    val styleTransform1 = styleTransform
-    val operation1 = operation
-    new CellData[T] {
-      override val data = data1
-      override val styleTransform = styleTransform1
-      override protected val operation = operation1
-    }
-  }
-
-}
+case class CellDataImpl[T](override val data: T,
+                           override val styleTransform: List[StyleTransform] =
+                             List.empty)(
+    implicit override val operation: CellWriter[T])
+    extends CellData[T]

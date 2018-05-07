@@ -1,6 +1,6 @@
-package net.scalax.cpoi
+package net.scalax.cpoi.test
 
-import net.scalax.cpoi.style.CPoiUtils
+import net.scalax.cpoi._
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.scalatest._
 
