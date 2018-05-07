@@ -1,9 +1,12 @@
-package net.scalax.cpoi
+package net.scalax.cpoi.test
 
 import java.util.{Calendar, Date}
 
-import net.scalax.cpoi.exception._
-import net.scalax.cpoi.style.CPoiUtils
+import net.scalax.cpoi._
+import net.scalax.cpoi.exception.{
+  ExpectBooleanCellException,
+  ExpectStringCellException
+}
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.ss.usermodel.CellType
 import org.scalatest._

@@ -44,12 +44,3 @@ trait MutableStyleGen {
   }
 
 }
-
-object MutableStyleGen {
-  def newInstance: MutableStyleGen = {
-    new MutableStyleGen {
-      override protected val cellMap: MutableMap[StyleKeyWrap, CellStyle] =
-        MutableMap.empty
-    }
-  }
-}

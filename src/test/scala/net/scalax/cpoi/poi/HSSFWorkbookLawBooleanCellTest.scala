@@ -1,4 +1,4 @@
-package net.scalax.cpoi
+package net.scalax.cpoi.test
 
 import java.util.Date
 

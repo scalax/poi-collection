@@ -1,7 +1,6 @@
 package net.scalax.cpoi.content
 
 import net.scalax.cpoi.rw.{CellReader, CellWriter}
-import net.scalax.cpoi._
 
 import org.apache.poi.ss.usermodel.{Cell, CellStyle, CellType}
 
@@ -22,12 +21,13 @@ trait CellContentAbs {
   lazy val rowIndex: Option[Int] = poiCell.map(_.getRowIndex)
   lazy val columnIndex: Option[Int] = poiCell.map(_.getColumnIndex)
 
-  def genData[T: CellWriter: CellReader]: CellReadResult[CellData[T]] = {
+  def genData[T: CellWriter: CellReader]
+    : CellReader.CellReadResult[CellData[T]] = {
     val valueEt = implicitly[CellReader[T]].get(poiCell)
-    valueEt.map(s => CellData.gen(s, List.empty))
+    valueEt.map(s => CellDataImpl(s, List.empty))
   }
 
-  def tryValue[T: CellReader]: CellReadResult[T] = {
+  def tryValue[T: CellReader]: CellReader.CellReadResult[T] = {
     implicitly[CellReader[T]].get(poiCell)
   }
 

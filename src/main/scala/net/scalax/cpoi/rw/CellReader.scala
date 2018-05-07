@@ -1,18 +1,19 @@
 package net.scalax.cpoi.rw
 
 import cats._
-import net.scalax.cpoi._
 import net.scalax.cpoi.exception._
 import org.apache.poi.ss.usermodel.Cell
 import cats.implicits._
 
 trait CellReader[T] {
 
-  def get(cell: Option[Cell]): CellReadResult[T]
+  def get(cell: Option[Cell]): CellReader.CellReadResult[T]
 
 }
 
 object CellReader {
+
+  type CellReadResult[R] = Either[CellReaderException, R]
 
   implicit def optionCellReaderToNoneOptionCellReader[T: CellReader]
     : CellReader[Option[T]] = {
