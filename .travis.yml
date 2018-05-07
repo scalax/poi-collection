@@ -2,9 +2,6 @@ language: scala
 sudo: required
 dist: trusty
 
-python:
-  - 3.6
-
 scala:
   - 2.11.12
   - 2.12.5
