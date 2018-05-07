@@ -29,4 +29,7 @@ trait Alias {
   type CellDataAbs = net.scalax.cpoi.content.CellDataAbs
   type CellData[T] = net.scalax.cpoi.content.CellData[T]
 
+  type CellReaderException = net.scalax.cpoi.exception.CellReaderException
+  type CellReadResult[T] = net.scalax.cpoi.rw.CellReader.CellReadResult[T]
+
 }
