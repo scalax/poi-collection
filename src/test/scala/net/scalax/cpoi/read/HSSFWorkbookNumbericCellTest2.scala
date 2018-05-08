@@ -21,7 +21,7 @@ class HSSFWorkbookNumbericCellTest2 extends FlatSpec with Matchers {
     val row = sheet.createRow(1)
     val cell = row.createCell(1)
     cell.setCellValue(-123.321)
-    val wrap = CPoiUtils.wrapCell(cell)
+    val wrap = CPoi.wrapCell(cell)
     wrap.cellType should be(Option(CellType.NUMERIC))
     val value = wrap.tryValue[String]
     wrap.cellType should be(Option(CellType.STRING))
@@ -36,7 +36,7 @@ class HSSFWorkbookNumbericCellTest2 extends FlatSpec with Matchers {
     val row = sheet.createRow(1)
     val cell = row.createCell(1)
     cell.setCellValue(-123.321)
-    val wrap = CPoiUtils.wrapCell(cell)
+    val wrap = CPoi.wrapCell(cell)
     val value = wrap.tryValue[Double]
     value.isRight should be(true)
     value.right.get should be(-123.321)
@@ -49,7 +49,7 @@ class HSSFWorkbookNumbericCellTest2 extends FlatSpec with Matchers {
     val row = sheet.createRow(1)
     val cell = row.createCell(1)
     cell.setCellValue(-123.321)
-    val wrap = CPoiUtils.wrapCell(cell)
+    val wrap = CPoi.wrapCell(cell)
     val value = wrap.tryValue[Boolean]
     value.isLeft should be(true)
     value.left.get.isInstanceOf[ExpectBooleanCellException] should be(true)
@@ -62,7 +62,7 @@ class HSSFWorkbookNumbericCellTest2 extends FlatSpec with Matchers {
     val row = sheet.createRow(1)
     val cell = row.createCell(1)
     cell.setCellValue(-123.321)
-    val wrap = CPoiUtils.wrapCell(cell)
+    val wrap = CPoi.wrapCell(cell)
     val value = wrap.tryValue[Date]
     value.isLeft should be(true)
     value.left.get.isInstanceOf[ExpectDateException] should be(true)
@@ -75,7 +75,7 @@ class HSSFWorkbookNumbericCellTest2 extends FlatSpec with Matchers {
     val row = sheet.createRow(1)
     val cell = row.createCell(1)
     cell.setCellValue(-123.321)
-    val wrap = CPoiUtils.wrapCell(cell)
+    val wrap = CPoi.wrapCell(cell)
     wrap.cellType should be(Option(CellType.NUMERIC))
     val value = wrap.tryValue[String]
     wrap.cellType should be(Option(CellType.NUMERIC))
@@ -90,7 +90,7 @@ class HSSFWorkbookNumbericCellTest2 extends FlatSpec with Matchers {
     val row = sheet.createRow(1)
     val cell = row.createCell(1)
     cell.setCellValue(-123.321)
-    val wrap = CPoiUtils.wrapCell(cell)
+    val wrap = CPoi.wrapCell(cell)
     wrap.cellType should be(Option(CellType.NUMERIC))
     val value = wrap.tryValue[String]
     wrap.cellType should be(Option(CellType.STRING))
@@ -105,7 +105,7 @@ class HSSFWorkbookNumbericCellTest2 extends FlatSpec with Matchers {
     val row = sheet.createRow(1)
     val cell = row.createCell(1)
     cell.setCellValue(-123.321)
-    val wrap = CPoiUtils.wrapCell(cell)
+    val wrap = CPoi.wrapCell(cell)
     wrap.cellType should be(Option(CellType.NUMERIC))
     val value = wrap.tryValue[String]
     wrap.cellType should be(Option(CellType.STRING))

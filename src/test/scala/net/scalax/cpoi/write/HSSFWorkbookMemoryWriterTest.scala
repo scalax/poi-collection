@@ -50,16 +50,16 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
     val cells = (for (rowIndex <- (1 to 8000)) yield {
       val row = sheet.createRow(rowIndex + 2)
       List(
-        row.createCell(3) -> CPoiUtils
+        row.createCell(3) -> CPoi
           .wrapData(testUTF8Str)
           .addTransform(TextStyle, Locked(false)),
-        row.createCell(6) -> CPoiUtils
+        row.createCell(6) -> CPoi
           .wrapData(testDouble)
           .addTransform(DoubleStyle, Locked(true))
       )
     }).flatten.toList
-    val gen = CPoiUtils.newStyleGen
-    CPoiUtils.multiplySet(gen, cells): Try[StyleGen]
+    val gen = CPoi.newStyleGen
+    CPoi.multiplySet(gen, cells): Try[StyleGen]
 
     (for (rowIndex <- (1 to 8000)) yield {
       val row = sheet.getRow(rowIndex + 2)
@@ -91,16 +91,16 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
     val cells = (for (rowIndex <- (1 to 8000)) yield {
       val row = sheet.createRow(rowIndex + 2)
       List(
-        row.createCell(3) -> CPoiUtils
+        row.createCell(3) -> CPoi
           .wrapData(testUTF8Str)
           .addTransform(TextStyle, Locked(false)),
-        row.createCell(6) -> CPoiUtils
+        row.createCell(6) -> CPoi
           .wrapData(testDouble)
           .addTransform(DoubleStyle, Locked(true))
       )
     }).flatten.toList
-    val gen = CPoiUtils.newMutableStyleGen
-    CPoiUtils.multiplySet(gen, cells): Unit
+    val gen = CPoi.newMutableStyleGen
+    CPoi.multiplySet(gen, cells): Unit
 
     (for (rowIndex <- (1 to 8000)) yield {
       val row = sheet.getRow(rowIndex + 2)
@@ -132,16 +132,16 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
     val cells = (for (rowIndex <- (1 to 8000)) yield {
       val row = sheet.createRow(rowIndex + 2)
       List(
-        row.createCell(3) -> CPoiUtils
+        row.createCell(3) -> CPoi
           .wrapData(testUTF8Str)
           .addTransform(TextStyle, Locked(false)),
-        row.createCell(6) -> CPoiUtils
+        row.createCell(6) -> CPoi
           .wrapData(testDouble)
           .addTransform(DoubleStyle, Locked(true))
       )
     }).flatten.toList.toStream
-    val gen = CPoiUtils.newStyleGen
-    CPoiUtils.multiplySet(gen, cells): Try[StyleGen]
+    val gen = CPoi.newStyleGen
+    CPoi.multiplySet(gen, cells): Try[StyleGen]
 
     (for (rowIndex <- (1 to 8000)) yield {
       val row = sheet.getRow(rowIndex + 2)
@@ -173,16 +173,16 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
     val cells = (for (rowIndex <- (1 to 8000)) yield {
       val row = sheet.createRow(rowIndex + 2)
       List(
-        row.createCell(3) -> CPoiUtils
+        row.createCell(3) -> CPoi
           .wrapData(testUTF8Str)
           .addTransform(TextStyle, Locked(false)),
-        row.createCell(6) -> CPoiUtils
+        row.createCell(6) -> CPoi
           .wrapData(testDouble)
           .addTransform(DoubleStyle, Locked(true))
       )
     }).flatten.toList.toStream
-    val gen = CPoiUtils.newMutableStyleGen
-    CPoiUtils.multiplySet(gen, cells): Unit
+    val gen = CPoi.newMutableStyleGen
+    CPoi.multiplySet(gen, cells): Unit
 
     (for (rowIndex <- (1 to 8000)) yield {
       val row = sheet.getRow(rowIndex + 2)
@@ -222,14 +222,14 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
     val poiCell4 = sheet.createRow(1).createCell(4)
 
     val cells = List(
-      poiCell1 -> CPoiUtils.wrapData(Option.empty[String]),
-      poiCell2 -> CPoiUtils.wrapData(Option.empty[Double]),
-      poiCell3 -> CPoiUtils.wrapData(Option.empty[Boolean]),
-      poiCell4 -> CPoiUtils.wrapData(Option.empty[Date])
+      poiCell1 -> CPoi.wrapData(Option.empty[String]),
+      poiCell2 -> CPoi.wrapData(Option.empty[Double]),
+      poiCell3 -> CPoi.wrapData(Option.empty[Boolean]),
+      poiCell4 -> CPoi.wrapData(Option.empty[Date])
     )
 
-    val gen = CPoiUtils.newStyleGen
-    CPoiUtils.multiplySet(gen, cells): Try[StyleGen]
+    val gen = CPoi.newStyleGen
+    CPoi.multiplySet(gen, cells): Try[StyleGen]
 
     poiCell1.getCellTypeEnum should be(CellType.BLANK)
     poiCell2.getCellTypeEnum should be(CellType.BLANK)
@@ -248,9 +248,9 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
       sheet.createRow(i).createCell(1)
     }
 
-    val cellData = CPoiUtils.wrapData("2333").addTransform(TextStyle)
+    val cellData = CPoi.wrapData("2333").addTransform(TextStyle)
     val cellDataList = (1 to 1000).map(_ => cellData)
-    val gen = CPoiUtils.newStyleGen
+    val gen = CPoi.newStyleGen
 
     val tuple2List = poiCells
       .zip(cellDataList)
@@ -260,7 +260,7 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
         case (item, _)                  => item
       }
 
-    CPoiUtils.multiplySet(gen, tuple2List): Try[StyleGen]
+    CPoi.multiplySet(gen, tuple2List): Try[StyleGen]
 
     poiCells(600).getCellTypeEnum should be(CellType.STRING)
     poiCells(601).getCellTypeEnum should be(CellType.STRING)
@@ -279,9 +279,9 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
       sheet.createRow(i).createCell(1)
     }
 
-    val cellData = CPoiUtils.wrapData("2333").addTransform(TextStyle)
+    val cellData = CPoi.wrapData("2333").addTransform(TextStyle)
     val cellDataList = (1 to 1000).map(_ => cellData)
-    val gen = CPoiUtils.newMutableStyleGen
+    val gen = CPoi.newMutableStyleGen
 
     val tuple2List = poiCells
       .zip(cellDataList)
@@ -291,7 +291,7 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
         case (item, _)                  => item
       }
 
-    CPoiUtils.multiplySet(gen, tuple2List): Try[CPoiDone]
+    CPoi.multiplySet(gen, tuple2List): Try[CPoiDone]
 
     poiCells(600).getCellTypeEnum should be(CellType.STRING)
     poiCells(601).getCellTypeEnum should be(CellType.STRING)
