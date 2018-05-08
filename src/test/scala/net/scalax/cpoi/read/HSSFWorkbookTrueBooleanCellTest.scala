@@ -2,7 +2,7 @@ package net.scalax.cpoi.test
 
 import java.util.Date
 
-import net.scalax.cpoi._
+import net.scalax.cpoi.api._
 import net.scalax.cpoi.exception.{
   ExpectDateException,
   ExpectNumericCellException,
@@ -20,7 +20,7 @@ class HSSFWorkbookTrueBooleanCellTest extends FlatSpec with Matchers {
     val row = sheet.createRow(1)
     val cell = row.createCell(1)
     cell.setCellValue(true)
-    val wrap = CPoiUtils.wrapCell(cell)
+    val wrap = CPoi.wrapCell(cell)
     val value = wrap.tryValue[String]
     value.isLeft should be(true)
     value.left.get.isInstanceOf[ExpectStringCellException] should be(true)
@@ -33,7 +33,7 @@ class HSSFWorkbookTrueBooleanCellTest extends FlatSpec with Matchers {
     val row = sheet.createRow(1)
     val cell = row.createCell(1)
     cell.setCellValue(true)
-    val wrap = CPoiUtils.wrapCell(cell)
+    val wrap = CPoi.wrapCell(cell)
     val value = wrap.tryValue[Double]
     value.isLeft should be(true)
     value.left.get.isInstanceOf[ExpectNumericCellException] should be(true)
@@ -46,7 +46,7 @@ class HSSFWorkbookTrueBooleanCellTest extends FlatSpec with Matchers {
     val row = sheet.createRow(1)
     val cell = row.createCell(1)
     cell.setCellValue(true)
-    val wrap = CPoiUtils.wrapCell(cell)
+    val wrap = CPoi.wrapCell(cell)
     val value = wrap.tryValue[Boolean]
     value.isRight should be(true)
     value.right.get should be(true)
@@ -59,7 +59,7 @@ class HSSFWorkbookTrueBooleanCellTest extends FlatSpec with Matchers {
     val row = sheet.createRow(1)
     val cell = row.createCell(1)
     cell.setCellValue(true)
-    val wrap = CPoiUtils.wrapCell(cell)
+    val wrap = CPoi.wrapCell(cell)
     val value = wrap.tryValue[Date]
     value.isLeft should be(true)
     value.left.get.isInstanceOf[ExpectDateException] should be(true)
@@ -72,7 +72,7 @@ class HSSFWorkbookTrueBooleanCellTest extends FlatSpec with Matchers {
     val row = sheet.createRow(1)
     val cell = row.createCell(1)
     cell.setCellValue(true)
-    val wrap = CPoiUtils.wrapCell(cell)
+    val wrap = CPoi.wrapCell(cell)
     val value = wrap.tryValue[String]
     value.isLeft should be(true)
     value.left.get.isInstanceOf[ExpectStringCellException] should be(true)
@@ -85,7 +85,7 @@ class HSSFWorkbookTrueBooleanCellTest extends FlatSpec with Matchers {
     val row = sheet.createRow(1)
     val cell = row.createCell(1)
     cell.setCellValue(true)
-    val wrap = CPoiUtils.wrapCell(cell)
+    val wrap = CPoi.wrapCell(cell)
     val value = wrap.tryValue[String]
     value.isLeft should be(true)
     value.left.get.isInstanceOf[ExpectStringCellException] should be(true)
@@ -98,7 +98,7 @@ class HSSFWorkbookTrueBooleanCellTest extends FlatSpec with Matchers {
     val row = sheet.createRow(1)
     val cell = row.createCell(1)
     cell.setCellValue(true)
-    val wrap = CPoiUtils.wrapCell(cell)
+    val wrap = CPoi.wrapCell(cell)
     val value = wrap.tryValue[String]
     value.isLeft should be(true)
     value.left.get.isInstanceOf[ExpectStringCellException] should be(true)

@@ -8,7 +8,7 @@ import net.scalax.cpoi.rw.{
 
 trait Alias {
 
-  val CPoiUtils: CPoiUtils = new CPoiUtils {}
+  val CPoi: CPoi = new CPoi {}
 
   val readers: CellReadersImplicits = new CellReadersImplicits {}
   val immutableReaders: ImmutableCellReadersImplicits =

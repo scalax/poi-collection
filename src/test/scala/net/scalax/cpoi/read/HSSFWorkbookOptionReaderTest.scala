@@ -1,6 +1,6 @@
 package net.scalax.cpoi.test
 
-import net.scalax.cpoi._
+import net.scalax.cpoi.api._
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.scalatest._
 
@@ -15,7 +15,7 @@ class HSSFWorkbookOptionReaderTest extends FlatSpec with Matchers {
     val row = sheet.createRow(2)
     val cell = row.createCell(3)
     cell.setCellValue(testBlankStr)
-    val ccell = CPoiUtils.wrapCell(cell)
+    val ccell = CPoi.wrapCell(cell)
     val value = ccell.tryValue[Option[String]]
     value.isRight should be(true)
     value.right.get should be(Option(testBlankStr))
@@ -30,7 +30,7 @@ class HSSFWorkbookOptionReaderTest extends FlatSpec with Matchers {
     val row = sheet.createRow(2)
     val cell = row.createCell(3)
     cell.setCellValue(testBlankStr)
-    val ccell = CPoiUtils.wrapCell(cell)
+    val ccell = CPoi.wrapCell(cell)
     val value = ccell.tryValue[Option[String]]
     value.isRight should be(true)
     value.right.get should be(Option.empty)

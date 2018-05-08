@@ -3,7 +3,7 @@ package net.scalax.cpoi.test
 import java.util.Date
 
 import net.scalax.cpoi.exception.CellNotExistsException
-import net.scalax.cpoi._
+import net.scalax.cpoi.api._
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.scalatest._
 
@@ -15,7 +15,7 @@ class HSSFWorkbookBlankCellTest extends FlatSpec with Matchers {
     val sheet = workbook.createSheet("Sheet1")
     val row = sheet.createRow(1)
     val cell = row.createCell(1)
-    val wrap = CPoiUtils.wrapCell(cell)
+    val wrap = CPoi.wrapCell(cell)
     val value = wrap.tryValue[String]
     wrap.isBlank should be(true)
     value.isRight should be(true)
@@ -28,7 +28,7 @@ class HSSFWorkbookBlankCellTest extends FlatSpec with Matchers {
     val sheet = workbook.createSheet("Sheet1")
     val row = sheet.createRow(1)
     val cell = row.createCell(1)
-    val wrap = CPoiUtils.wrapCell(cell)
+    val wrap = CPoi.wrapCell(cell)
     val value = wrap.tryValue[Double]
     wrap.isBlank should be(true)
     value.isLeft should be(true)
@@ -41,7 +41,7 @@ class HSSFWorkbookBlankCellTest extends FlatSpec with Matchers {
     val sheet = workbook.createSheet("Sheet1")
     val row = sheet.createRow(1)
     val cell = row.createCell(1)
-    val wrap = CPoiUtils.wrapCell(cell)
+    val wrap = CPoi.wrapCell(cell)
     val value = wrap.tryValue[Boolean]
     wrap.isBlank should be(true)
     value.isLeft should be(true)
@@ -54,7 +54,7 @@ class HSSFWorkbookBlankCellTest extends FlatSpec with Matchers {
     val sheet = workbook.createSheet("Sheet1")
     val row = sheet.createRow(1)
     val cell = row.createCell(1)
-    val wrap = CPoiUtils.wrapCell(cell)
+    val wrap = CPoi.wrapCell(cell)
     val value = wrap.tryValue[Date]
     wrap.isBlank should be(true)
     value.isLeft should be(true)
@@ -67,7 +67,7 @@ class HSSFWorkbookBlankCellTest extends FlatSpec with Matchers {
     val sheet = workbook.createSheet("Sheet1")
     val row = sheet.createRow(1)
     val cell = row.createCell(1)
-    val wrap = CPoiUtils.wrapCell(cell)
+    val wrap = CPoi.wrapCell(cell)
     val value = wrap.tryValue[String]
     wrap.isBlank should be(true)
     value.isRight should be(true)
@@ -80,7 +80,7 @@ class HSSFWorkbookBlankCellTest extends FlatSpec with Matchers {
     val sheet = workbook.createSheet("Sheet1")
     val row = sheet.createRow(1)
     val cell = row.createCell(1)
-    val wrap = CPoiUtils.wrapCell(cell)
+    val wrap = CPoi.wrapCell(cell)
     val value = wrap.tryValue[String]
     wrap.isBlank should be(true)
     value.isLeft should be(true)
@@ -93,7 +93,7 @@ class HSSFWorkbookBlankCellTest extends FlatSpec with Matchers {
     val sheet = workbook.createSheet("Sheet1")
     val row = sheet.createRow(1)
     val cell = row.createCell(1)
-    val wrap = CPoiUtils.wrapCell(cell)
+    val wrap = CPoi.wrapCell(cell)
     val value = wrap.tryValue[String]
     wrap.isBlank should be(true)
     value.isLeft should be(true)
