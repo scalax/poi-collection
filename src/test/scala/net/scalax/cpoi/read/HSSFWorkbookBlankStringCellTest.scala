@@ -8,7 +8,7 @@ import net.scalax.cpoi.exception.{
   ExpectDateException,
   ExpectNumericCellException
 }
-import net.scalax.cpoi._
+import net.scalax.cpoi.api._
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.scalatest._
 

@@ -2,7 +2,7 @@ package net.scalax.cpoi.test
 
 import java.util.Date
 
-import net.scalax.cpoi._
+import net.scalax.cpoi.api._
 import net.scalax.cpoi.exception.{
   ExpectBooleanCellException,
   ExpectDateException,
