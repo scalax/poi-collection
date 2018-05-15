@@ -12,6 +12,8 @@ organization := "net.scalax"
 
 name := "poi-collection"
 
-scalaVersion := "2.12.5"
+scalaVersion := "2.12.6"
+
+crossScalaVersions := Seq("2.12.6", "2.11.12")
 
 scalacOptions ++= Seq("-feature", "-deprecation", "-Ypartial-unification")

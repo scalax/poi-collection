@@ -8,6 +8,7 @@ import org.apache.poi.ss.usermodel.{CellStyle, CellType, Workbook}
 import org.scalatest._
 
 import scala.util.Try
+import scala.collection.compat._
 
 class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
 
@@ -57,7 +58,7 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
           .wrapData(testDouble)
           .addTransform(DoubleStyle, Locked(true))
       )
-    }).flatten.toList
+    }).flatten.to(List)
     val gen = CPoi.newStyleGen
     CPoi.multiplySet(gen, cells): Try[StyleGen]
 
@@ -98,7 +99,7 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
           .wrapData(testDouble)
           .addTransform(DoubleStyle, Locked(true))
       )
-    }).flatten.toList
+    }).flatten.to(List)
     val gen = CPoi.newMutableStyleGen
     CPoi.multiplySet(gen, cells): Unit
 
@@ -139,7 +140,7 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
           .wrapData(testDouble)
           .addTransform(DoubleStyle, Locked(true))
       )
-    }).flatten.toList.toStream
+    }).flatten.to(List).toStream
     val gen = CPoi.newStyleGen
     CPoi.multiplySet(gen, cells): Try[StyleGen]
 
@@ -180,7 +181,7 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
           .wrapData(testDouble)
           .addTransform(DoubleStyle, Locked(true))
       )
-    }).flatten.toList.toStream
+    }).flatten.to(List).toStream
     val gen = CPoi.newMutableStyleGen
     CPoi.multiplySet(gen, cells): Unit
 
