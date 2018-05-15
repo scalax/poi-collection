@@ -6,6 +6,7 @@ import org.apache.poi.ss.usermodel.{Cell, CellStyle}
 
 import scala.collection.mutable.{Map => MutableMap}
 import scala.util.Try
+import scala.collection.compat._
 
 trait MutableStyleGen {
   self =>
@@ -40,7 +41,7 @@ trait MutableStyleGen {
   }
 
   def toImmutable: StyleGen = new StyleGen {
-    override protected val cellMap = self.cellMap.toMap
+    override protected val cellMap = Map.from(self.cellMap)
   }
 
 }

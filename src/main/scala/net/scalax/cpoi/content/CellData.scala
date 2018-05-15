@@ -5,6 +5,7 @@ import net.scalax.cpoi.style.StyleTransform
 import org.apache.poi.ss.usermodel.Cell
 
 import scala.util.Try
+import scala.collection.compat._
 
 trait CellDataAbs {
   self =>
@@ -29,7 +30,7 @@ trait CellDataAbs {
 
   def withTransforms(trans: StyleTransform*): CellDataAbs = {
     implicit val operation1 = self.operation
-    CellDataImpl(data, trans.toList)
+    CellDataImpl(data, trans.to(List))
   }
 
   def addTransform(tran: List[StyleTransform]): CellDataAbs = {
@@ -41,7 +42,7 @@ trait CellDataAbs {
   def addTransform(tran: StyleTransform*): CellDataAbs = {
     implicit val operation1 = self.operation
     val thisTrans = this.styleTransform
-    CellDataImpl(data, thisTrans ::: tran.toList)
+    CellDataImpl(data, thisTrans ::: tran.to(List))
   }
 
 }
@@ -65,7 +66,7 @@ trait CellData[T] extends CellDataAbs {
 
   override def withTransforms(trans: StyleTransform*): CellData[T] = {
     implicit val operation1 = self.operation
-    CellDataImpl(data, trans.toList)
+    CellDataImpl(data, trans.to(List))
   }
 
   override def addTransform(tran: List[StyleTransform]): CellData[T] = {
@@ -77,7 +78,7 @@ trait CellData[T] extends CellDataAbs {
   override def addTransform(tran: StyleTransform*): CellData[T] = {
     val thisTrans = this.styleTransform
     implicit val operation1 = self.operation
-    CellDataImpl(data, thisTrans ::: tran.toList)
+    CellDataImpl(data, thisTrans ::: tran.to(List))
   }
 
 }
