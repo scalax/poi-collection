@@ -7,13 +7,11 @@ libraryDependencies ++= {
     //poi
     "org.apache.poi" % "poi" % poiVersion exclude("stax", "stax-api"),
     "org.apache.poi" % "poi-ooxml" % poiVersion exclude("stax", "stax-api"),
-    "org.apache.poi" % "poi-ooxml-schemas" % poiVersion exclude("stax", "stax-api"),
-
-    //joda-time
-    "joda-time" % "joda-time" % "2.9.9",
-    "org.joda" % "joda-convert" % "1.9.2"
+    "org.apache.poi" % "poi-ooxml-schemas" % poiVersion exclude("stax", "stax-api")
   )
 }
 
 libraryDependencies += "org.scalactic" %% "scalactic" % "3.0.5"
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test"
+
+libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % "0.1.0"
