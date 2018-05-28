@@ -14,4 +14,4 @@ libraryDependencies ++= {
 libraryDependencies += "org.scalactic" %% "scalactic" % "3.0.5"
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test"
 
-libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % "0.1.0"
+libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % "0.1.1"
