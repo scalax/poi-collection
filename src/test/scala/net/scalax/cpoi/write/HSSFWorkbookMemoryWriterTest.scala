@@ -3,8 +3,8 @@ package net.scalax.cpoi.test
 import java.util.Date
 
 import net.scalax.cpoi.api._
-import org.apache.poi.hssf.usermodel.HSSFWorkbook
-import org.apache.poi.ss.usermodel.{CellStyle, CellType, Workbook}
+import org.apache.poi.hssf.usermodel.{ HSSFCell, HSSFWorkbook }
+import org.apache.poi.ss.usermodel.{ CellStyle, CellType, Workbook }
 import org.scalatest._
 
 import scala.util.Try
@@ -13,8 +13,9 @@ import scala.collection.compat._
 class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
 
   case object TextStyle extends StyleTransform {
-    override def operation(workbook: Workbook,
-                           cellStyle: CellStyle): CellStyle = {
+    override def operation(
+      workbook: Workbook,
+      cellStyle: CellStyle): CellStyle = {
       val format = workbook.createDataFormat.getFormat("@")
       cellStyle.setDataFormat(format)
       cellStyle
@@ -22,8 +23,9 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
   }
 
   case object DoubleStyle extends StyleTransform {
-    override def operation(workbook: Workbook,
-                           cellStyle: CellStyle): CellStyle = {
+    override def operation(
+      workbook: Workbook,
+      cellStyle: CellStyle): CellStyle = {
       val format = workbook.createDataFormat.getFormat("0.00")
       cellStyle.setDataFormat(format)
       cellStyle
@@ -31,8 +33,9 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
   }
 
   case class Locked(lock: Boolean) extends StyleTransform {
-    override def operation(workbook: Workbook,
-                           cellStyle: CellStyle): CellStyle = {
+    override def operation(
+      workbook: Workbook,
+      cellStyle: CellStyle): CellStyle = {
       cellStyle.setLocked(lock)
       cellStyle
     }
@@ -56,8 +59,7 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
           .addTransform(TextStyle, Locked(false)),
         row.createCell(6) -> CPoi
           .wrapData(testDouble)
-          .addTransform(DoubleStyle, Locked(true))
-      )
+          .addTransform(DoubleStyle, Locked(true)))
     }).flatten.to(List)
     val gen = CPoi.newStyleGen
     CPoi.multiplySet(gen, cells): Try[StyleGen]
@@ -97,8 +99,7 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
           .addTransform(TextStyle, Locked(false)),
         row.createCell(6) -> CPoi
           .wrapData(testDouble)
-          .addTransform(DoubleStyle, Locked(true))
-      )
+          .addTransform(DoubleStyle, Locked(true)))
     }).flatten.to(List)
     val gen = CPoi.newMutableStyleGen
     CPoi.multiplySet(gen, cells): Unit
@@ -130,7 +131,7 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
     val defaultCellStyleCount = workbook.getNumCellStyles
 
     val sheet = workbook.createSheet("SheetA")
-    val cells = (for (rowIndex <- (1 to 8000)) yield {
+    val cells: Stream[(HSSFCell, CellDataAbs)] = (for (rowIndex <- Stream.from(1 to 8000)) yield {
       val row = sheet.createRow(rowIndex + 2)
       List(
         row.createCell(3) -> CPoi
@@ -138,9 +139,8 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
           .addTransform(TextStyle, Locked(false)),
         row.createCell(6) -> CPoi
           .wrapData(testDouble)
-          .addTransform(DoubleStyle, Locked(true))
-      )
-    }).flatten.to(List).toStream
+          .addTransform(DoubleStyle, Locked(true)))
+    }).flatten
     val gen = CPoi.newStyleGen
     CPoi.multiplySet(gen, cells): Try[StyleGen]
 
@@ -171,7 +171,7 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
     val defaultCellStyleCount = workbook.getNumCellStyles
 
     val sheet = workbook.createSheet("SheetA")
-    val cells = (for (rowIndex <- (1 to 8000)) yield {
+    val cells: Stream[(HSSFCell, CellDataAbs)] = (for (rowIndex <- Stream.from(1 to 8000)) yield {
       val row = sheet.createRow(rowIndex + 2)
       List(
         row.createCell(3) -> CPoi
@@ -179,9 +179,8 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
           .addTransform(TextStyle, Locked(false)),
         row.createCell(6) -> CPoi
           .wrapData(testDouble)
-          .addTransform(DoubleStyle, Locked(true))
-      )
-    }).flatten.to(List).toStream
+          .addTransform(DoubleStyle, Locked(true)))
+    }).flatten
     val gen = CPoi.newMutableStyleGen
     CPoi.multiplySet(gen, cells): Unit
 
@@ -204,10 +203,9 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
 
   "HSSFWorkbook" should "throw exception when create more than 4000 cell style" in {
     val workbook = new HSSFWorkbook()
-    a[IllegalStateException] should be thrownBy (for ((_: Int) <- (1 to 4010))
-      yield {
-        workbook.createCellStyle
-      })
+    a[IllegalStateException] should be thrownBy (for ((_: Int) <- (1 to 4010)) yield {
+      workbook.createCellStyle
+    })
   }
 
   "HSSFWorkbook" should "not write to cell when data is None" in {
@@ -226,16 +224,15 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
       poiCell1 -> CPoi.wrapData(Option.empty[String]),
       poiCell2 -> CPoi.wrapData(Option.empty[Double]),
       poiCell3 -> CPoi.wrapData(Option.empty[Boolean]),
-      poiCell4 -> CPoi.wrapData(Option.empty[Date])
-    )
+      poiCell4 -> CPoi.wrapData(Option.empty[Date]))
 
     val gen = CPoi.newStyleGen
     CPoi.multiplySet(gen, cells): Try[StyleGen]
 
-    poiCell1.getCellTypeEnum should be(CellType.BLANK)
-    poiCell2.getCellTypeEnum should be(CellType.BLANK)
-    poiCell3.getCellTypeEnum should be(CellType.BLANK)
-    poiCell4.getCellTypeEnum should be(CellType.BLANK)
+    poiCell1.getCellType should be(CellType.BLANK)
+    poiCell2.getCellType should be(CellType.BLANK)
+    poiCell3.getCellType should be(CellType.BLANK)
+    poiCell4.getCellType should be(CellType.BLANK)
   }
 
   "HSSFWorkbook" should "not write to cell with immutable style gen when there is a exception thrown" in {
@@ -258,15 +255,15 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
       .zipWithIndex
       .map {
         case (_, index) if index == 602 => null
-        case (item, _)                  => item
+        case (item, _) => item
       }
 
     CPoi.multiplySet(gen, tuple2List): Try[StyleGen]
 
-    poiCells(600).getCellTypeEnum should be(CellType.STRING)
-    poiCells(601).getCellTypeEnum should be(CellType.STRING)
-    poiCells(602).getCellTypeEnum should be(CellType.BLANK)
-    poiCells(603).getCellTypeEnum should be(CellType.BLANK)
+    poiCells(600).getCellType should be(CellType.STRING)
+    poiCells(601).getCellType should be(CellType.STRING)
+    poiCells(602).getCellType should be(CellType.BLANK)
+    poiCells(603).getCellType should be(CellType.BLANK)
   }
 
   "HSSFWorkbook" should "not write to cell with mutable style gen when there is a exception thrown" in {
@@ -289,15 +286,15 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
       .zipWithIndex
       .map {
         case (_, index) if index == 602 => null
-        case (item, _)                  => item
+        case (item, _) => item
       }
 
     CPoi.multiplySet(gen, tuple2List): Try[CPoiDone]
 
-    poiCells(600).getCellTypeEnum should be(CellType.STRING)
-    poiCells(601).getCellTypeEnum should be(CellType.STRING)
-    poiCells(602).getCellTypeEnum should be(CellType.BLANK)
-    poiCells(603).getCellTypeEnum should be(CellType.BLANK)
+    poiCells(600).getCellType should be(CellType.STRING)
+    poiCells(601).getCellType should be(CellType.STRING)
+    poiCells(602).getCellType should be(CellType.BLANK)
+    poiCells(603).getCellType should be(CellType.BLANK)
   }
 
 }

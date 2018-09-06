@@ -1,7 +1,7 @@
 package net.scalax.cpoi.rw
 
 import net.scalax.cpoi.exception._
-import org.apache.poi.ss.usermodel.{Cell, CellType}
+import org.apache.poi.ss.usermodel.{ Cell, CellType }
 
 trait ImmutableCellReadersImpl extends CellReadersImpl {
 
@@ -11,7 +11,7 @@ trait ImmutableCellReadersImpl extends CellReadersImpl {
     override def get(cell: Option[Cell]): CellReader.CellReadResult[String] = {
       cell match {
         case Some(c) =>
-          c.getCellTypeEnum match {
+          c.getCellType match {
             case CellType.BLANK =>
               Right(c.getStringCellValue)
             case CellType.STRING =>

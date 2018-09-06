@@ -1,6 +1,6 @@
 package net.scalax.cpoi.content
 
-import net.scalax.cpoi.rw.{CPoiDone, CellWriter}
+import net.scalax.cpoi.rw.{ CPoiDone, CellWriter }
 import net.scalax.cpoi.style.StyleTransform
 import org.apache.poi.ss.usermodel.Cell
 
@@ -83,8 +83,9 @@ trait CellData[T] extends CellDataAbs {
 
 }
 
-case class CellDataImpl[T](override val data: T,
-                           override val styleTransform: List[StyleTransform] =
-                             List.empty)(
-    implicit override val operation: CellWriter[T])
-    extends CellData[T]
+case class CellDataImpl[T](
+  override val data: T,
+  override val styleTransform: List[StyleTransform] = List.empty)(
+  implicit
+  override val operation: CellWriter[T])
+  extends CellData[T]

@@ -15,8 +15,7 @@ object CellReader {
 
   type CellReadResult[R] = Either[CellReaderException, R]
 
-  implicit def optionCellReaderToNoneOptionCellReader[T: CellReader]
-    : CellReader[Option[T]] = {
+  implicit def optionCellReaderToNoneOptionCellReader[T: CellReader]: CellReader[Option[T]] = {
     implicitly[CellReader[T]].map(Option(_)).recover {
       case _: CellNotExistsException =>
         Option.empty
@@ -24,13 +23,13 @@ object CellReader {
   }
 
   implicit val monadError: MonadError[CellReader, CellReaderException] =
-    new MonadError[CellReader, CellReaderException]
-    with StackSafeMonad[CellReader] {
+    new MonadError[CellReader, CellReaderException] with StackSafeMonad[CellReader] {
 
       override def map[A, B](fa: CellReader[A])(f: A => B): CellReader[B] = {
         new CellReader[B] {
           def get(cell: Option[Cell]): CellReadResult[B] = {
-            fa.get(cell).map(f)
+            //TODO Will be changed to Either.map when drop scala 2.11 support
+            fa.get(cell).right.map(f)
           }
         }
       }
@@ -42,7 +41,7 @@ object CellReader {
       }
 
       override def flatMap[A, B](fa: CellReader[A])(
-          f: A => CellReader[B]): CellReader[B] = new CellReader[B] {
+        f: A => CellReader[B]): CellReader[B] = new CellReader[B] {
         def get(cell: Option[Cell]): CellReadResult[B] = {
           fa.get(cell).right.flatMap(s => f(s).get(cell))
         }
@@ -56,7 +55,7 @@ object CellReader {
         }
 
       override def handleError[A](fa: CellReader[A])(
-          f: CellReaderException => A): CellReader[A] = new CellReader[A] {
+        f: CellReaderException => A): CellReader[A] = new CellReader[A] {
         def get(cell: Option[Cell]): CellReadResult[A] = {
           fa.get(cell) match {
             case Left(e) =>
@@ -68,7 +67,7 @@ object CellReader {
       }
 
       override def handleErrorWith[A](fa: CellReader[A])(
-          f: CellReaderException => CellReader[A]): CellReader[A] =
+        f: CellReaderException => CellReader[A]): CellReader[A] =
         new CellReader[A] {
           def get(cell: Option[Cell]): CellReadResult[A] = {
             fa.get(cell) match {
