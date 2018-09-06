@@ -4,7 +4,7 @@ import java.util.Date
 
 import cats.ApplicativeError
 import net.scalax.cpoi.exception._
-import org.apache.poi.ss.usermodel.{Cell, CellType}
+import org.apache.poi.ss.usermodel.{ Cell, CellType }
 import cats.implicits._
 
 trait CellReadersImpl {
@@ -51,7 +51,7 @@ trait CellReadersImpl {
     override def get(cell: Option[Cell]): CellReader.CellReadResult[String] = {
       cell match {
         case Some(c) =>
-          c.getCellTypeEnum match {
+          c.getCellType match {
             case CellType.BLANK =>
               Right(c.getStringCellValue)
             case CellType.STRING =>
@@ -84,7 +84,7 @@ trait CellReadersImpl {
     override def get(cell: Option[Cell]): CellReader.CellReadResult[Double] = {
       cell match {
         case Some(c) =>
-          c.getCellTypeEnum match {
+          c.getCellType match {
             case CellType.BLANK =>
               Left(new CellNotExistsException())
             case CellType.NUMERIC =>
@@ -109,7 +109,7 @@ trait CellReadersImpl {
     override def get(cell: Option[Cell]): CellReader.CellReadResult[Boolean] = {
       cell match {
         case Some(c) =>
-          c.getCellTypeEnum match {
+          c.getCellType match {
             case CellType.BLANK =>
               Left(new CellNotExistsException())
             case CellType.BOOLEAN =>
@@ -134,7 +134,7 @@ trait CellReadersImpl {
     override def get(cell: Option[Cell]): CellReader.CellReadResult[Date] = {
       cell match {
         case Some(c) =>
-          c.getCellTypeEnum match {
+          c.getCellType match {
             case CellType.BLANK =>
               Left(new CellNotExistsException())
             case CellType.NUMERIC =>

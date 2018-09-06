@@ -5,14 +5,14 @@ sealed trait CellReaderException extends Exception {}
 trait CellNotConfirmException extends CellReaderException {}
 
 class CellNotExistsException
-    extends Exception("Cell not found.")
-    with CellReaderException {}
+  extends Exception("Cell not found.")
+  with CellReaderException {}
 
 sealed trait CellTypeNotConfirmException extends CellReaderException {}
 
 class ExpectFormulaException
-    extends Exception("Expect formula cell.")
-    with CellTypeNotConfirmException {
+  extends Exception("Expect formula cell.")
+  with CellTypeNotConfirmException {
   def this(cause: Throwable) = {
     this()
     initCause(cause)
@@ -20,8 +20,8 @@ class ExpectFormulaException
 }
 
 class ExpectNumericCellException
-    extends Exception("Expect numeric cell.")
-    with CellTypeNotConfirmException {
+  extends Exception("Expect numeric cell.")
+  with CellTypeNotConfirmException {
   def this(cause: Throwable) = {
     this()
     initCause(cause)
@@ -29,8 +29,8 @@ class ExpectNumericCellException
 }
 
 class ExpectDateException
-    extends Exception("Expect date cell.")
-    with CellTypeNotConfirmException {
+  extends Exception("Expect date cell.")
+  with CellTypeNotConfirmException {
   def this(cause: Throwable) = {
     this()
     initCause(cause)
@@ -38,8 +38,8 @@ class ExpectDateException
 }
 
 class ExpectRichTextException
-    extends Exception("Expect rich text cell.")
-    with CellTypeNotConfirmException {
+  extends Exception("Expect rich text cell.")
+  with CellTypeNotConfirmException {
   def this(cause: Throwable) = {
     this()
     initCause(cause)
@@ -47,8 +47,8 @@ class ExpectRichTextException
 }
 
 class ExpectStringCellException
-    extends Exception("Expect string cell.")
-    with CellTypeNotConfirmException {
+  extends Exception("Expect string cell.")
+  with CellTypeNotConfirmException {
   def this(cause: Throwable) = {
     this()
     initCause(cause)
@@ -56,8 +56,8 @@ class ExpectStringCellException
 }
 
 class ExpectBooleanCellException
-    extends Exception("Expect boolean cell.")
-    with CellTypeNotConfirmException {
+  extends Exception("Expect boolean cell.")
+  with CellTypeNotConfirmException {
   def this(cause: Throwable) = {
     this()
     initCause(cause)
@@ -65,8 +65,8 @@ class ExpectBooleanCellException
 }
 
 class ExpectErrorCellException
-    extends Exception("Expect error cell.")
-    with CellTypeNotConfirmException {
+  extends Exception("Expect error cell.")
+  with CellTypeNotConfirmException {
   def this(cause: Throwable) = {
     this()
     initCause(cause)

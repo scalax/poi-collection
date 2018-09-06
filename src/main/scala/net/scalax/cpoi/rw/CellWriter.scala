@@ -11,8 +11,7 @@ trait CellWriter[T] {
 
 object CellWriter {
 
-  implicit def optionCellOperationToNoneOptionCellOpreation[T: CellWriter]
-    : CellWriter[Option[T]] = {
+  implicit def optionCellOperationToNoneOptionCellOpreation[T: CellWriter]: CellWriter[Option[T]] = {
     new CellWriter[Option[T]] {
       override def setValue(cell: Cell, value: Option[T]): Try[CPoiDone] = {
         value
@@ -27,7 +26,7 @@ object CellWriter {
   implicit val contravariant: Contravariant[CellWriter] = {
     new Contravariant[CellWriter] {
       override def contramap[A, B](fa: CellWriter[A])(
-          f: B => A): CellWriter[B] = {
+        f: B => A): CellWriter[B] = {
         new CellWriter[B] {
           override def setValue(cell: Cell, value: B): Try[CPoiDone] = {
             Try { f(value) }.flatMap(s => fa.setValue(cell, s))

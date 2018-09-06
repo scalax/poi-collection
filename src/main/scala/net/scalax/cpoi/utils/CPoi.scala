@@ -6,24 +6,26 @@ import net.scalax.cpoi.content.{
   CellDataAbs,
   CellDataImpl
 }
-import net.scalax.cpoi.rw.{CPoiDone, CellWriter}
+import net.scalax.cpoi.rw.{ CPoiDone, CellWriter }
 import net.scalax.cpoi.style.{
   MutableStyleGen,
   StyleGen,
   StyleKeyWrap,
   StyleTransform
 }
-import org.apache.poi.ss.usermodel.{Cell, CellStyle}
+import org.apache.poi.ss.usermodel.{ Cell, CellStyle }
 
-import scala.util.{Failure, Try}
-import scala.collection.mutable.{Map => MutableMap}
+import scala.util.{ Failure, Try }
+import scala.collection.mutable.{ Map => MutableMap }
+import scala.collection.compat._
 
 trait CPoi {
 
-  def multiplySet(styleGen: StyleGen,
-                  seq: Seq[(Cell, CellDataAbs)]): Try[StyleGen] = {
+  def multiplySet(
+    styleGen: StyleGen,
+    seq: Seq[(Cell, CellDataAbs)]): Try[StyleGen] = {
     val ms = styleGen.toMutable
-    seq.toStream
+    Stream.from(seq)
       .map { item =>
         Try {
           item match {
@@ -35,16 +37,17 @@ trait CPoi {
         }.flatten: Try[CPoiDone]
       }
       .collectFirst { case Failure(e) => e } match {
-      case Some(e) =>
-        Failure(e)
-      case None =>
-        Try { ms.toImmutable }
-    }
+        case Some(e) =>
+          Failure(e)
+        case None =>
+          Try { ms.toImmutable }
+      }
   }
 
-  def multiplySet(styleGen: MutableStyleGen,
-                  seq: Seq[(Cell, CellDataAbs)]): Try[CPoiDone] = {
-    seq.toStream
+  def multiplySet(
+    styleGen: MutableStyleGen,
+    seq: Seq[(Cell, CellDataAbs)]): Try[CPoiDone] = {
+    Stream.from(seq)
       .map { item =>
         Try {
           item match {
@@ -57,11 +60,11 @@ trait CPoi {
         }.flatten: Try[CPoiDone]
       }
       .collectFirst { case Failure(e) => e } match {
-      case Some(e) =>
-        Failure(e)
-      case None =>
-        Try { CPoiDone.instance }
-    }
+        case Some(e) =>
+          Failure(e)
+        case None =>
+          Try { CPoiDone.instance }
+      }
   }
 
   def wrapCell(poiCell: Option[Cell]): CellContentAbs = {
@@ -79,7 +82,8 @@ trait CPoi {
   }
 
   def wrapData[T](data: T, styleTransform: List[StyleTransform] = List.empty)(
-      implicit operation: CellWriter[T]): CellData[T] =
+    implicit
+    operation: CellWriter[T]): CellData[T] =
     CellDataImpl(data, styleTransform)
 
   def newStyleGen: StyleGen = new StyleGen {

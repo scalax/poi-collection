@@ -14,6 +14,6 @@ name := "poi-collection"
 
 scalaVersion := "2.12.6"
 
-crossScalaVersions := Seq("2.12.6", "2.11.12")
+crossScalaVersions := Seq("2.13.0-M4", "2.12.6", "2.11.12")
 
-scalacOptions ++= Seq("-feature", "-deprecation", "-Ypartial-unification")
+scalacOptions ++= Seq("-feature", "-deprecation")
