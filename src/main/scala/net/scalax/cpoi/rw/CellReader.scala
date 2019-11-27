@@ -28,8 +28,7 @@ object CellReader {
       override def map[A, B](fa: CellReader[A])(f: A => B): CellReader[B] = {
         new CellReader[B] {
           def get(cell: Option[Cell]): CellReadResult[B] = {
-            //TODO Will be changed to Either.map when drop scala 2.11 support
-            fa.get(cell).right.map(f)
+            fa.get(cell).map(f)
           }
         }
       }
@@ -40,8 +39,7 @@ object CellReader {
         }
       }
 
-      override def flatMap[A, B](fa: CellReader[A])(
-        f: A => CellReader[B]): CellReader[B] = new CellReader[B] {
+      override def flatMap[A, B](fa: CellReader[A])(f: A => CellReader[B]): CellReader[B] = new CellReader[B] {
         def get(cell: Option[Cell]): CellReadResult[B] = {
           fa.get(cell).right.flatMap(s => f(s).get(cell))
         }
@@ -54,8 +52,7 @@ object CellReader {
           }
         }
 
-      override def handleError[A](fa: CellReader[A])(
-        f: CellReaderException => A): CellReader[A] = new CellReader[A] {
+      override def handleError[A](fa: CellReader[A])(f: CellReaderException => A): CellReader[A] = new CellReader[A] {
         def get(cell: Option[Cell]): CellReadResult[A] = {
           fa.get(cell) match {
             case Left(e) =>
@@ -66,8 +63,7 @@ object CellReader {
         }
       }
 
-      override def handleErrorWith[A](fa: CellReader[A])(
-        f: CellReaderException => CellReader[A]): CellReader[A] =
+      override def handleErrorWith[A](fa: CellReader[A])(f: CellReaderException => CellReader[A]): CellReader[A] =
         new CellReader[A] {
           def get(cell: Option[Cell]): CellReadResult[A] = {
             fa.get(cell) match {

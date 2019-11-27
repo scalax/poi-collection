@@ -1,7 +1,7 @@
 package net.scalax.cpoi.style
 
 import net.scalax.cpoi.content.CellDataAbs
-import org.apache.poi.ss.usermodel.{ Cell, CellStyle }
+import org.apache.poi.ss.usermodel.{Cell, CellStyle}
 import scala.collection.compat._
 
 trait StyleGen {
@@ -9,9 +9,7 @@ trait StyleGen {
 
   protected val cellMap: Map[StyleKeyWrap, CellStyle]
 
-  protected def getCellStyle(
-    cellData: CellDataAbs,
-    cell: Cell): (CellStyle, StyleGen) = {
+  protected def getCellStyle(cellData: CellDataAbs, cell: Cell): (CellStyle, StyleGen) = {
     val workbook = cell.getSheet.getWorkbook
     val key =
       StyleKeyWrap(workbook = workbook, styleTrans = cellData.styleTransform)

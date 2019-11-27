@@ -10,8 +10,8 @@ class HSSFWorkbookLawNumbricCellTest extends FlatSpec with Matchers {
 
   "String cell" should "throw exception when setting a numeric cell type" in {
     val workbook = new HSSFWorkbook()
-    val sheet = workbook.createSheet("Sheet1")
-    val cell = sheet.createRow(0).createCell(0)
+    val sheet    = workbook.createSheet("Sheet1")
+    val cell     = sheet.createRow(0).createCell(0)
     cell.setCellValue("2333.44")
     a[IllegalStateException] should be thrownBy {
       cell.setCellType(CellType.NUMERIC)
@@ -20,8 +20,8 @@ class HSSFWorkbookLawNumbricCellTest extends FlatSpec with Matchers {
 
   "Boolean cell" should "be set a numberic cell type" in {
     val workbook = new HSSFWorkbook()
-    val sheet = workbook.createSheet("Sheet1")
-    val cell = sheet.createRow(0).createCell(0)
+    val sheet    = workbook.createSheet("Sheet1")
+    val cell     = sheet.createRow(0).createCell(0)
     cell.setCellValue(false)
     a[IllegalStateException] should be thrownBy {
       cell.setCellType(CellType.NUMERIC)
@@ -30,8 +30,8 @@ class HSSFWorkbookLawNumbricCellTest extends FlatSpec with Matchers {
 
   "Date cell" should "be set a numeric cell type" in {
     val workbook = new HSSFWorkbook()
-    val sheet = workbook.createSheet("Sheet1")
-    val cell = sheet.createRow(0).createCell(0)
+    val sheet    = workbook.createSheet("Sheet1")
+    val cell     = sheet.createRow(0).createCell(0)
     cell.setCellValue(new Date(0))
     cell.setCellType(CellType.NUMERIC)
     cell.getNumericCellValue.toInt should be(25569)

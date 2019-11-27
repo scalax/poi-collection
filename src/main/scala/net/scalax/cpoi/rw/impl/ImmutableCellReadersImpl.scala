@@ -1,7 +1,7 @@
 package net.scalax.cpoi.rw
 
 import net.scalax.cpoi.exception._
-import org.apache.poi.ss.usermodel.{ Cell, CellType }
+import org.apache.poi.ss.usermodel.{Cell, CellType}
 
 trait ImmutableCellReadersImpl extends CellReadersImpl {
 
@@ -17,9 +17,9 @@ trait ImmutableCellReadersImpl extends CellReadersImpl {
             case CellType.STRING =>
               Right(c.getStringCellValue)
             case CellType.FORMULA =>
-              val wb = c.getSheet.getWorkbook
+              val wb          = c.getSheet.getWorkbook
               val crateHelper = wb.getCreationHelper
-              val evaluator = crateHelper.createFormulaEvaluator
+              val evaluator   = crateHelper.createFormulaEvaluator
               self.get(Option(evaluator.evaluateInCell(c)))
             case _ =>
               Left(new ExpectStringCellException())

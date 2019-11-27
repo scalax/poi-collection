@@ -10,10 +10,10 @@ class HSSFWorkbookOptionReaderTest extends FlatSpec with Matchers {
     import readers._
 
     val testBlankStr = "    " * 100
-    val workbook = new HSSFWorkbook()
-    val sheet = workbook.createSheet("SheetA")
-    val row = sheet.createRow(2)
-    val cell = row.createCell(3)
+    val workbook     = new HSSFWorkbook()
+    val sheet        = workbook.createSheet("SheetA")
+    val row          = sheet.createRow(2)
+    val cell         = row.createCell(3)
     cell.setCellValue(testBlankStr)
     val ccell = CPoi.wrapCell(cell)
     val value = ccell.tryValue[Option[String]]
@@ -25,10 +25,10 @@ class HSSFWorkbookOptionReaderTest extends FlatSpec with Matchers {
     implicit val strReader = readers.nonBlankStringReader
 
     val testBlankStr = "    " * 100
-    val workbook = new HSSFWorkbook()
-    val sheet = workbook.createSheet("SheetA")
-    val row = sheet.createRow(2)
-    val cell = row.createCell(3)
+    val workbook     = new HSSFWorkbook()
+    val sheet        = workbook.createSheet("SheetA")
+    val row          = sheet.createRow(2)
+    val cell         = row.createCell(3)
     cell.setCellValue(testBlankStr)
     val ccell = CPoi.wrapCell(cell)
     val value = ccell.tryValue[Option[String]]

@@ -1,6 +1,6 @@
-libraryDependencies += "org.typelevel" %% "cats-core" % "1.3.1"
+libraryDependencies += "org.typelevel" %% "cats-core" % "2.1.0-RC2"
 
-val poiVersion = "4.0.0"
+val poiVersion = "4.1.1"
 
 libraryDependencies ++= {
   Seq(
@@ -13,7 +13,7 @@ libraryDependencies ++= {
 
 libraryDependencies += "org.apache.commons" % "commons-math3" % "3.6.1"
 
-libraryDependencies += "org.scalactic" %% "scalactic" % "3.0.6-SNAP2"
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.6-SNAP2" % "test"
+libraryDependencies += "org.scalactic" %% "scalactic" % "3.0.8"
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.8" % "test"
 
-libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % "0.1.1"
+libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % "2.1.2"
