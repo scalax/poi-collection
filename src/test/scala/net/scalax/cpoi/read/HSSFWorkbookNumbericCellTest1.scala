@@ -22,7 +22,7 @@ class HSSFWorkbookNumbericCellTest1 extends FlatSpec with Matchers {
     val value = wrap.tryValue[String]
     wrap.cellType should be(Option(CellType.STRING))
     value.isRight should be(true)
-    value.right.get should be("123.321")
+    value.getOrElse(throw new Exception("Test not pass")) should be("123.321")
   }
 
   it should "read as double by double reader" in {
@@ -35,7 +35,7 @@ class HSSFWorkbookNumbericCellTest1 extends FlatSpec with Matchers {
     val wrap  = CPoi.wrapCell(cell)
     val value = wrap.tryValue[Double]
     value.isRight should be(true)
-    value.right.get should be(123.321)
+    value.getOrElse(throw new Exception("Test not pass")) should be(123.321)
   }
 
   it should "throw exception when read by boolean reader" in {
@@ -48,7 +48,7 @@ class HSSFWorkbookNumbericCellTest1 extends FlatSpec with Matchers {
     val wrap  = CPoi.wrapCell(cell)
     val value = wrap.tryValue[Boolean]
     value.isLeft should be(true)
-    value.left.get.isInstanceOf[ExpectBooleanCellException] should be(true)
+    value.left.getOrElse(throw new Exception("Test not pass")).isInstanceOf[ExpectBooleanCellException] should be(true)
   }
 
   it should "read as date when read by date reader" in {
@@ -62,7 +62,7 @@ class HSSFWorkbookNumbericCellTest1 extends FlatSpec with Matchers {
     val value = wrap.tryValue[Date]
     value.isRight should be(true)
     val calendar = Calendar.getInstance
-    calendar.setTime(value.right.get)
+    calendar.setTime(value.getOrElse(throw new Exception("Test not pass")))
     calendar.get(Calendar.YEAR) should be(1900)
   }
 
@@ -78,7 +78,7 @@ class HSSFWorkbookNumbericCellTest1 extends FlatSpec with Matchers {
     val value = wrap.tryValue[String]
     wrap.cellType should be(Option(CellType.NUMERIC))
     value.isLeft should be(true)
-    value.left.get.isInstanceOf[ExpectStringCellException] should be(true)
+    value.left.getOrElse(throw new Exception("Test not pass")).isInstanceOf[ExpectStringCellException] should be(true)
   }
 
   it should "read as string by non empty string reader" in {
@@ -93,7 +93,7 @@ class HSSFWorkbookNumbericCellTest1 extends FlatSpec with Matchers {
     val value = wrap.tryValue[String]
     wrap.cellType should be(Option(CellType.STRING))
     value.isRight should be(true)
-    value.right.get should be("123.321")
+    value.getOrElse(throw new Exception("Test not pass")) should be("123.321")
   }
 
   it should "read as trim string by non blank string reader" in {
@@ -108,7 +108,7 @@ class HSSFWorkbookNumbericCellTest1 extends FlatSpec with Matchers {
     val value = wrap.tryValue[String]
     wrap.cellType should be(Option(CellType.STRING))
     value.isRight should be(true)
-    value.right.get should be("123.321")
+    value.getOrElse(throw new Exception("Test not pass")) should be("123.321")
   }
 
 }

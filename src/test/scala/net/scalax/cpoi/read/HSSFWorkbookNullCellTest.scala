@@ -14,7 +14,7 @@ class HSSFWorkbookNullCellTest extends FlatSpec with Matchers {
     val wrap  = CPoi.wrapCell(null: Cell)
     val value = wrap.tryValue[String]
     value.isRight should be(true)
-    value.right.get should be("")
+    value.getOrElse(throw new Exception("Test not pass")) should be("")
   }
 
   it should "throw exception when read by double reader" in {
@@ -22,7 +22,7 @@ class HSSFWorkbookNullCellTest extends FlatSpec with Matchers {
     val wrap  = CPoi.wrapCell(null: Cell)
     val value = wrap.tryValue[Double]
     value.isLeft should be(true)
-    value.left.get.isInstanceOf[CellNotExistsException] should be(true)
+    value.left.getOrElse(throw new Exception("Test not pass")).isInstanceOf[CellNotExistsException] should be(true)
   }
 
   it should "throw exception when read by boolean reader" in {
@@ -30,7 +30,7 @@ class HSSFWorkbookNullCellTest extends FlatSpec with Matchers {
     val wrap  = CPoi.wrapCell(null: Cell)
     val value = wrap.tryValue[Boolean]
     value.isLeft should be(true)
-    value.left.get.isInstanceOf[CellNotExistsException] should be(true)
+    value.left.getOrElse(throw new Exception("Test not pass")).isInstanceOf[CellNotExistsException] should be(true)
   }
 
   it should "throw exception when read by date reader" in {
@@ -38,7 +38,7 @@ class HSSFWorkbookNullCellTest extends FlatSpec with Matchers {
     val wrap  = CPoi.wrapCell(null: Cell)
     val value = wrap.tryValue[Date]
     value.isLeft should be(true)
-    value.left.get.isInstanceOf[CellNotExistsException] should be(true)
+    value.left.getOrElse(throw new Exception("Test not pass")).isInstanceOf[CellNotExistsException] should be(true)
   }
 
   it should "read as empty string by immutable string reader" in {
@@ -46,7 +46,7 @@ class HSSFWorkbookNullCellTest extends FlatSpec with Matchers {
     val wrap  = CPoi.wrapCell(null: Cell)
     val value = wrap.tryValue[String]
     value.isRight should be(true)
-    value.right.get should be("")
+    value.getOrElse(throw new Exception("Test not pass")) should be("")
   }
 
   it should "throw exception when read by non empty string reader" in {
@@ -54,7 +54,7 @@ class HSSFWorkbookNullCellTest extends FlatSpec with Matchers {
     val wrap        = CPoi.wrapCell(null: Cell)
     val value       = wrap.tryValue[String]
     value.isLeft should be(true)
-    value.left.get.isInstanceOf[CellNotExistsException] should be(true)
+    value.left.getOrElse(throw new Exception("Test not pass")).isInstanceOf[CellNotExistsException] should be(true)
   }
 
   it should "throw exception when read by non blank string reader" in {
@@ -62,7 +62,7 @@ class HSSFWorkbookNullCellTest extends FlatSpec with Matchers {
     val wrap        = CPoi.wrapCell(null: Cell)
     val value       = wrap.tryValue[String]
     value.isLeft should be(true)
-    value.left.get.isInstanceOf[CellNotExistsException] should be(true)
+    value.left.getOrElse(throw new Exception("Test not pass")).isInstanceOf[CellNotExistsException] should be(true)
   }
 
 }

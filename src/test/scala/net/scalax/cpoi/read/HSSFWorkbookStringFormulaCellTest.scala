@@ -21,7 +21,7 @@ class HSSFWorkbookStringFormulaCellTest extends FlatSpec with Matchers {
     val wrap  = CPoi.wrapCell(cell)
     val value = wrap.tryValue[String]
     value.isRight should be(true)
-    value.right.get should be(s"a${testUTF8Str}")
+    value.getOrElse(throw new Exception("Test not pass")) should be(s"a${testUTF8Str}")
   }
 
   it should "throw exception when read by double reader" in {
@@ -34,7 +34,7 @@ class HSSFWorkbookStringFormulaCellTest extends FlatSpec with Matchers {
     val wrap  = CPoi.wrapCell(cell)
     val value = wrap.tryValue[Double]
     value.isLeft should be(true)
-    value.left.get.isInstanceOf[ExpectNumericCellException] should be(true)
+    value.left.getOrElse(throw new Exception("Test not pass")).isInstanceOf[ExpectNumericCellException] should be(true)
   }
 
   it should "throw exception when read by boolean reader" in {
@@ -47,7 +47,7 @@ class HSSFWorkbookStringFormulaCellTest extends FlatSpec with Matchers {
     val wrap  = CPoi.wrapCell(cell)
     val value = wrap.tryValue[Boolean]
     value.isLeft should be(true)
-    value.left.get.isInstanceOf[ExpectBooleanCellException] should be(true)
+    value.left.getOrElse(throw new Exception("Test not pass")).isInstanceOf[ExpectBooleanCellException] should be(true)
   }
 
   it should "throw exception when read by date reader" in {
@@ -60,7 +60,7 @@ class HSSFWorkbookStringFormulaCellTest extends FlatSpec with Matchers {
     val wrap  = CPoi.wrapCell(cell)
     val value = wrap.tryValue[Date]
     value.isLeft should be(true)
-    value.left.get.isInstanceOf[ExpectDateException] should be(true)
+    value.left.getOrElse(throw new Exception("Test not pass")).isInstanceOf[ExpectDateException] should be(true)
   }
 
   it should "read as empty string by immutable string reader" in {
@@ -73,7 +73,7 @@ class HSSFWorkbookStringFormulaCellTest extends FlatSpec with Matchers {
     val wrap  = CPoi.wrapCell(cell)
     val value = wrap.tryValue[String]
     value.isRight should be(true)
-    value.right.get should be(s"a${testUTF8Str}")
+    value.getOrElse(throw new Exception("Test not pass")) should be(s"a${testUTF8Str}")
   }
 
   it should "read as string by non empty string reader" in {
@@ -86,7 +86,7 @@ class HSSFWorkbookStringFormulaCellTest extends FlatSpec with Matchers {
     val wrap  = CPoi.wrapCell(cell)
     val value = wrap.tryValue[String]
     value.isRight should be(true)
-    value.right.get should be(s"a${testUTF8Str}")
+    value.getOrElse(throw new Exception("Test not pass")) should be(s"a${testUTF8Str}")
   }
 
   it should "read as trim string by non blank string reader" in {
@@ -99,7 +99,7 @@ class HSSFWorkbookStringFormulaCellTest extends FlatSpec with Matchers {
     val wrap  = CPoi.wrapCell(cell)
     val value = wrap.tryValue[String]
     value.isRight should be(true)
-    value.right.get should be(s"a${testUTF8Str.reverse.dropWhile(s => s == ' ').reverse}")
+    value.getOrElse(throw new Exception("Test not pass")) should be(s"a${testUTF8Str.reverse.dropWhile(s => s == ' ').reverse}")
   }
 
 }
