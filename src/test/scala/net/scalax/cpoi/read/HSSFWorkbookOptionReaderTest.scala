@@ -18,7 +18,7 @@ class HSSFWorkbookOptionReaderTest extends FlatSpec with Matchers {
     val ccell = CPoi.wrapCell(cell)
     val value = ccell.tryValue[Option[String]]
     value.isRight should be(true)
-    value.right.get should be(Option(testBlankStr))
+    value.getOrElse(throw new Exception("Test not pass")) should be(Option(testBlankStr))
   }
 
   "Blank string cell" should "read as None by non blank string reader" in {
@@ -33,7 +33,7 @@ class HSSFWorkbookOptionReaderTest extends FlatSpec with Matchers {
     val ccell = CPoi.wrapCell(cell)
     val value = ccell.tryValue[Option[String]]
     value.isRight should be(true)
-    value.right.get should be(Option.empty)
+    value.getOrElse(throw new Exception("Test not pass")) should be(Option.empty)
   }
 
 }

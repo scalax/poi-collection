@@ -69,7 +69,7 @@ trait CPoi {
   }
 
   def wrapData[T](data: T, styleTransform: List[StyleTransform] = List.empty)(
-    implicit
+      implicit
     operation: CellWriter[T]
   ): CellData[T] =
     CellDataImpl(data, styleTransform)

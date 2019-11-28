@@ -4,10 +4,10 @@ val poiVersion = "4.1.1"
 
 libraryDependencies ++= {
   Seq(
-    //poi
-    "org.apache.poi" % "poi" % poiVersion exclude("stax", "stax-api"),
-    "org.apache.poi" % "poi-ooxml" % poiVersion exclude("stax", "stax-api"),
-    "org.apache.poi" % "poi-ooxml-schemas" % poiVersion exclude("stax", "stax-api")
+      //poi
+    "org.apache.poi"   % "poi"               % poiVersion exclude ("stax", "stax-api")
+    , "org.apache.poi" % "poi-ooxml"         % poiVersion exclude ("stax", "stax-api")
+    , "org.apache.poi" % "poi-ooxml-schemas" % poiVersion exclude ("stax", "stax-api")
   )
 }
 

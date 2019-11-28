@@ -41,7 +41,7 @@ object CellReader {
 
       override def flatMap[A, B](fa: CellReader[A])(f: A => CellReader[B]): CellReader[B] = new CellReader[B] {
         def get(cell: Option[Cell]): CellReadResult[B] = {
-          fa.get(cell).right.flatMap(s => f(s).get(cell))
+          fa.get(cell).flatMap(s => f(s).get(cell))
         }
       }
 

@@ -84,6 +84,6 @@ trait CellData[T] extends CellDataAbs {
 }
 
 case class CellDataImpl[T](override val data: T, override val styleTransform: List[StyleTransform] = List.empty)(
-  implicit
+    implicit
   override val operation: CellWriter[T]
 ) extends CellData[T]
