@@ -3,11 +3,7 @@ package net.scalax.cpoi.test
 import java.util.Date
 
 import net.scalax.cpoi.api._
-import net.scalax.cpoi.exception.{
-  ExpectBooleanCellException,
-  ExpectDateException,
-  ExpectStringCellException
-}
+import net.scalax.cpoi.exception.{ExpectBooleanCellException, ExpectDateException, ExpectStringCellException}
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.ss.usermodel.CellType
 import org.scalatest._
@@ -17,9 +13,9 @@ class HSSFWorkbookNumbericCellTest2 extends FlatSpec with Matchers {
   "numberic cell" should "read as empty string by common string reader" in {
     import readers._
     val workbook = new HSSFWorkbook()
-    val sheet = workbook.createSheet("Sheet1")
-    val row = sheet.createRow(1)
-    val cell = row.createCell(1)
+    val sheet    = workbook.createSheet("Sheet1")
+    val row      = sheet.createRow(1)
+    val cell     = row.createCell(1)
     cell.setCellValue(-123.321)
     val wrap = CPoi.wrapCell(cell)
     wrap.cellType should be(Option(CellType.NUMERIC))
@@ -32,11 +28,11 @@ class HSSFWorkbookNumbericCellTest2 extends FlatSpec with Matchers {
   it should "read as double by double reader" in {
     import readers._
     val workbook = new HSSFWorkbook()
-    val sheet = workbook.createSheet("Sheet1")
-    val row = sheet.createRow(1)
-    val cell = row.createCell(1)
+    val sheet    = workbook.createSheet("Sheet1")
+    val row      = sheet.createRow(1)
+    val cell     = row.createCell(1)
     cell.setCellValue(-123.321)
-    val wrap = CPoi.wrapCell(cell)
+    val wrap  = CPoi.wrapCell(cell)
     val value = wrap.tryValue[Double]
     value.isRight should be(true)
     value.right.get should be(-123.321)
@@ -45,11 +41,11 @@ class HSSFWorkbookNumbericCellTest2 extends FlatSpec with Matchers {
   it should "throw exception when read by boolean reader" in {
     import readers._
     val workbook = new HSSFWorkbook()
-    val sheet = workbook.createSheet("Sheet1")
-    val row = sheet.createRow(1)
-    val cell = row.createCell(1)
+    val sheet    = workbook.createSheet("Sheet1")
+    val row      = sheet.createRow(1)
+    val cell     = row.createCell(1)
     cell.setCellValue(-123.321)
-    val wrap = CPoi.wrapCell(cell)
+    val wrap  = CPoi.wrapCell(cell)
     val value = wrap.tryValue[Boolean]
     value.isLeft should be(true)
     value.left.get.isInstanceOf[ExpectBooleanCellException] should be(true)
@@ -58,11 +54,11 @@ class HSSFWorkbookNumbericCellTest2 extends FlatSpec with Matchers {
   it should "read as date when read by date reader" in {
     import readers._
     val workbook = new HSSFWorkbook()
-    val sheet = workbook.createSheet("Sheet1")
-    val row = sheet.createRow(1)
-    val cell = row.createCell(1)
+    val sheet    = workbook.createSheet("Sheet1")
+    val row      = sheet.createRow(1)
+    val cell     = row.createCell(1)
     cell.setCellValue(-123.321)
-    val wrap = CPoi.wrapCell(cell)
+    val wrap  = CPoi.wrapCell(cell)
     val value = wrap.tryValue[Date]
     value.isLeft should be(true)
     value.left.get.isInstanceOf[ExpectDateException] should be(true)
@@ -71,9 +67,9 @@ class HSSFWorkbookNumbericCellTest2 extends FlatSpec with Matchers {
   it should "throw exception when read by immutable string reader" in {
     import immutableReaders._
     val workbook = new HSSFWorkbook()
-    val sheet = workbook.createSheet("Sheet1")
-    val row = sheet.createRow(1)
-    val cell = row.createCell(1)
+    val sheet    = workbook.createSheet("Sheet1")
+    val row      = sheet.createRow(1)
+    val cell     = row.createCell(1)
     cell.setCellValue(-123.321)
     val wrap = CPoi.wrapCell(cell)
     wrap.cellType should be(Option(CellType.NUMERIC))
@@ -85,10 +81,10 @@ class HSSFWorkbookNumbericCellTest2 extends FlatSpec with Matchers {
 
   it should "read as string by non empty string reader" in {
     implicit val ec = readers.nonEmptyStringReader
-    val workbook = new HSSFWorkbook()
-    val sheet = workbook.createSheet("Sheet1")
-    val row = sheet.createRow(1)
-    val cell = row.createCell(1)
+    val workbook    = new HSSFWorkbook()
+    val sheet       = workbook.createSheet("Sheet1")
+    val row         = sheet.createRow(1)
+    val cell        = row.createCell(1)
     cell.setCellValue(-123.321)
     val wrap = CPoi.wrapCell(cell)
     wrap.cellType should be(Option(CellType.NUMERIC))
@@ -100,10 +96,10 @@ class HSSFWorkbookNumbericCellTest2 extends FlatSpec with Matchers {
 
   it should "read as trim string by non blank string reader" in {
     implicit val ec = readers.nonBlankStringReader
-    val workbook = new HSSFWorkbook()
-    val sheet = workbook.createSheet("Sheet1")
-    val row = sheet.createRow(1)
-    val cell = row.createCell(1)
+    val workbook    = new HSSFWorkbook()
+    val sheet       = workbook.createSheet("Sheet1")
+    val row         = sheet.createRow(1)
+    val cell        = row.createCell(1)
     cell.setCellValue(-123.321)
     val wrap = CPoi.wrapCell(cell)
     wrap.cellType should be(Option(CellType.NUMERIC))

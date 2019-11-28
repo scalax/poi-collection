@@ -3,8 +3,8 @@ package net.scalax.cpoi.test
 import java.util.Date
 
 import net.scalax.cpoi.api._
-import org.apache.poi.hssf.usermodel.{ HSSFCell, HSSFWorkbook }
-import org.apache.poi.ss.usermodel.{ CellStyle, CellType, Workbook }
+import org.apache.poi.hssf.usermodel.{HSSFCell, HSSFWorkbook}
+import org.apache.poi.ss.usermodel.{CellStyle, CellType, Workbook}
 import org.scalatest._
 
 import scala.util.Try
@@ -13,9 +13,7 @@ import scala.collection.compat._
 class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
 
   case object TextStyle extends StyleTransform {
-    override def operation(
-      workbook: Workbook,
-      cellStyle: CellStyle): CellStyle = {
+    override def operation(workbook: Workbook, cellStyle: CellStyle): CellStyle = {
       val format = workbook.createDataFormat.getFormat("@")
       cellStyle.setDataFormat(format)
       cellStyle
@@ -23,9 +21,7 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
   }
 
   case object DoubleStyle extends StyleTransform {
-    override def operation(
-      workbook: Workbook,
-      cellStyle: CellStyle): CellStyle = {
+    override def operation(workbook: Workbook, cellStyle: CellStyle): CellStyle = {
       val format = workbook.createDataFormat.getFormat("0.00")
       cellStyle.setDataFormat(format)
       cellStyle
@@ -33,9 +29,7 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
   }
 
   case class Locked(lock: Boolean) extends StyleTransform {
-    override def operation(
-      workbook: Workbook,
-      cellStyle: CellStyle): CellStyle = {
+    override def operation(workbook: Workbook, cellStyle: CellStyle): CellStyle = {
       cellStyle.setLocked(lock)
       cellStyle
     }
@@ -45,8 +39,8 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
     import writers._
 
     val testUTF8Str = "  测试 UTF8 字符  "
-    val testDouble = 2333.2233
-    val workbook = new HSSFWorkbook()
+    val testDouble  = 2333.2233
+    val workbook    = new HSSFWorkbook()
 
     val defaultCellStyleCount = workbook.getNumCellStyles
 
@@ -54,18 +48,15 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
     val cells = (for (rowIndex <- (1 to 8000)) yield {
       val row = sheet.createRow(rowIndex + 2)
       List(
-        row.createCell(3) -> CPoi
-          .wrapData(testUTF8Str)
-          .addTransform(TextStyle, Locked(false)),
-        row.createCell(6) -> CPoi
-          .wrapData(testDouble)
-          .addTransform(DoubleStyle, Locked(true)))
+          row.createCell(3) -> CPoi.wrapData(testUTF8Str).addTransform(TextStyle, Locked(false))
+        , row.createCell(6) -> CPoi.wrapData(testDouble).addTransform(DoubleStyle, Locked(true))
+      )
     }).flatten.to(List)
     val gen = CPoi.newStyleGen
     CPoi.multiplySet(gen, cells): Try[StyleGen]
 
     (for (rowIndex <- (1 to 8000)) yield {
-      val row = sheet.getRow(rowIndex + 2)
+      val row     = sheet.getRow(rowIndex + 2)
       val strCell = row.getCell(3)
       strCell.getStringCellValue should be(testUTF8Str)
       strCell.getCellStyle.getDataFormatString should be("@")
@@ -85,8 +76,8 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
     import writers._
 
     val testUTF8Str = "  测试 UTF8 字符  "
-    val testDouble = 2333.2233
-    val workbook = new HSSFWorkbook()
+    val testDouble  = 2333.2233
+    val workbook    = new HSSFWorkbook()
 
     val defaultCellStyleCount = workbook.getNumCellStyles
 
@@ -94,18 +85,15 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
     val cells = (for (rowIndex <- (1 to 8000)) yield {
       val row = sheet.createRow(rowIndex + 2)
       List(
-        row.createCell(3) -> CPoi
-          .wrapData(testUTF8Str)
-          .addTransform(TextStyle, Locked(false)),
-        row.createCell(6) -> CPoi
-          .wrapData(testDouble)
-          .addTransform(DoubleStyle, Locked(true)))
+          row.createCell(3) -> CPoi.wrapData(testUTF8Str).addTransform(TextStyle, Locked(false))
+        , row.createCell(6) -> CPoi.wrapData(testDouble).addTransform(DoubleStyle, Locked(true))
+      )
     }).flatten.to(List)
     val gen = CPoi.newMutableStyleGen
     CPoi.multiplySet(gen, cells): Unit
 
     (for (rowIndex <- (1 to 8000)) yield {
-      val row = sheet.getRow(rowIndex + 2)
+      val row     = sheet.getRow(rowIndex + 2)
       val strCell = row.getCell(3)
       strCell.getStringCellValue should be(testUTF8Str)
       strCell.getCellStyle.getDataFormatString should be("@")
@@ -125,8 +113,8 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
     import writers._
 
     val testUTF8Str = "  测试 UTF8 字符  "
-    val testDouble = 2333.2233
-    val workbook = new HSSFWorkbook()
+    val testDouble  = 2333.2233
+    val workbook    = new HSSFWorkbook()
 
     val defaultCellStyleCount = workbook.getNumCellStyles
 
@@ -134,18 +122,15 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
     val cells: Stream[(HSSFCell, CellDataAbs)] = (for (rowIndex <- Stream.from(1 to 8000)) yield {
       val row = sheet.createRow(rowIndex + 2)
       List(
-        row.createCell(3) -> CPoi
-          .wrapData(testUTF8Str)
-          .addTransform(TextStyle, Locked(false)),
-        row.createCell(6) -> CPoi
-          .wrapData(testDouble)
-          .addTransform(DoubleStyle, Locked(true)))
+          row.createCell(3) -> CPoi.wrapData(testUTF8Str).addTransform(TextStyle, Locked(false))
+        , row.createCell(6) -> CPoi.wrapData(testDouble).addTransform(DoubleStyle, Locked(true))
+      )
     }).flatten
     val gen = CPoi.newStyleGen
     CPoi.multiplySet(gen, cells): Try[StyleGen]
 
     (for (rowIndex <- (1 to 8000)) yield {
-      val row = sheet.getRow(rowIndex + 2)
+      val row     = sheet.getRow(rowIndex + 2)
       val strCell = row.getCell(3)
       strCell.getStringCellValue should be(testUTF8Str)
       strCell.getCellStyle.getDataFormatString should be("@")
@@ -165,8 +150,8 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
     import writers._
 
     val testUTF8Str = "  测试 UTF8 字符  "
-    val testDouble = 2333.2233
-    val workbook = new HSSFWorkbook()
+    val testDouble  = 2333.2233
+    val workbook    = new HSSFWorkbook()
 
     val defaultCellStyleCount = workbook.getNumCellStyles
 
@@ -174,18 +159,15 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
     val cells: Stream[(HSSFCell, CellDataAbs)] = (for (rowIndex <- Stream.from(1 to 8000)) yield {
       val row = sheet.createRow(rowIndex + 2)
       List(
-        row.createCell(3) -> CPoi
-          .wrapData(testUTF8Str)
-          .addTransform(TextStyle, Locked(false)),
-        row.createCell(6) -> CPoi
-          .wrapData(testDouble)
-          .addTransform(DoubleStyle, Locked(true)))
+          row.createCell(3) -> CPoi.wrapData(testUTF8Str).addTransform(TextStyle, Locked(false))
+        , row.createCell(6) -> CPoi.wrapData(testDouble).addTransform(DoubleStyle, Locked(true))
+      )
     }).flatten
     val gen = CPoi.newMutableStyleGen
     CPoi.multiplySet(gen, cells): Unit
 
     (for (rowIndex <- (1 to 8000)) yield {
-      val row = sheet.getRow(rowIndex + 2)
+      val row     = sheet.getRow(rowIndex + 2)
       val strCell = row.getCell(3)
       strCell.getStringCellValue should be(testUTF8Str)
       strCell.getCellStyle.getDataFormatString should be("@")
@@ -221,10 +203,11 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
     val poiCell4 = sheet.createRow(1).createCell(4)
 
     val cells = List(
-      poiCell1 -> CPoi.wrapData(Option.empty[String]),
-      poiCell2 -> CPoi.wrapData(Option.empty[Double]),
-      poiCell3 -> CPoi.wrapData(Option.empty[Boolean]),
-      poiCell4 -> CPoi.wrapData(Option.empty[Date]))
+        poiCell1 -> CPoi.wrapData(Option.empty[String])
+      , poiCell2 -> CPoi.wrapData(Option.empty[Double])
+      , poiCell3 -> CPoi.wrapData(Option.empty[Boolean])
+      , poiCell4 -> CPoi.wrapData(Option.empty[Date])
+    )
 
     val gen = CPoi.newStyleGen
     CPoi.multiplySet(gen, cells): Try[StyleGen]
@@ -246,17 +229,14 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
       sheet.createRow(i).createCell(1)
     }
 
-    val cellData = CPoi.wrapData("2333").addTransform(TextStyle)
+    val cellData     = CPoi.wrapData("2333").addTransform(TextStyle)
     val cellDataList = (1 to 1000).map(_ => cellData)
-    val gen = CPoi.newStyleGen
+    val gen          = CPoi.newStyleGen
 
-    val tuple2List = poiCells
-      .zip(cellDataList)
-      .zipWithIndex
-      .map {
-        case (_, index) if index == 602 => null
-        case (item, _) => item
-      }
+    val tuple2List = poiCells.zip(cellDataList).zipWithIndex.map {
+      case (_, index) if index == 602 => null
+      case (item, _)                  => item
+    }
 
     CPoi.multiplySet(gen, tuple2List): Try[StyleGen]
 
@@ -277,17 +257,14 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
       sheet.createRow(i).createCell(1)
     }
 
-    val cellData = CPoi.wrapData("2333").addTransform(TextStyle)
+    val cellData     = CPoi.wrapData("2333").addTransform(TextStyle)
     val cellDataList = (1 to 1000).map(_ => cellData)
-    val gen = CPoi.newMutableStyleGen
+    val gen          = CPoi.newMutableStyleGen
 
-    val tuple2List = poiCells
-      .zip(cellDataList)
-      .zipWithIndex
-      .map {
-        case (_, index) if index == 602 => null
-        case (item, _) => item
-      }
+    val tuple2List = poiCells.zip(cellDataList).zipWithIndex.map {
+      case (_, index) if index == 602 => null
+      case (item, _)                  => item
+    }
 
     CPoi.multiplySet(gen, tuple2List): Try[CPoiDone]
 

@@ -1,8 +1,8 @@
 package net.scalax.cpoi.content
 
-import net.scalax.cpoi.rw.{ CellReader, CellWriter }
+import net.scalax.cpoi.rw.{CellReader, CellWriter}
 
-import org.apache.poi.ss.usermodel.{ Cell, CellStyle, CellType }
+import org.apache.poi.ss.usermodel.{Cell, CellStyle, CellType}
 
 import scala.util.Try
 
@@ -18,7 +18,7 @@ trait CellContentAbs {
 
   def cellStyle: Option[CellStyle] = poiCell.map(_.getCellStyle)
 
-  lazy val rowIndex: Option[Int] = poiCell.map(_.getRowIndex)
+  lazy val rowIndex: Option[Int]    = poiCell.map(_.getRowIndex)
   lazy val columnIndex: Option[Int] = poiCell.map(_.getColumnIndex)
 
   def genData[T: CellWriter: CellReader]: CellReader.CellReadResult[CellData[T]] = {
@@ -34,8 +34,7 @@ trait CellContentAbs {
 
 object CellContentAbs {
 
-  implicit class CellContentOptExtensionMethon(
-    cellOpt: Option[CellContentAbs]) {
+  implicit class CellContentOptExtensionMethon(cellOpt: Option[CellContentAbs]) {
 
     def openAlways: CellContentAbs = {
       cellOpt match {

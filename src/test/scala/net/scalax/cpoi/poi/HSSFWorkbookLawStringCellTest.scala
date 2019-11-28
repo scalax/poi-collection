@@ -10,8 +10,8 @@ class HSSFWorkbookLawStringCellTest extends FlatSpec with Matchers {
 
   "Numberic cell" should "be set a string cell type" in {
     val workbook = new HSSFWorkbook()
-    val sheet = workbook.createSheet("Sheet1")
-    val cell = sheet.createRow(0).createCell(0)
+    val sheet    = workbook.createSheet("Sheet1")
+    val cell     = sheet.createRow(0).createCell(0)
     cell.setCellValue(2333.2233)
     cell.setCellType(CellType.STRING)
     cell.getStringCellValue should be("2333.2233")
@@ -19,8 +19,8 @@ class HSSFWorkbookLawStringCellTest extends FlatSpec with Matchers {
 
   "Boolean cell" should "be set a string cell type" in {
     val workbook = new HSSFWorkbook()
-    val sheet = workbook.createSheet("Sheet1")
-    val cell = sheet.createRow(0).createCell(0)
+    val sheet    = workbook.createSheet("Sheet1")
+    val cell     = sheet.createRow(0).createCell(0)
     cell.setCellValue(true)
     cell.setCellType(CellType.STRING)
     cell.getStringCellValue should be("TRUE")
@@ -33,8 +33,8 @@ class HSSFWorkbookLawStringCellTest extends FlatSpec with Matchers {
 
   "Date cell" should "be set a string cell type" in {
     val workbook = new HSSFWorkbook()
-    val sheet = workbook.createSheet("Sheet1")
-    val cell = sheet.createRow(0).createCell(0)
+    val sheet    = workbook.createSheet("Sheet1")
+    val cell     = sheet.createRow(0).createCell(0)
     cell.setCellValue(new Date(0))
     cell.setCellType(CellType.STRING)
     cell.getStringCellValue.startsWith("25569") should be(true)

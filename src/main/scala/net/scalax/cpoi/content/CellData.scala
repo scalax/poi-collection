@@ -1,6 +1,6 @@
 package net.scalax.cpoi.content
 
-import net.scalax.cpoi.rw.{ CPoiDone, CellWriter }
+import net.scalax.cpoi.rw.{CPoiDone, CellWriter}
 import net.scalax.cpoi.style.StyleTransform
 import org.apache.poi.ss.usermodel.Cell
 
@@ -35,13 +35,13 @@ trait CellDataAbs {
 
   def addTransform(tran: List[StyleTransform]): CellDataAbs = {
     implicit val operation1 = self.operation
-    val thisTrans = this.styleTransform
+    val thisTrans           = this.styleTransform
     CellDataImpl(data, thisTrans ::: tran)
   }
 
   def addTransform(tran: StyleTransform*): CellDataAbs = {
     implicit val operation1 = self.operation
-    val thisTrans = this.styleTransform
+    val thisTrans           = this.styleTransform
     CellDataImpl(data, thisTrans ::: tran.to(List))
   }
 
@@ -70,22 +70,20 @@ trait CellData[T] extends CellDataAbs {
   }
 
   override def addTransform(tran: List[StyleTransform]): CellData[T] = {
-    val thisTrans = this.styleTransform
+    val thisTrans           = this.styleTransform
     implicit val operation1 = self.operation
     CellDataImpl(data, thisTrans ::: tran)
   }
 
   override def addTransform(tran: StyleTransform*): CellData[T] = {
-    val thisTrans = this.styleTransform
+    val thisTrans           = this.styleTransform
     implicit val operation1 = self.operation
     CellDataImpl(data, thisTrans ::: tran.to(List))
   }
 
 }
 
-case class CellDataImpl[T](
-  override val data: T,
-  override val styleTransform: List[StyleTransform] = List.empty)(
+case class CellDataImpl[T](override val data: T, override val styleTransform: List[StyleTransform] = List.empty)(
   implicit
-  override val operation: CellWriter[T])
-  extends CellData[T]
+  override val operation: CellWriter[T]
+) extends CellData[T]

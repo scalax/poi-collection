@@ -25,8 +25,7 @@ object CellWriter {
 
   implicit val contravariant: Contravariant[CellWriter] = {
     new Contravariant[CellWriter] {
-      override def contramap[A, B](fa: CellWriter[A])(
-        f: B => A): CellWriter[B] = {
+      override def contramap[A, B](fa: CellWriter[A])(f: B => A): CellWriter[B] = {
         new CellWriter[B] {
           override def setValue(cell: Cell, value: B): Try[CPoiDone] = {
             Try { f(value) }.flatMap(s => fa.setValue(cell, s))

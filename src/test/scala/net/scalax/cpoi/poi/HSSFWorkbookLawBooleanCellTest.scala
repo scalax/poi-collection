@@ -10,8 +10,8 @@ class HSSFWorkbookLawBooleanCellTest extends FlatSpec with Matchers {
 
   "String cell" should "be set a boolean cell type" in {
     val workbook = new HSSFWorkbook()
-    val sheet = workbook.createSheet("Sheet1")
-    val cell = sheet.createRow(0).createCell(0)
+    val sheet    = workbook.createSheet("Sheet1")
+    val cell     = sheet.createRow(0).createCell(0)
     cell.setCellValue("2333.44")
     cell.setCellType(CellType.BOOLEAN)
     cell.getBooleanCellValue should be(false)
@@ -19,8 +19,8 @@ class HSSFWorkbookLawBooleanCellTest extends FlatSpec with Matchers {
 
   "Numberic cell" should "be set a boolean cell type" in {
     val workbook = new HSSFWorkbook()
-    val sheet = workbook.createSheet("Sheet1")
-    val cell = sheet.createRow(0).createCell(0)
+    val sheet    = workbook.createSheet("Sheet1")
+    val cell     = sheet.createRow(0).createCell(0)
     cell.setCellValue(2333.2233)
     cell.setCellType(CellType.BOOLEAN)
     cell.getBooleanCellValue should be(true)
@@ -33,8 +33,8 @@ class HSSFWorkbookLawBooleanCellTest extends FlatSpec with Matchers {
 
   "Date cell" should "be set a boolean cell type" in {
     val workbook = new HSSFWorkbook()
-    val sheet = workbook.createSheet("Sheet1")
-    val cell = sheet.createRow(0).createCell(0)
+    val sheet    = workbook.createSheet("Sheet1")
+    val cell     = sheet.createRow(0).createCell(0)
     cell.setCellValue(new Date())
     cell.setCellType(CellType.BOOLEAN)
     cell.getBooleanCellValue should be(true)

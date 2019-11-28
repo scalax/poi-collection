@@ -2,9 +2,9 @@ package net.scalax.cpoi.style
 
 import net.scalax.cpoi.content.CellDataAbs
 import net.scalax.cpoi.rw.CPoiDone
-import org.apache.poi.ss.usermodel.{ Cell, CellStyle }
+import org.apache.poi.ss.usermodel.{Cell, CellStyle}
 
-import scala.collection.mutable.{ Map => MutableMap }
+import scala.collection.mutable.{Map => MutableMap}
 import scala.util.Try
 import scala.collection.compat._
 
