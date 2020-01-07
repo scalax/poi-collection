@@ -1,1 +1,1 @@
-version := "0.4.0-M5"
+version := "0.4.0-M6"

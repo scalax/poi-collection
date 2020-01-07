@@ -120,7 +120,7 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
     val defaultCellStyleCount = workbook.getNumCellStyles
 
     val sheet = workbook.createSheet("SheetA")
-    val cells: CollectionCompat.LazyList[(HSSFCell, CellDataAbs)] = (for (rowIndex <- CollectionCompat.LazyList.from(1 to 8000)) yield {
+    val cells: CollectionCompat.LazyList[(HSSFCell, CellDataAbs)] = (for (rowIndex <- CollectionCompat.seqToLazyList(1 to 8000)) yield {
       val row = sheet.createRow(rowIndex + 2)
       List(
           row.createCell(3) -> CPoi.wrapData(testUTF8Str).addTransform(TextStyle, Locked(false))
@@ -157,7 +157,7 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
     val defaultCellStyleCount = workbook.getNumCellStyles
 
     val sheet = workbook.createSheet("SheetA")
-    val cells: CollectionCompat.LazyList[(HSSFCell, CellDataAbs)] = (for (rowIndex <- CollectionCompat.LazyList.from(1 to 8000)) yield {
+    val cells: CollectionCompat.LazyList[(HSSFCell, CellDataAbs)] = (for (rowIndex <- CollectionCompat.seqToLazyList(1 to 8000)) yield {
       val row = sheet.createRow(rowIndex + 2)
       List(
           row.createCell(3) -> CPoi.wrapData(testUTF8Str).addTransform(TextStyle, Locked(false))

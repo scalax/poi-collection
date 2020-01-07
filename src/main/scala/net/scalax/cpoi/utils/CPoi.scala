@@ -8,14 +8,13 @@ import org.apache.poi.ss.usermodel.{Cell, CellStyle}
 
 import scala.util.{Failure, Try}
 import scala.collection.mutable.{Map => MutableMap}
-import scala.collection.compat._
 
 trait CPoi {
 
   def multiplySet(styleGen: StyleGen, seq: Seq[(Cell, CellDataAbs)]): Try[StyleGen] = {
     val ms = styleGen.toMutable
-    CollectionCompat.LazyList
-      .from(seq)
+    CollectionCompat
+      .seqToLazyList(seq)
       .map { item =>
         Try {
           item match {
@@ -35,8 +34,8 @@ trait CPoi {
   }
 
   def multiplySet(styleGen: MutableStyleGen, seq: Seq[(Cell, CellDataAbs)]): Try[CPoiDone] = {
-    CollectionCompat.LazyList
-      .from(seq)
+    CollectionCompat
+      .seqToLazyList(seq)
       .map { item =>
         Try {
           item match {
@@ -80,8 +79,7 @@ trait CPoi {
   }
 
   def newMutableStyleGen: MutableStyleGen = new MutableStyleGen {
-    override protected val cellMap: MutableMap[StyleKeyWrap, CellStyle] =
-      MutableMap.empty
+    override protected val cellMap: MutableMap[StyleKeyWrap, CellStyle] = MutableMap.empty
   }
 
 }
