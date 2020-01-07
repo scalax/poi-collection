@@ -13,10 +13,12 @@ trait CellReader[T] {
 
 object CellReader {
 
+  def apply[T: CellReader]: CellReader[T] = implicitly
+
   type CellReadResult[R] = Either[CellReaderException, R]
 
   implicit def optionCellReaderToNoneOptionCellReader[T: CellReader]: CellReader[Option[T]] = {
-    implicitly[CellReader[T]].map(Option(_)).recover {
+    CellReader[T].map(Option(_)).recover {
       case _: CellNotExistsException =>
         Option.empty
     }

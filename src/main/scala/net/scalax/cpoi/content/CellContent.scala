@@ -22,12 +22,12 @@ trait CellContentAbs {
   lazy val columnIndex: Option[Int] = poiCell.map(_.getColumnIndex)
 
   def genData[T: CellWriter: CellReader]: CellReader.CellReadResult[CellData[T]] = {
-    val valueEt = implicitly[CellReader[T]].get(poiCell)
+    val valueEt = CellReader[T].get(poiCell)
     valueEt.map(s => CellDataImpl(s, List.empty))
   }
 
   def tryValue[T: CellReader]: CellReader.CellReadResult[T] = {
-    implicitly[CellReader[T]].get(poiCell)
+    CellReader[T].get(poiCell)
   }
 
 }

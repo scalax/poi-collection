@@ -3,6 +3,7 @@ package net.scalax.cpoi.test
 import java.util.Date
 
 import net.scalax.cpoi.api._
+import net.scalax.cpoi.utils.compat.CollectionCompat
 import org.apache.poi.hssf.usermodel.{HSSFCell, HSSFWorkbook}
 import org.apache.poi.ss.usermodel.{CellStyle, CellType, Workbook}
 import org.scalatest._
@@ -119,7 +120,7 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
     val defaultCellStyleCount = workbook.getNumCellStyles
 
     val sheet = workbook.createSheet("SheetA")
-    val cells: Stream[(HSSFCell, CellDataAbs)] = (for (rowIndex <- Stream.from(1 to 8000)) yield {
+    val cells: CollectionCompat.LazyList[(HSSFCell, CellDataAbs)] = (for (rowIndex <- CollectionCompat.LazyList.from(1 to 8000)) yield {
       val row = sheet.createRow(rowIndex + 2)
       List(
           row.createCell(3) -> CPoi.wrapData(testUTF8Str).addTransform(TextStyle, Locked(false))
@@ -156,7 +157,7 @@ class HSSFWorkbookMemoryWriterTest extends FlatSpec with Matchers {
     val defaultCellStyleCount = workbook.getNumCellStyles
 
     val sheet = workbook.createSheet("SheetA")
-    val cells: Stream[(HSSFCell, CellDataAbs)] = (for (rowIndex <- Stream.from(1 to 8000)) yield {
+    val cells: CollectionCompat.LazyList[(HSSFCell, CellDataAbs)] = (for (rowIndex <- CollectionCompat.LazyList.from(1 to 8000)) yield {
       val row = sheet.createRow(rowIndex + 2)
       List(
           row.createCell(3) -> CPoi.wrapData(testUTF8Str).addTransform(TextStyle, Locked(false))

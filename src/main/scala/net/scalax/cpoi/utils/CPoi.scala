@@ -3,6 +3,7 @@ package net.scalax.cpoi.utils
 import net.scalax.cpoi.content.{CellContentAbs, CellData, CellDataAbs, CellDataImpl}
 import net.scalax.cpoi.rw.{CPoiDone, CellWriter}
 import net.scalax.cpoi.style.{MutableStyleGen, StyleGen, StyleKeyWrap, StyleTransform}
+import net.scalax.cpoi.utils.compat.CollectionCompat
 import org.apache.poi.ss.usermodel.{Cell, CellStyle}
 
 import scala.util.{Failure, Try}
@@ -13,7 +14,7 @@ trait CPoi {
 
   def multiplySet(styleGen: StyleGen, seq: Seq[(Cell, CellDataAbs)]): Try[StyleGen] = {
     val ms = styleGen.toMutable
-    Stream
+    CollectionCompat.LazyList
       .from(seq)
       .map { item =>
         Try {
@@ -34,7 +35,7 @@ trait CPoi {
   }
 
   def multiplySet(styleGen: MutableStyleGen, seq: Seq[(Cell, CellDataAbs)]): Try[CPoiDone] = {
-    Stream
+    CollectionCompat.LazyList
       .from(seq)
       .map { item =>
         Try {

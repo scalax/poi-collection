@@ -1,7 +1,9 @@
 package net.scalax.cpoi.style
 
 import net.scalax.cpoi.content.CellDataAbs
+import net.scalax.cpoi.utils.compat.CollectionCompat
 import org.apache.poi.ss.usermodel.{Cell, CellStyle}
+
 import scala.collection.compat._
 
 trait StyleGen {
@@ -36,7 +38,7 @@ trait StyleGen {
   }
 
   def toMutable: MutableStyleGen = {
-    val newMap = scala.collection.mutable.Map.from(self.cellMap)
+    val newMap = CollectionCompat.mapFromImmutable(self.cellMap)
     new MutableStyleGen {
       override protected val cellMap = newMap
     }

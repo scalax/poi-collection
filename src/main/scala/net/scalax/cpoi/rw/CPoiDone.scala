@@ -1,7 +1,7 @@
 package net.scalax.cpoi.rw
 
-sealed trait CPoiDone
+class CPoiDone
 
 object CPoiDone {
-  val instance: CPoiDone = new CPoiDone {}
+  val instance: CPoiDone = new CPoiDone
 }

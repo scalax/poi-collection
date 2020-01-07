@@ -11,12 +11,14 @@ trait CellWriter[T] {
 
 object CellWriter {
 
+  def apply[T: CellWriter]: CellWriter[T] = implicitly
+
   implicit def optionCellOperationToNoneOptionCellOpreation[T: CellWriter]: CellWriter[Option[T]] = {
     new CellWriter[Option[T]] {
       override def setValue(cell: Cell, value: Option[T]): Try[CPoiDone] = {
         value
           .map { v =>
-            implicitly[CellWriter[T]].setValue(cell, v)
+            CellWriter[T].setValue(cell, v)
           }
           .getOrElse(Try { CPoiDone.instance })
       }
