@@ -4,7 +4,7 @@ import net.scalax.cpoi.rw.{CellReadersImplicits, CellWritersImplicits, Immutable
 
 trait Alias {
 
-  val CPoi: CPoi = new CPoi {}
+  val CPoi: CPoi = new CPoi
 
   val readers: CellReadersImplicits = new CellReadersImplicits {}
   val immutableReaders: ImmutableCellReadersImplicits =
@@ -19,7 +19,9 @@ trait Alias {
   val CPoiDone: CPoiDone = net.scalax.cpoi.rw.CPoiDone.instance
 
   type CellWriter[T] = net.scalax.cpoi.rw.CellWriter[T]
+  val CellWriter = net.scalax.cpoi.rw.CellWriter
   type CellReader[T] = net.scalax.cpoi.rw.CellReader[T]
+  val CellReader = net.scalax.cpoi.rw.CellReader
 
   type CellContentAbs = net.scalax.cpoi.content.CellContentAbs
   type CellDataAbs    = net.scalax.cpoi.content.CellDataAbs
