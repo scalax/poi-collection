@@ -9,7 +9,7 @@ import org.apache.poi.ss.usermodel.{Cell, CellStyle}
 import scala.util.{Failure, Try}
 import scala.collection.mutable.{Map => MutableMap}
 
-trait CPoi {
+class CPoi {
 
   def multiplySet(styleGen: StyleGen, seq: Seq[(Cell, CellDataAbs)]): Try[StyleGen] = {
     val ms = styleGen.toMutable
