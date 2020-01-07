@@ -5,7 +5,7 @@ licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
 resolvers += Resolver.jcenterRepo
 
 resolvers += Resolver.bintrayRepo("djx314", "maven")
-
+bintrayVcsUrl := Some("git@github.com:you/your-repo.git")
 bintrayPackageLabels := Seq("scala", "poi")
 
 organization := "net.scalax"
