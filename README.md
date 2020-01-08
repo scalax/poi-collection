@@ -15,5 +15,5 @@ How to get it
 
 ```scala
 resolvers += Resolver.bintrayRepo("djx314", "maven")
-libraryDependencies += "net.scalax" %% "poi-collection" % "0.4.0-M5"
+libraryDependencies += "net.scalax" %% "poi-collection" % "0.4.0-M8"
 ```
